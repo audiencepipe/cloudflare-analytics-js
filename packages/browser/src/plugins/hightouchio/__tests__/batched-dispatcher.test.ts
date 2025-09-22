@@ -9,7 +9,7 @@ import batch from '../batched-dispatcher'
 const fatEvent = {
   _id: '609c0e91fe97b680e384d6e4',
   index: 5,
-  guid: 'ca7fac24-41c9-45db-bc53-59b544e43943',
+  guid: 'ca7fac24-41c9-45db-bc53-59b54e43943',
   isActive: false,
   balance: '$2,603.43',
   picture: 'http://placehold.it/32x32',
@@ -27,7 +27,7 @@ const fatEvent = {
   latitude: 68.879515,
   longitude: -46.670697,
   tags: ['magna', 'ex', 'nostrud', 'mollit', 'laborum', 'exercitation', 'sit'],
-  friends: [
+ friends: [
     {
       id: 0,
       name: 'Lynn Brock',
@@ -50,7 +50,7 @@ describe('Batching', () => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
     jest.useFakeTimers({
-      now: new Date('9 Jun 1993 00:00:00Z').getTime(),
+      now: new Date('9 Jun 193 00:00:00Z').getTime(),
     })
   })
 
@@ -61,9 +61,9 @@ describe('Batching', () => {
   })
 
   it('does not send requests right away', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`)
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`)
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       hello: 'world',
     })
 
@@ -71,30 +71,30 @@ describe('Batching', () => {
   })
 
   it('sends requests after a batch limit is hit', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
       size: 3,
     })
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'first',
     })
     expect(fetch).not.toHaveBeenCalled()
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'second',
     })
     expect(fetch).not.toHaveBeenCalled()
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'third',
     })
 
     expect(fetch).toHaveBeenCalledTimes(1)
     expect(fetch.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "https://https://us-east-1.hightouch-events.com/v1/batch",
+        "https://mock-pipeline.cloudflare.com",
         {
-          "body": "{"batch":[{"event":"first"},{"event":"second"},{"event":"third"}],"sentAt":"1993-06-09T00:00:00.000Z"}",
+          "body": "[{"event":"first"},{"event":"second"},{"event":"third"}]",
           "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -107,13 +107,13 @@ describe('Batching', () => {
   })
 
   it('sends requests if the size of events exceeds tracking API limits', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
       size: 600,
     })
 
     // fatEvent is about ~1kb in size
     for (let i = 0; i < 250; i++) {
-      await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+      await dispatch(`https://mock-pipeline.cloudflare.com`, {
         event: 'fat event',
         properties: fatEvent,
       })
@@ -121,7 +121,7 @@ describe('Batching', () => {
     expect(fetch).not.toHaveBeenCalled()
 
     for (let i = 0; i < 250; i++) {
-      await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+      await dispatch(`https://mock-pipeline.cloudflare.com`, {
         event: 'fat event',
         properties: fatEvent,
       })
@@ -132,17 +132,17 @@ describe('Batching', () => {
   })
 
   it('sends requests when the timeout expires', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
       size: 100,
       timeout: 10000, // 10 seconds
     })
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'first',
     })
     expect(fetch).not.toHaveBeenCalled()
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/i`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'second',
     })
 
@@ -151,9 +151,9 @@ describe('Batching', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
     expect(fetch.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "https://https://us-east-1.hightouch-events.com/v1/batch",
+        "https://mock-pipeline.cloudflare.com",
         {
-          "body": "{"batch":[{"event":"first"},{"event":"second"}],"sentAt":"1993-06-09T00:00:10.000Z"}",
+          "body": "[{"event":"first"},{"event":"second"}]",
           "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -166,18 +166,18 @@ describe('Batching', () => {
   })
 
   it('clears the buffer between flushes', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
       size: 100,
       timeout: 10000, // 10 seconds
     })
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'first',
     })
 
     jest.advanceTimersByTime(11000) // 11 seconds
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/i`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'second',
     })
 
@@ -187,9 +187,9 @@ describe('Batching', () => {
 
     expect(fetch.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "https://https://us-east-1.hightouch-events.com/v1/batch",
+        "https://mock-pipeline.cloudflare.com",
         {
-          "body": "{"batch":[{"event":"first"}],"sentAt":"1993-06-09T00:00:10.000Z"}",
+          "body": "[{"event":"first"}]",
           "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -202,9 +202,9 @@ describe('Batching', () => {
 
     expect(fetch.mock.calls[1]).toMatchInlineSnapshot(`
       [
-        "https://https://us-east-1.hightouch-events.com/v1/batch",
+        "https://mock-pipeline.cloudflare.com",
         {
-          "body": "{"batch":[{"event":"second"}],"sentAt":"1993-06-09T00:00:21.000Z"}",
+          "body": "[{"event":"second"}]",
           "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -216,17 +216,17 @@ describe('Batching', () => {
     `)
   })
 
-  it('removes sentAt from individual events', async () => {
-    const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+  it('does not remove sentAt from individual events', async () => {
+    const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
       size: 2,
     })
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'first',
       sentAt: new Date('11 Jun 1993 00:01:00Z'),
     })
 
-    await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+    await dispatch(`https://mock-pipeline.cloudflare.com`, {
       event: 'second',
       sentAt: new Date('11 Jun 1993 00:02:00Z'),
     })
@@ -234,9 +234,9 @@ describe('Batching', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
     expect(fetch.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "https://https://us-east-1.hightouch-events.com/v1/batch",
+        "https://mock-pipeline.cloudflare.com",
         {
-          "body": "{"batch":[{"event":"first"},{"event":"second"}],"sentAt":"1993-06-09T00:00:00.000Z"}",
+          "body": "[{"event":"first","sentAt":"1993-06-11T00:01:00.000Z"},{"event":"second","sentAt":"1993-06-11T00:02:00.000Z"}]",
           "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -250,13 +250,13 @@ describe('Batching', () => {
 
   describe('on unload', () => {
     it('flushes the batch', async () => {
-      const { dispatch } = batch(`https://us-east-1.hightouch-events.com`)
+      const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`)
 
-      dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+      dispatch(`https://mock-pipeline.cloudflare.com`, {
         hello: 'world',
       }).catch(console.error)
 
-      dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+      dispatch(`https://mock-pipeline.cloudflare.com`, {
         bye: 'world',
       }).catch(console.error)
 
@@ -268,7 +268,7 @@ describe('Batching', () => {
 
       // any dispatch attempts after the page has unloaded are flushed immediately
       // this can happen if analytics.track is called right before page is navigated away
-      dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+      dispatch(`https://mock-pipeline.cloudflare.com`, {
         afterlife: 'world',
       }).catch(console.error)
 
@@ -277,13 +277,13 @@ describe('Batching', () => {
     })
 
     it('flushes in batches of no more than 64kb', async () => {
-      const { dispatch } = batch(`https://us-east-1.hightouch-events.com`, {
+      const { dispatch } = batch(`https://mock-pipeline.cloudflare.com`, {
         size: 1000,
       })
 
       // fatEvent is about ~1kb in size
       for (let i = 0; i < 80; i++) {
-        await dispatch(`https://us-east-1.hightouch-events.com/v1/t`, {
+        await dispatch(`https://mock-pipeline.cloudflare.com`, {
           event: 'fat event',
           properties: fatEvent,
         })
