@@ -6,11 +6,14 @@ export type StandardDispatcherConfig = {
   keepalive?: boolean
 }
 
-export default function (config?: StandardDispatcherConfig): {
+export default function (
+  cloudflarePipelineUrl: string,
+  config?: StandardDispatcherConfig
+): {
   dispatch: Dispatcher
 } {
-  function dispatch(url: string, body: object): Promise<unknown> {
-    return fetch(url, {
+  function dispatch(_url: string, body: object): Promise<unknown> {
+    return fetch(cloudflarePipelineUrl, {
       keepalive: config?.keepalive,
       headers: {
         Accept: 'application/json',

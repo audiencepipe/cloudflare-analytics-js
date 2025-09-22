@@ -20,7 +20,8 @@ describe('Hightouch.io', () => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
 
-    options = { apiKey: 'foo' }
+    // Use a mock Cloudflare Pipeline URL for testing
+    options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
     analytics = new Analytics({ writeKey: options.apiKey })
     hightouch = await hightouchio(analytics, options, {})
 
@@ -44,29 +45,6 @@ describe('Hightouch.io', () => {
     window.localStorage.clear()
   })
 
-  describe('using a custom protocol', () => {
-    it('should be able to send http requests', async () => {
-      const options: {
-        apiKey: string
-        protocol: 'http' | 'https'
-      } = {
-        apiKey: 'foo',
-        protocol: 'http',
-      }
-      const analytics = new Analytics({ writeKey: options.apiKey })
-      const hightouch = await hightouchio(analytics, options, {})
-      await analytics.register(hightouch, envEnrichment)
-
-      // @ts-ignore test a valid ajsc page call
-      await analytics.page(null, { foo: 'bar' })
-
-      const [url] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"http://us-east-1.hightouch-events.com/v1/page"`
-      )
-    })
-  })
-
   describe('configuring a keep alive', () => {
     it('should accept keepalive configuration', async () => {
       const analytics = new Analytics({ writeKey: 'foo' })
@@ -74,6 +52,7 @@ describe('Hightouch.io', () => {
       await analytics.register(
         await hightouchio(analytics, {
           apiKey: '',
+          cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
           deliveryStrategy: {
             config: {
               keepalive: true,
@@ -92,6 +71,7 @@ describe('Hightouch.io', () => {
 
       const hightouch = await hightouchio(analytics, {
         apiKey: '',
+        cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
       })
       await analytics.register(await hightouch)
       await analytics.track('foo')
@@ -106,17 +86,20 @@ describe('Hightouch.io', () => {
       await analytics.page('section', 'name', { property: true }, { opt: true })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/page"`
-      )
+      // All events should now go to the Cloudflare Pipeline URL
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
+      // The body should be an array containing the event object
       const body = JSON.parse(params.body)
-
-      assert(body.name === 'name')
-      assert(body.category === 'section')
-      assert(body.properties.property === true)
-      assert(body.context.opt === true)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.name === 'name')
+      assert(event.category === 'section')
+      assert(event.properties.property === true)
+      assert(event.context.opt === true)
+      assert(event.timestamp)
     })
 
     it('sets properties when name and category are null', async () => {
@@ -124,13 +107,14 @@ describe('Hightouch.io', () => {
       await analytics.page(null, { foo: 'bar' })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/page"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.properties.foo === 'bar')
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.properties.foo === 'bar')
     })
   })
 
@@ -139,31 +123,35 @@ describe('Hightouch.io', () => {
       await analytics.identify('id', { trait: true }, { opt: true })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/identify"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.userId === 'id')
-      assert(body.traits.trait === true)
-      assert(body.context.opt === true)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.userId === 'id')
+      assert(event.traits.trait === true)
+      assert(event.context.opt === true)
+      assert(event.timestamp)
     })
 
     it('should set traits with null id', async () => {
       await analytics.identify(null, { trait: true }, { opt: true })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/identify"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.userId === null)
-      assert(body.traits.trait === true)
-      assert(!body.context.trait)
-      assert(body.context.opt === true)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.userId === null)
+      assert(event.traits.trait === true)
+      assert(!event.context.trait)
+      assert(event.context.opt === true)
+      assert(event.timestamp)
     })
   })
 
@@ -171,17 +159,18 @@ describe('Hightouch.io', () => {
     it('should enqueue an event and properties', async () => {
       await analytics.track('event', { prop: true }, { opt: true })
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/track"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.event === 'event')
-      assert(body.context.opt === true)
-      assert(body.properties.prop === true)
-      assert(body.traits == null)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.event === 'event')
+      assert(event.context.opt === true)
+      assert(event.properties.prop === true)
+      assert(event.traits == null)
+      assert(event.timestamp)
     })
   })
 
@@ -190,33 +179,35 @@ describe('Hightouch.io', () => {
       await analytics.group('id', { trait: true }, { opt: true })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/group"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.groupId === 'id')
-      assert(body.context.opt === true)
-      assert(body.traits.trait === true)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.groupId === 'id')
+      assert(event.context.opt === true)
+      assert(event.traits.trait === true)
+      assert(event.timestamp)
     })
 
     it('should set traits with null id', async () => {
       await analytics.group(null, { trait: true }, { opt: true })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/group"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.groupId === null)
-      assert(body.context.opt === true)
-      assert(body.traits.trait === true)
-      assert(!body.context.trait)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.groupId === null)
+      assert(event.context.opt === true)
+      assert(event.traits.trait === true)
+      assert(!event.context.trait)
+      assert(event.timestamp)
     })
   })
 
@@ -224,14 +215,16 @@ describe('Hightouch.io', () => {
     it('should enqueue .userId and .previousId', async () => {
       await analytics.alias('to', 'from')
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/alias"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.previousId === 'from')
-      assert(body.userId === 'to')
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.previousId === 'from')
+      assert(event.userId === 'to')
+      assert(event.timestamp)
     })
 
     it('should fallback to user.anonymousId if .previousId is omitted', async () => {
@@ -239,41 +232,47 @@ describe('Hightouch.io', () => {
       await analytics.alias('to')
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/alias"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.previousId === 'anon-id')
-      assert(body.userId === 'to')
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.previousId === 'anon-id')
+      assert(event.userId === 'to')
+      assert(event.timestamp)
     })
 
     it('should fallback to user.anonymousId if .previousId and user.id are falsey', async () => {
       await analytics.alias('to')
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/alias"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.previousId)
-      assert(body.previousId.length === 36)
-      assert(body.userId === 'to')
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.previousId)
+      assert(event.previousId.length === 36)
+      assert(event.userId === 'to')
     })
 
     it('should rename `.from` and `.to` to `.previousId` and `.userId`', async () => {
       await analytics.alias('user-id', 'previous-id')
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/alias"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-      assert(body.previousId === 'previous-id')
-      assert(body.userId === 'user-id')
-      assert(body.from == null)
-      assert(body.to == null)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.previousId === 'previous-id')
+      assert(event.userId === 'user-id')
+      assert(event.from == null)
+      assert(event.to == null)
     })
   })
 
@@ -287,17 +286,18 @@ describe('Hightouch.io', () => {
       )
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/screen"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.name === 'name')
-      assert(body.category === 'section')
-      assert(body.properties.property === true)
-      assert(body.context.opt === true)
-      assert(body.timestamp)
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.name === 'name')
+      assert(event.category === 'section')
+      assert(event.properties.property === true)
+      assert(event.context.opt === true)
+      assert(event.timestamp)
     })
 
     it('sets properties when name and category are null', async () => {
@@ -305,13 +305,14 @@ describe('Hightouch.io', () => {
       await analytics.screen(null, { foo: 'bar' })
 
       const [url, params] = spyMock.mock.calls[0]
-      expect(url).toMatchInlineSnapshot(
-        `"https://us-east-1.hightouch-events.com/v1/screen"`
-      )
+      expect(url).toBe('https://mock-pipeline.cloudflare.com')
 
       const body = JSON.parse(params.body)
-
-      assert(body.properties.foo === 'bar')
+      expect(Array.isArray(body)).toBe(true)
+      expect(body.length).toBe(1)
+      
+      const event = body[0]
+      assert(event.properties.foo === 'bar')
     })
   })
 })

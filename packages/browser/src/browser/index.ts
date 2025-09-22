@@ -109,7 +109,7 @@ export interface HtEventsBrowserSettings extends AnalyticsSettings {
 
 export function loadLegacySettings(
   writeKey: string,
-  cdnURL?: string
+  cdnURL?: string,
 ): Promise<LegacySettings> {
   const baseUrl = cdnURL ?? getCDN()
 
@@ -310,8 +310,7 @@ async function registerPlugins(
 
 const defaultHightouchIntegration: HightouchioSettings = {
   apiKey: 'WRITE_KEY',
-  apiHost: 'us-east-1.hightouch-events.com',
-  protocol: 'https',
+  cloudflarePipelineUrl: 'https://us-east-1.hightouch-events.com', // Default to the original URL, but now as cloudflarePipelineUrl
   unbundledIntegrations: [],
   addBundledMetadata: false,
   maybeBundledConfigIds: {},
@@ -350,8 +349,8 @@ async function loadAnalytics(
     defaultSettings.integrations['Hightouch.io'] = {
       ...defaultHightouchIntegration,
       ...(settings.writeKey ? { apiKey: settings.writeKey } : {}),
-      ...(options.apiHost ? { apiHost: options.apiHost } : {}),
-      ...(options.protocol ? { protocol: options.protocol } : {}),
+      // Remove apiHost and protocol, add cloudflarePipelineUrl if provided in options
+      ...(options.cloudflarePipelineUrl ? { cloudflarePipelineUrl: options.cloudflarePipelineUrl } : {}),
       // defaultHightouchIntegration defaults to 'standard'
       // allow a simple options override to turn on 'batching'
       ...(options.batching == true
@@ -368,7 +367,7 @@ async function loadAnalytics(
 
   if (options.updateCDNSettings) {
     legacySettings = options.updateCDNSettings(legacySettings)
-  }
+ }
 
   const retryQueue: boolean =
     legacySettings.integrations['Hightouch.io']?.retryQueue ?? true

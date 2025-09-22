@@ -11,7 +11,6 @@ import batch, { BatchingDispatchConfig } from './batched-dispatcher'
 import standard, { StandardDispatcherConfig } from './fetch-dispatcher'
 import { normalize } from './normalize'
 import { scheduleFlush } from './schedule-flush'
-import { HIGHTOUCH_API_HOST } from '../../core/constants'
 
 type DeliveryStrategy =
   | {
@@ -25,8 +24,7 @@ type DeliveryStrategy =
 
 export type HightouchioSettings = {
   apiKey: string
-  apiHost?: string
-  protocol?: 'http' | 'https'
+  cloudflarePipelineUrl: string
 
   addBundledMetadata?: boolean
   unbundledIntegrations?: string[]
@@ -55,7 +53,7 @@ export function hightouchio(
   settings?: HightouchioSettings,
   integrations?: LegacySettings['integrations']
 ): Plugin {
-  // Attach `pagehide` before buffer is created so that inflight events are added
+ // Attach `pagehide` before buffer is created so that inflight events are added
   // to the buffer before the buffer persists events in its own `pagehide` handler.
   window.addEventListener('pagehide', () => {
     buffer.push(...Array.from(inflightEvents))
@@ -72,17 +70,17 @@ export function hightouchio(
       )
 
   const inflightEvents = new Set<Context>()
-  const flushing = false
+ const flushing = false
 
-  const apiHost = settings?.apiHost ?? HIGHTOUCH_API_HOST
-  const protocol = settings?.protocol ?? 'https'
-  const remote = `${protocol}://${apiHost}`
+  // Use the cloudflarePipelineUrl directly, with a fallback
+  const cloudflarePipelineUrl = settings?.cloudflarePipelineUrl ?? 'https://us-east-1.hightouch-events.com'
 
   const deliveryStrategy = settings?.deliveryStrategy
+  // Pass the cloudflarePipelineUrl to both dispatchers
   const client =
     deliveryStrategy?.strategy === 'batching'
-      ? batch(apiHost, deliveryStrategy.config, protocol)
-      : standard(deliveryStrategy?.config as StandardDispatcherConfig)
+      ? batch(cloudflarePipelineUrl, deliveryStrategy.config)
+      : standard(cloudflarePipelineUrl, deliveryStrategy?.config as StandardDispatcherConfig)
 
   async function send(ctx: Context): Promise<Context> {
     if (isOffline()) {
@@ -94,8 +92,6 @@ export function hightouchio(
 
     inflightEvents.add(ctx)
 
-    const eventType = ctx.event.type
-
     let json = toFacade(ctx.event).json()
 
     if (ctx.event.type === 'track') {
@@ -106,10 +102,13 @@ export function hightouchio(
       json = onAlias(analytics, json)
     }
 
+    // Wrap the normalized JSON object in an array for Cloudflare Pipeline
+    const payload = [normalize(analytics, json, settings, integrations)]
+
     return client
       .dispatch(
-        `${remote}/v1/${eventType}`,
-        normalize(analytics, json, settings, integrations)
+        cloudflarePipelineUrl,
+        payload
       )
       .then(() => ctx)
       .catch(() => {

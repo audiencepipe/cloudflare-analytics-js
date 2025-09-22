@@ -154,6 +154,11 @@ export interface InitOptions {
   apiHost?: string // Defaults to us-east-1.hightouch-events.com
   protocol?: string // Defaults to https
   batching?: boolean // Defaults to false
+  
+  /**
+   * Cloudflare Pipeline URL for sending all events
+   */
+  cloudflarePipelineUrl?: string
 }
 
 /* analytics-classic stubs */

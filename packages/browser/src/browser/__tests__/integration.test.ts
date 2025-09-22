@@ -57,7 +57,7 @@ const xt: Plugin = {
   },
 
   track: async (ctx) => ctx,
-  identify: async (ctx) => ctx,
+ identify: async (ctx) => ctx,
   page: async (ctx) => ctx,
   group: async (ctx) => ctx,
   alias: async (ctx) => ctx,
@@ -156,7 +156,9 @@ describe('Initialization', () => {
       ready: async () => {
         return new Promise((resolve) => setTimeout(resolve, 300))
       },
-      isLoaded: () => true,
+      isLoaded: () => {
+        return true
+      },
     }
 
     const lazyPlugin2: Plugin = {
@@ -168,7 +170,9 @@ describe('Initialization', () => {
       ready: async () => {
         return new Promise((resolve) => setTimeout(resolve, 100))
       },
-      isLoaded: () => true,
+      isLoaded: () => {
+        return true
+      },
     }
 
     jest.spyOn(lazyPlugin1, 'load')
@@ -1056,7 +1060,7 @@ describe('Hightouch.io overrides', () => {
       {
         integrations: {
           'Hightouch.io': {
-            apiHost: 'https://my.endpoint.com',
+            cloudflarePipelineUrl: 'https://my.endpoint.com',
             anotherSettings: '👻',
           },
         },
@@ -1066,7 +1070,7 @@ describe('Hightouch.io overrides', () => {
     expect(HightouchPlugin.hightouchio).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
-        apiHost: 'https://my.endpoint.com',
+        cloudflarePipelineUrl: 'https://my.endpoint.com',
         anotherSettings: '👻',
       }),
       expect.anything()
@@ -1198,7 +1202,7 @@ describe.skip('Options', () => {
       const integrationMock = jest.spyOn(amplitude.integration!, 'track')
       await analytics.track('Hello!', {
         date: new Date(),
-        iso: '2020-10-10',
+        iso: '20-10-10',
       })
 
       const [integrationEvent] = integrationMock.mock.lastCall!

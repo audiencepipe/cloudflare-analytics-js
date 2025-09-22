@@ -1,4 +1,3 @@
-import { HightouchEvent } from '../../core/events'
 import { fetch } from '../../lib/fetch'
 import { onPageChange } from '../../lib/on-page-change'
 
@@ -44,9 +43,8 @@ function chunks(batch: object[]): Array<object[]> {
 }
 
 export default function batch(
-  apiHost: string,
-  config?: BatchingDispatchConfig,
-  protocol = 'https'
+  cloudflarePipelineUrl: string,
+  config?: BatchingDispatchConfig
 ) {
   let buffer: object[] = []
   let pageUnloaded = false
@@ -59,26 +57,16 @@ export default function batch(
       return
     }
 
-    const writeKey = (batch[0] as HightouchEvent)?.writeKey
-
-    // Remove sentAt from every event as batching only needs a single timestamp
-    const updatedBatch = batch.map((event) => {
-      const { sentAt, ...newEvent } = event as HightouchEvent
-      return newEvent
-    })
-
-    return fetch(`${protocol}://${apiHost}/v1/batch`, {
+    // For Cloudflare Pipeline, we send the batch directly to the pipeline URL
+    // The payload is already an array of events, which is what Cloudflare Pipeline expects
+    return fetch(cloudflarePipelineUrl, {
       keepalive: pageUnloaded,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'post',
-      body: JSON.stringify({
-        writeKey,
-        batch: updatedBatch,
-        sentAt: new Date().toISOString(),
-      }),
+      body: JSON.stringify(batch),
     })
   }
 

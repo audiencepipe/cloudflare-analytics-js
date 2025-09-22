@@ -36,7 +36,8 @@ describe('before loading', () => {
   let analytics: Analytics
 
   beforeEach(() => {
-    options = { apiKey: 'foo' }
+    // Use a mock Cloudflare Pipeline URL for testing
+    options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
     analytics = new Analytics({ writeKey: options.apiKey })
 
     window.localStorage.clear()
