@@ -50,7 +50,7 @@ describe('Batching', () => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
     jest.useFakeTimers({
-      now: new Date('9 Jun 193 00:00:00Z').getTime(),
+      now: new Date('9 Jun 1993 00:00:00Z').getTime(),
     })
   })
 
