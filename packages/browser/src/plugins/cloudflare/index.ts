@@ -22,7 +22,7 @@ type DeliveryStrategy =
       config?: BatchingDispatchConfig
     }
 
-export type HightouchioSettings = {
+export type CloudflareSettings = {
   apiKey: string
   cloudflarePipelineUrl: string
 
@@ -48,9 +48,9 @@ function onAlias(analytics: Analytics, json: JSON): JSON {
   return json
 }
 
-export function hightouchio(
+export function cloudflare(
   analytics: Analytics,
-  settings?: HightouchioSettings,
+  settings?: CloudflareSettings,
   integrations?: LegacySettings['integrations']
 ): Plugin {
  // Attach `pagehide` before buffer is created so that inflight events are added
@@ -66,14 +66,14 @@ export function hightouchio(
     ? new PriorityQueue<Context>(analytics.queue.queue.maxAttempts, [])
     : new PersistedPriorityQueue(
         analytics.queue.queue.maxAttempts,
-        `${writeKey}:dest-Hightouch.io`
+        `${writeKey}:dest-Cloudflare`
       )
 
   const inflightEvents = new Set<Context>()
  const flushing = false
 
   // Use the cloudflarePipelineUrl directly, with a fallback
-  const cloudflarePipelineUrl = settings?.cloudflarePipelineUrl ?? 'https://us-east-1.hightouch-events.com'
+  const cloudflarePipelineUrl = settings?.cloudflarePipelineUrl ?? 'https://us-east-1.cloudflare-events.com'
 
   const deliveryStrategy = settings?.deliveryStrategy
   // Pass the cloudflarePipelineUrl to both dispatchers
@@ -86,7 +86,7 @@ export function hightouchio(
     if (isOffline()) {
       buffer.push(ctx)
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      scheduleFlush(flushing, buffer, hightouch, scheduleFlush)
+      scheduleFlush(flushing, buffer, cloudflare, scheduleFlush)
       return ctx
     }
 
@@ -114,7 +114,7 @@ export function hightouchio(
       .catch(() => {
         buffer.pushWithBackoff(ctx)
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        scheduleFlush(flushing, buffer, hightouch, scheduleFlush)
+        scheduleFlush(flushing, buffer, cloudflare, scheduleFlush)
         return ctx
       })
       .finally(() => {
@@ -122,8 +122,8 @@ export function hightouchio(
       })
   }
 
-  const hightouch: Plugin = {
-    name: 'Hightouch.io',
+  const cloudflare: Plugin = {
+    name: 'Cloudflare',
     type: 'after',
     version: '0.1.0',
     isLoaded: (): boolean => true,
@@ -139,8 +139,8 @@ export function hightouchio(
   // Buffer may already have items if they were previously stored in localStorage.
   // Start flushing them immediately.
   if (buffer.todo) {
-    scheduleFlush(flushing, buffer, hightouch, scheduleFlush)
+    scheduleFlush(flushing, buffer, cloudflare, scheduleFlush)
   }
 
-  return hightouch
+  return cloudflare
 }

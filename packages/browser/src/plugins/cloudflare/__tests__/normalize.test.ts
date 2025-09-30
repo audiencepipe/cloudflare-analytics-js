@@ -1,6 +1,6 @@
 import assert from 'assert'
 import cookie from 'js-cookie'
-import { HightouchioSettings } from '..'
+import { CloudflareSettings } from '..'
 import { normalize } from '../normalize'
 import { Analytics } from '../../../core/analytics'
 import { HightouchEvent } from '../../../core/events'
@@ -32,7 +32,7 @@ describe('before loading', () => {
     )
   })
 
-  let options: HightouchioSettings
+  let options: CloudflareSettings
   let analytics: Analytics
 
   beforeEach(() => {
@@ -123,7 +123,7 @@ describe('before loading', () => {
     describe('unbundling', () => {
       it('should add a list of bundled integrations', () => {
         normalize(analytics, object, options, {
-          'Hightouch.io': {},
+          'Cloudflare': {},
           other: {
             bundlingStatus: 'bundled',
           },
@@ -131,7 +131,7 @@ describe('before loading', () => {
 
         assert(object)
         assert(object._metadata)
-        assert.deepEqual(object._metadata.bundled, ['Hightouch.io', 'other'])
+        assert.deepEqual(object._metadata.bundled, ['Cloudflare', 'other'])
       })
 
       it('should add a list of bundled ids', () => {
@@ -145,7 +145,7 @@ describe('before loading', () => {
             },
           },
           {
-            'Hightouch.io': {},
+            'Cloudflare': {},
             other: {
               bundlingStatus: 'bundled',
             },

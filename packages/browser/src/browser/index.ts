@@ -17,7 +17,7 @@ import {
   RemotePlugin,
 } from '../plugins/remote-loader'
 import type { RoutingRule } from '../plugins/routing-middleware'
-import { hightouchio, HightouchioSettings } from '../plugins/hightouchio'
+import { cloudflare, CloudflareSettings } from '../plugins/cloudflare'
 import { validation } from '../plugins/validation'
 import {
   AnalyticsBuffered,
@@ -102,7 +102,7 @@ export interface CfEventsBrowserSettings extends AnalyticsSettings {
    */
   cdnSettings?: LegacySettings & Record<string, unknown>
   /**
-   * If provided, will override the default Hightouch CDN (https://cdn.hightouch-events.com) for this application.
+   * If provided, will override the default Hightouch CDN (https://cdn.cloudflare-events.com) for this application.
    */
   cdnURL?: string
 }
@@ -131,7 +131,7 @@ export function loadLegacySettings(
 function hasLegacyDestinations(settings: LegacySettings): boolean {
   return (
     getProcessEnv().NODE_ENV !== 'test' &&
-    // just one integration means hightouchio
+    // just one integration means cloudflare
     Object.keys(settings.integrations).length > 1
   )
 }
@@ -258,14 +258,14 @@ async function registerPlugins(
   }
 
   const shouldIgnoreHightouchio =
-    (opts.integrations?.All === false && !opts.integrations['Hightouch.io']) ||
-    (opts.integrations && opts.integrations['Hightouch.io'] === false)
+    (opts.integrations?.All === false && !opts.integrations['Cloudflare']) ||
+    (opts.integrations && opts.integrations['Cloudflare'] === false)
 
   if (!shouldIgnoreHightouchio) {
     toRegister.push(
-      await hightouchio(
+      await cloudflare(
         analytics,
-        mergedSettings['Hightouch.io'] as HightouchioSettings,
+        mergedSettings['Cloudflare'] as CloudflareSettings,
         legacySettings.integrations
       )
     )
@@ -308,9 +308,9 @@ async function registerPlugins(
   return ctx
 }
 
-const defaultHightouchIntegration: HightouchioSettings = {
+const defaultCloudflareIntegration: CloudflareSettings = {
   apiKey: 'WRITE_KEY',
-  cloudflarePipelineUrl: 'https://us-east-1.hightouch-events.com', // Default to the original URL, but now as cloudflarePipelineUrl
+  cloudflarePipelineUrl: 'https://us-east-1.cloudflare-events.com', // Default to the original URL, but now as cloudflarePipelineUrl
   unbundledIntegrations: [],
   addBundledMetadata: false,
   maybeBundledConfigIds: {},
@@ -346,19 +346,19 @@ async function loadAnalytics(
   if (settings.cdnSettings) {
     legacySettings = settings.cdnSettings
   } else {
-    defaultSettings.integrations['Hightouch.io'] = {
-      ...defaultHightouchIntegration,
+    defaultSettings.integrations['Cloudflare'] = {
+      ...defaultCloudflareIntegration,
       ...(settings.writeKey ? { apiKey: settings.writeKey } : {}),
       // Remove apiHost and protocol, add cloudflarePipelineUrl if provided in options
       ...(options.cloudflarePipelineUrl ? { cloudflarePipelineUrl: options.cloudflarePipelineUrl } : {}),
-      // defaultHightouchIntegration defaults to 'standard'
+      // defaultCloudflareIntegration defaults to 'standard'
       // allow a simple options override to turn on 'batching'
       ...(options.batching == true
         ? {
             deliveryStrategy: {
               strategy: 'batching',
               config: { timeout: 1000, size: 10 }, // 1 second or 10 items
-            } as HightouchioSettings['deliveryStrategy'],
+            } as CloudflareSettings['deliveryStrategy'],
           }
         : {}),
     }
@@ -370,7 +370,7 @@ async function loadAnalytics(
  }
 
   const retryQueue: boolean =
-    legacySettings.integrations['Hightouch.io']?.retryQueue ?? true
+    legacySettings.integrations['Cloudflare']?.retryQueue ?? true
 
   if (!options.disableClientPersistence && options.httpCookieServiceOptions) {
     options.httpCookieService = await HTTPCookieService.load(

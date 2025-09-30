@@ -1,12 +1,12 @@
 import { Analytics } from '../../core/analytics'
 import { LegacySettings } from '../../browser'
 import { SegmentFacade } from '../../lib/to-facade'
-import { HightouchioSettings } from './index'
+import { CloudflareSettings } from './index'
 
 export function normalize(
   analytics: Analytics,
   json: ReturnType<SegmentFacade['json']>,
-  settings?: HightouchioSettings,
+  settings?: CloudflareSettings,
   integrations?: LegacySettings['integrations']
 ): object {
   const user = analytics.user()
@@ -30,7 +30,7 @@ export function normalize(
 
   for (const key in integrations) {
     const integration = integrations[key]
-    if (key === 'Hightouch.io') {
+    if (key === 'Cloudflare') {
       bundled.push(key)
     }
     if (integration.bundlingStatus === 'bundled') {

@@ -1,6 +1,6 @@
 import assert from 'assert'
 import unfetch from 'unfetch'
-import { hightouchio, HightouchioSettings } from '..'
+import { cloudflare, CloudflareSettings } from '..'
 import { Analytics } from '../../../core/analytics'
 import { Plugin } from '../../../core/plugin'
 import { envEnrichment } from '../../env-enrichment'
@@ -10,10 +10,10 @@ jest.mock('unfetch', () => {
   return jest.fn()
 })
 
-describe('Hightouch.io', () => {
-  let options: HightouchioSettings
+describe('Cloudflare', () => {
+  let options: CloudflareSettings
   let analytics: Analytics
-  let hightouch: Plugin
+  let cloudflare: Plugin
   let spyMock: jest.SpyInstance
 
   beforeEach(async () => {
@@ -23,9 +23,9 @@ describe('Hightouch.io', () => {
     // Use a mock Cloudflare Pipeline URL for testing
     options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
     analytics = new Analytics({ writeKey: options.apiKey })
-    hightouch = await hightouchio(analytics, options, {})
+    cloudflare = await cloudflare(analytics, options, {})
 
-    await analytics.register(hightouch, envEnrichment)
+    await analytics.register(cloudflare, envEnrichment)
 
     window.localStorage.clear()
 
@@ -50,7 +50,7 @@ describe('Hightouch.io', () => {
       const analytics = new Analytics({ writeKey: 'foo' })
 
       await analytics.register(
-        await hightouchio(analytics, {
+        await cloudflare(analytics, {
           apiKey: '',
           cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
           deliveryStrategy: {
@@ -69,11 +69,11 @@ describe('Hightouch.io', () => {
     it('should default to no keepalive', async () => {
       const analytics = new Analytics({ writeKey: 'foo' })
 
-      const hightouch = await hightouchio(analytics, {
+      const cloudflare = await cloudflare(analytics, {
         apiKey: '',
         cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
       })
-      await analytics.register(await hightouch)
+      await analytics.register(await cloudflare)
       await analytics.track('foo')
 
       const [_, params] = spyMock.mock.lastCall

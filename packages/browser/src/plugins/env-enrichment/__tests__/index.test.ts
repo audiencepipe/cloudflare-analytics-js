@@ -2,7 +2,7 @@ import cookie from 'js-cookie'
 import assert from 'assert'
 import { Analytics } from '../../../core/analytics'
 import { envEnrichment } from '..'
-import { HightouchioSettings } from '../../hightouchio'
+import { CloudflareSettings } from '../../cloudflare'
 import { CoreExtraContext } from '@ht-sdks/events-sdk-js-core'
 import { UADataValues } from '../../../lib/client-hints/interfaces'
 import {
@@ -25,7 +25,7 @@ const ignoreProbeCookieWrites = (
 ) => fn.mock.calls.filter((c) => c[0] !== 'ajs_cookies_check')
 
 describe('Other visitor metadata', () => {
-  let options: HightouchioSettings
+  let options: CloudflareSettings
   let analytics: Analytics
   ;(window.navigator as any).userAgentData = {
     ...lowEntropyTestData,

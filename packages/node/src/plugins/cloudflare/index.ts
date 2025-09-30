@@ -40,7 +40,7 @@ export function createNodePlugin(publisher: Publisher): HightouchNodePlugin {
   }
 
   return {
-    name: 'Hightouch.io',
+    name: 'Cloudflare',
     type: 'after',
     version: '1.0.0',
     isLoaded: () => true,

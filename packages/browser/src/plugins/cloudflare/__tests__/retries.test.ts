@@ -1,4 +1,4 @@
-import { hightouchio, HightouchioSettings } from '..'
+import { cloudflare, CloudflareSettings } from '..'
 import { Analytics } from '../../../core/analytics'
 // @ts-ignore isOffline mocked dependency is accused as unused
 import { isOffline } from '../../../core/connection'
@@ -13,7 +13,7 @@ jest.mock('../schedule-flush')
 
 type QueueType = 'priority' | 'persisted'
 
-describe('Hightouch.io retries', () => {
+describe('Cloudflare retries', () => {
   let options: HightouchioSettings
   let analytics: Analytics
   let hightouch: Plugin
@@ -58,7 +58,7 @@ describe('Hightouch.io retries', () => {
           })
         }
 
-        hightouch = await hightouchio(analytics, options, {})
+        cloudflare = await cloudflare(analytics, options, {})
 
         await analytics.register(hightouch, envEnrichment)
       })

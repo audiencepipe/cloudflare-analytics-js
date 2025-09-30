@@ -1,7 +1,7 @@
 import { CoreAnalytics, bindAll, pTimeout } from '@ht-sdks/events-sdk-js-core'
 import { HtEventsSettings, validateSettings } from './settings'
 import { version } from '../generated/version'
-import { createConfiguredNodePlugin } from '../plugins/hightouchio'
+import { createConfiguredNodePlugin } from '../plugins/cloudflare'
 import { NodeEventFactory } from './event-factory'
 import { Callback, dispatchAndEmit } from './dispatch-emit'
 import { NodeEmitter } from './emitter'

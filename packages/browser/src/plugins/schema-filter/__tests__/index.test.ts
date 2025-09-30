@@ -3,14 +3,14 @@ import { Analytics } from '../../../core/analytics'
 import { Context } from '../../../core/context'
 import { schemaFilter } from '..'
 import { LegacySettings } from '../../../browser'
-import { hightouchio, HightouchioSettings } from '../../hightouchio'
+import { cloudflare, CloudflareSettings } from '../../cloudflare'
 
 const settings: LegacySettings = {
   integrations: {
     'Braze Web Mode (Actions)': {},
     // note that Fullstory's name here doesn't contain 'Actions'
     Fullstory: {},
-    'Hightouch.io': {},
+    'Cloudflare': {},
   },
   remotePlugins: [
     {
@@ -93,7 +93,7 @@ const fullstory: Plugin = {
 }
 
 describe('schema filter', () => {
-  let options: HightouchioSettings
+  let options: CloudflareSettings
   let filterXt: Plugin
   let hightouch: Plugin
   let ajs: Analytics
@@ -104,7 +104,7 @@ describe('schema filter', () => {
 
     options = { apiKey: 'foo' }
     ajs = new Analytics({ writeKey: options.apiKey })
-    hightouch = await hightouchio(ajs, options, {})
+    cloudflare = await cloudflare(ajs, options, {})
     filterXt = schemaFilter({}, settings)
 
     jest.spyOn(hightouch, 'track')
