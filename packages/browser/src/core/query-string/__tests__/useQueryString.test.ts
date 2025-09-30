@@ -1,5 +1,5 @@
 import unfetch from 'unfetch'
-import { HtEventsBrowser } from '../../..'
+import { CfEventsBrowser } from '../../..'
 import { createSuccess } from '../../../test-helpers/factories'
 
 jest.mock('unfetch')
@@ -16,7 +16,7 @@ window.location = new URL(
 
 describe('useQueryString configuration option', () => {
   it('ignores aid and uid from query string when disabled', async () => {
-    const [analyticsAlt] = await HtEventsBrowser.load(
+    const [analyticsAlt] = await CfEventsBrowser.load(
       { writeKey: 'abc' },
       {
         useQueryString: false,
@@ -29,7 +29,7 @@ describe('useQueryString configuration option', () => {
   })
 
   it('ignores uid when it doesnt match the required pattern', async () => {
-    const [analyticsAlt] = await HtEventsBrowser.load(
+    const [analyticsAlt] = await CfEventsBrowser.load(
       { writeKey: 'abc' },
       {
         useQueryString: {
@@ -44,7 +44,7 @@ describe('useQueryString configuration option', () => {
   })
 
   it('accepts both aid and uid from query string when they match the required pattern', async () => {
-    const [analyticsAlt] = await HtEventsBrowser.load(
+    const [analyticsAlt] = await CfEventsBrowser.load(
       { writeKey: 'abc' },
       {
         useQueryString: {
