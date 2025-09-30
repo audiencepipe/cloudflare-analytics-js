@@ -11,17 +11,17 @@ declare global {
 
 type GoogleTagManagerSettings = {
   /**
-   * If a `Viewed Page` event should be sent for all `htevents.page` calls
+   * If a `Viewed Page` event should be sent for all `cfevents.page` calls
    */
   trackAllPages?: boolean
 
   /**
-   * If a `Viewed <name> Page` event should be sent for `htevents.page('Name')` calls
+   * If a `Viewed <name> Page` event should be sent for `cfevents.page('Name')` calls
    */
   trackNamedPages?: boolean
 
   /**
-   * If a `Viewed <category> <name> Page` event should be sent for `htevents.page('Category', 'Name')` calls
+   * If a `Viewed <category> <name> Page` event should be sent for `cfevents.page('Category', 'Name')` calls
    */
   trackCategorizedPages?: boolean
 }

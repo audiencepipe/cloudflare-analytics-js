@@ -32,22 +32,22 @@ describe('destination', () => {
       next(payload)
     })
 
-    const htevents = HtEventsBrowser.load({ writeKey: 'WRITE_KEY' })
+    const cfevents = HtEventsBrowser.load({ writeKey: 'WRITE_KEY' })
 
-    await htevents.register(destination)
+    await cfevents.register(destination)
 
     // add middleware to destination via HtEvents
-    await htevents.addDestinationMiddleware('Test', ({ next, payload }) => {
-      payload.obj.context!.htevents = true
+    await cfevents.addDestinationMiddleware('Test', ({ next, payload }) => {
+      payload.obj.context!.cfevents = true
       next(payload)
     })
 
-    await htevents.track('Test Event', { testing: 123 })
+    await cfevents.track('Test Event', { testing: 123 })
 
     expect(spy.mock.lastCall?.[0]).toMatchObject({
       event: 'Test Event',
       properties: { testing: 123 },
-      context: { direct: true, htevents: true },
+      context: { direct: true, cfevents: true },
     })
   })
 })

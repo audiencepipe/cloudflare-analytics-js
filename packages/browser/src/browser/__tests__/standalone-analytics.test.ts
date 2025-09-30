@@ -44,7 +44,7 @@ describe('standalone bundle', () => {
   const hightouchDotCom = `foo`
 
   beforeEach(async () => {
-    ;(window as any).htevents = undefined
+    ;(window as any).cfevents = undefined
     const html = `
     <!DOCTYPE html>
       <head>
@@ -53,10 +53,10 @@ describe('standalone bundle', () => {
             hightouchDotCom,
             true,
             `
-            window.htevents.track('fruit basket', { fruits: ['🍌', '🍇'] })
-            window.htevents.identify('netto', { employer: 'hightouch' })
-            window.htevents.setAnonymousId('anonNetto')
-            window.htevents.on('initialize', () => ({ user: 'ariel' }))
+            window.cfevents.track('fruit basket', { fruits: ['🍌', '🍇'] })
+            window.cfevents.identify('netto', { employer: 'hightouch' })
+            window.cfevents.setAnonymousId('anonNetto')
+            window.cfevents.on('initialize', () => ({ user: 'ariel' }))
           `
           )}
         </script>

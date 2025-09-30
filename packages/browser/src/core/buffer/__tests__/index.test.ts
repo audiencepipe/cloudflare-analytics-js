@@ -29,7 +29,7 @@ describe(PreInitMethodCallBuffer, () => {
 
     it('should also read from global analytics buffer', () => {
       const call1 = new PreInitMethodCall('identify', ['foo'], jest.fn())
-      ;(window as any).htevents = [['track', 'snippet']]
+      ;(window as any).cfevents = [['track', 'snippet']]
 
       const buffer = new PreInitMethodCallBuffer(call1)
       const calls = buffer.toArray()

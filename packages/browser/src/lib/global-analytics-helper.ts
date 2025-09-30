@@ -3,7 +3,7 @@ import { HtEventsSnippet } from '../browser/standalone-interface'
 /**
  * Stores the global window analytics key
  */
-let _globalAnalyticsKey = 'htevents'
+let _globalAnalyticsKey = 'cfevents'
 
 /**
  * Gets the global analytics/buffer

@@ -4,15 +4,15 @@ export function next(writekey: string, obfuscate: boolean) {
     <head></head>
     <script>
       !(function () {
-        var htevents = (window.htevents = window.htevents || [])
-        if (!htevents.initialize)
-          if (htevents.invoked)
+        var cfevents = (window.cfevents = window.cfevents || [])
+        if (!cfevents.initialize)
+          if (cfevents.invoked)
             window.console &&
               console.error &&
               console.error('Hightouch snippet included twice.')
           else {
-            htevents.invoked = !0
-            htevents.methods = [
+            cfevents.invoked = !0
+            cfevents.methods = [
               'screen',
               'register',
               'deregister',
@@ -37,30 +37,30 @@ export function next(writekey: string, obfuscate: boolean) {
               'setAnonymousId',
               'addDestinationMiddleware',
             ]
-            htevents.factory = function (e) {
+            cfevents.factory = function (e) {
               return function () {
                 var t = Array.prototype.slice.call(arguments)
                 t.unshift(e)
-                htevents.push(t)
-                return htevents
+                cfevents.push(t)
+                return cfevents
               }
             }
-            for (var e = 0; e < htevents.methods.length; e++) {
-              var key = htevents.methods[e]
-              htevents[key] = htevents.factory(key)
+            for (var e = 0; e < cfevents.methods.length; e++) {
+              var key = cfevents.methods[e]
+              cfevents[key] = cfevents.factory(key)
             }
-            htevents.load = function (key, e) {
+            cfevents.load = function (key, e) {
               var t = document.createElement('script')
               t.type = 'text/javascript'
               t.async = !0
               t.src = 'http://localhost:4000/dist/umd/standalone.js'
               var n = document.getElementsByTagName('script')[0]
               n.parentNode.insertBefore(t, n)
-              htevents._loadOptions = e
+              cfevents._loadOptions = e
             }
-            htevents.SNIPPET_VERSION = '4.13.1'
-            htevents._writeKey = '${writekey}'
-            htevents.load('${writekey}', { obfuscate: ${obfuscate} })
+            cfevents.SNIPPET_VERSION = '4.13.1'
+            cfevents._writeKey = '${writekey}'
+            cfevents.load('${writekey}', { obfuscate: ${obfuscate} })
           }
       })()
     </script>
@@ -78,15 +78,15 @@ export function classic(writekey: string) {
   <head>
   </head>
     <script>!(function () {
-    var htevents = (window.htevents = window.htevents || [])
-    if (!htevents.initialize)
-      if (htevents.invoked)
+    var cfevents = (window.cfevents = window.cfevents || [])
+    if (!cfevents.initialize)
+      if (cfevents.invoked)
         window.console &&
           console.error &&
           console.error('Hightouch snippet included twice.')
       else {
-        htevents.invoked = !0
-        htevents.methods = [
+        cfevents.invoked = !0
+        cfevents.methods = [
           'screen',
           'register',
           'deregister',
@@ -111,32 +111,32 @@ export function classic(writekey: string) {
           'setAnonymousId',
           'addDestinationMiddleware',
         ]
-        htevents.factory = function (e) {
+        cfevents.factory = function (e) {
           return function () {
             var t = Array.prototype.slice.call(arguments)
             t.unshift(e)
-            htevents.push(t)
-            return htevents
+            cfevents.push(t)
+            return cfevents
           }
         }
-        for (var e = 0; e < htevents.methods.length; e++) {
-          var key = htevents.methods[e]
-          htevents[key] = htevents.factory(key)
+        for (var e = 0; e < cfevents.methods.length; e++) {
+          var key = cfevents.methods[e]
+          cfevents[key] = cfevents.factory(key)
         }
-        htevents.load = function (key, e) {
+        cfevents.load = function (key, e) {
           var t = document.createElement('script')
           t.type = 'text/javascript'
           t.async = !0
           t.src =
-            'https://cdn.hightouch-events.com/htevents.js/v1/' +
+            'https://cdn.hightouch-events.com/cfevents.js/v1/' +
             key +
-            '/htevents.classic.js'
+            '/cfevents.classic.js'
           var n = document.getElementsByTagName('script')[0]
           n.parentNode.insertBefore(t, n)
-          htevents._loadOptions = e
+          cfevents._loadOptions = e
         }
-        htevents.SNIPPET_VERSION = '4.13.1'
-        htevents.load('${writekey}')
+        cfevents.SNIPPET_VERSION = '4.13.1'
+        cfevents.load('${writekey}')
       }
   })()</script>
   <body>

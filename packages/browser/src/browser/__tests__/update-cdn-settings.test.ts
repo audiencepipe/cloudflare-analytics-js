@@ -26,7 +26,7 @@ jest.mocked(remoteLoader).mockImplementation(remoteLoaderSpy)
 describe('updateCDNSettings configuration option', () => {
   beforeEach(() => {
     setGlobalCDNUrl(undefined as any)
-    ;(window as any).htevents = undefined
+    ;(window as any).cfevents = undefined
   })
   it('should update the configuration options if they are passed directly', async () => {
     await HtEventsBrowser.load(

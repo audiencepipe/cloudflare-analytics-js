@@ -41,7 +41,7 @@ it('should not use the default CDN if not overridden', async () => {
 it('if CDN is overridden, sets the overridden CDN global variable', async () => {
   const mockCdn = 'https://cdn.foo.com'
 
-  ;(window as any).htevents = {}
+  ;(window as any).cfevents = {}
 
   await HtEventsBrowser.load({
     writeKey,

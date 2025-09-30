@@ -12,8 +12,8 @@ describe('Backwards compatibility', () => {
     const code = `(() => {
       return [
         ...new Set([
-          ...Object.getOwnPropertyNames(Object.getPrototypeOf(window.htevents)),
-          ...Object.getOwnPropertyNames(window.htevents)
+          ...Object.getOwnPropertyNames(Object.getPrototypeOf(window.cfevents)),
+          ...Object.getOwnPropertyNames(window.cfevents)
         ])
       ].sort()
     })()`
@@ -39,8 +39,8 @@ describe('Backwards compatibility', () => {
 
   test('accesses user_id the same way', async () => {
     const code = `(async () => {
-      await htevents.identify('Test User')
-      return htevents.user().id()
+      await cfevents.identify('Test User')
+      return cfevents.user().id()
     })()`
 
     const results = await run({
@@ -59,8 +59,8 @@ describe('Backwards compatibility', () => {
 
   test('accesses traits the same way', async () => {
     const code = `(async () => {
-      await htevents.identify('Test User', { email: 'test@example.org' })
-      return htevents.user().traits()
+      await cfevents.identify('Test User', { email: 'test@example.org' })
+      return cfevents.user().traits()
     })()`
 
     const results = await run({
@@ -109,23 +109,23 @@ describe('Backwards compatibility', () => {
   test('event emitters emit the same properties', async () => {
     const code = `(async () => {
       let allEvents = {}
-      const htevents = window.htevents
+      const cfevents = window.cfevents
 
-      htevents.on('page', (...args) => {
+      cfevents.on('page', (...args) => {
         allEvents['page'] = [...args].filter(a => a !== undefined && Object.keys(a ?? {}).length > 0)
       })
 
-      htevents.on('track', (...args) => {
+      cfevents.on('track', (...args) => {
         allEvents['track'] = [...args].filter(a => a !== undefined && Object.keys(a ?? {}).length > 0)
       })
 
-      htevents.on('identify', (...args) => {
+      cfevents.on('identify', (...args) => {
         allEvents['identify'] = [...args].filter(a => a !== undefined && Object.keys(a ?? {}).length > 0)
       })
 
-      await htevents.page()
-      await htevents.identify('Hasbulla', { goat: true })
-      await htevents.track('hello world')
+      await cfevents.page()
+      await cfevents.identify('Hasbulla', { goat: true })
+      await cfevents.track('hello world')
 
       return allEvents
     })()`

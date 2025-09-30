@@ -40,7 +40,7 @@ describe('Pre-initialization', () => {
   beforeEach(() => {
     setGlobalCDNUrl(undefined as any)
     mockFetchSettingsSuccessResponse()
-    ;(window as any).htevents = undefined
+    ;(window as any).cfevents = undefined
   })
 
   describe('Smoke', () => {
@@ -242,7 +242,7 @@ describe('Pre-initialization', () => {
       const track2 = ['track', 'bar']
       const identify = ['identify']
 
-      ;(window as any).htevents = [onTrack, track, track2, identify]
+      ;(window as any).cfevents = [onTrack, track, track2, identify]
 
       await HtEventsBrowser.standalone(writeKey)
 
@@ -270,7 +270,7 @@ describe('Pre-initialization', () => {
       const track2 = ['track', 'bar']
       const identify = ['identify']
 
-      ;(window as any).htevents = [identify, onTrack, track, track2]
+      ;(window as any).cfevents = [identify, onTrack, track, track2]
 
       await HtEventsBrowser.standalone(writeKey)
 

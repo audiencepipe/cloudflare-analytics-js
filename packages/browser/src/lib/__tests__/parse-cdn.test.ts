@@ -47,12 +47,12 @@ it('detects the existing hightouch cdn', () => {
   expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.hightouch-events.com"`)
 })
 
-it('should return the overridden cdn if window.htevents._cdn is mutated', () => {
+it('should return the overridden cdn if window.cfevents._cdn is mutated', () => {
   withTag(`
   <script src="https://cdn.hightouch-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
   // @ts-ignore
-  ;(window.htevents as any) = {
+  ;(window.cfevents as any) = {
     _cdn: 'http://foo.cdn.com',
   }
   expect(getCDN()).toMatchInlineSnapshot(`"http://foo.cdn.com"`)
@@ -61,7 +61,7 @@ it('should return the overridden cdn if window.htevents._cdn is mutated', () => 
 it('if analytics is not loaded yet, should still return cdn', () => {
   // is this an impossible state?
   // @ts-ignore
-  window.htevents = undefined as any
+  window.cfevents = undefined as any
   withTag(`
   <script src="https://cdn.hightouch-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)

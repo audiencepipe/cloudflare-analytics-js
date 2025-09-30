@@ -14,7 +14,7 @@ function makeStub(page: playwright.Page) {
       return await page.evaluate((innerArgs) => {
         return (
           // @ts-ignore
-          window.htevents
+          window.cfevents
             .register(...innerArgs)
             // @ts-ignore
             .then((ctx) => ctx.toJSON())
@@ -27,7 +27,7 @@ function makeStub(page: playwright.Page) {
       // @ts-expect-error
       const ctx = await page.evaluate((innerArgs) => {
         // @ts-ignore
-        return window.htevents.track(...innerArgs).then((ctx) => {
+        return window.cfevents.track(...innerArgs).then((ctx) => {
           return ctx.toJSON()
         })
         // @ts-ignore
@@ -40,7 +40,7 @@ function makeStub(page: playwright.Page) {
     ): Promise<SerializedContext> {
       const ctx = await page.evaluate((innerArgs) => {
         // @ts-ignore
-        return window.htevents.page(...innerArgs).then((ctx) => {
+        return window.cfevents.page(...innerArgs).then((ctx) => {
           return ctx.toJSON()
         })
         // @ts-ignore
@@ -54,7 +54,7 @@ function makeStub(page: playwright.Page) {
     ): Promise<SerializedContext> {
       const ctx = await page.evaluate((innerArgs) => {
         // @ts-ignore
-        return window.htevents.identify(...innerArgs).then((ctx) => {
+        return window.cfevents.identify(...innerArgs).then((ctx) => {
           return ctx.toJSON()
         })
         // @ts-ignore
@@ -110,10 +110,10 @@ export async function tester(
     window.AnalyticsNext.HtEventsBrowser.load({
       writeKey: '${_writeKey}',
     }).then(loaded => {
-      window.htevents = loaded[0]
+      window.cfevents = loaded[0]
     })
   `)
 
-  await page.waitForFunction('window.htevents !== undefined')
+  await page.waitForFunction('window.cfevents !== undefined')
   return makeStub(page)
 }

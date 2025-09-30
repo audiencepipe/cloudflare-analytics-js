@@ -129,7 +129,7 @@ export interface InitOptions {
    */
   highEntropyValuesClientHints?: HighEntropyHint[]
   /**
-   * When using the snippet, this is the key that points to the global analytics instance (e.g. window.htevents).
+   * When using the snippet, this is the key that points to the global analytics instance (e.g. window.cfevents).
    * default: analytics
    */
   globalAnalyticsKey?: string

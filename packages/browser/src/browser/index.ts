@@ -429,12 +429,12 @@ async function loadAnalytics(
  *
  * @example
  * ```ts
- *  export const htevents = new HtEventsBrowser()
+ *  export const cfevents = new HtEventsBrowser()
  *  htevents.load({ writeKey: 'foo' })
  * ```
  * @link https://github.com/ht-sdks/events-sdk-js-mono/tree/master/packages/browser#readme
  */
-export class HtEventsBrowser extends AnalyticsBuffered {
+export class CfEventsBrowser extends AnalyticsBuffered {
   private _resolveLoadStart: (
     settings: HtEventsBrowserSettings,
     options: InitOptions

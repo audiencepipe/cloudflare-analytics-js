@@ -25,19 +25,19 @@ describe('Destination Tests', () => {
   // if we deliver events too quickly.
 
   const code = `(async () => {
-    await new Promise(res => window.htevents.page({}, res))
+    await new Promise(res => window.cfevents.page({}, res))
 
     // second page so that assumePageView destinations stop complaining
     await new Promise(res => setTimeout(res, Math.random() * 150 + 100))
-    await new Promise(res => window.htevents.page({}, res))
+    await new Promise(res => window.cfevents.page({}, res))
 
     await new Promise(res => setTimeout(res, Math.random() * 150 + 100))
-    await new Promise(res => window.htevents.identify('Test', {
+    await new Promise(res => window.cfevents.identify('Test', {
       email: 'test@mctesting.org',
     }, res))
 
     await new Promise(res => setTimeout(res, Math.random() * 150 + 100))
-    await new Promise(res => window.htevents.track('Track!', {
+    await new Promise(res => window.cfevents.track('Track!', {
       leProp: 'propé',
     }, res))
   })()`
