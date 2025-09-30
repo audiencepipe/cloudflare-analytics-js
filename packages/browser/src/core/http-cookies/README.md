@@ -65,22 +65,22 @@ The Events SDK expects to interact with a customer's `$server` that implements a
 ### An API for **creating** server and browser cookies
 
 This route should look for the following **browser** cookies (from Events SDK):
-* `request.headers.get('Cookie')["htjs_anonymous_id"]`
-* `request.headers.get('Cookie')["htjs_user_id"]`
+* `request.headers.get('Cookie')["cfjs_anonymous_id"]`
+* `request.headers.get('Cookie')["cfjs_user_id"]`
 
 This route should return these values as **server** cookies:
-* `response.cookie("htjs_anonymous_id_srvr", anonVal, {httpOnly:true, ...})`
-* `response.cookie("htjs_user_id_srvr", userIdVal, {httpOnly:true, ...})`
+* `response.cookie("cfjs_anonymous_id_srvr", anonVal, {httpOnly:true, ...})`
+* `response.cookie("cfjs_user_id_srvr", userIdVal, {httpOnly:true, ...})`
 
 If there are no browser cookies found, return any server cookies as browser cookies:
-* `response.cookie("htjs_anonymous_id", anonVal, ...)`
-* `response.cookie("htjs_user_id", userIdVal, ...)`
+* `response.cookie("cfjs_anonymous_id", anonVal, ...)`
+* `response.cookie("cfjs_user_id", userIdVal, ...)`
 
 ### An API for **clearing** server cookies
 
 This route should look for **server** cookies and clean them:
-* `res.cookie("htjs_anonymous_id_srvr", "", {maxAge: 0, httpOnly:true, ...});`
-* `res.cookie("htjs_user_id_srvr", "", {maxAge: 0, httpOnly:true, ...});`
+* `res.cookie("cfjs_anonymous_id_srvr", "", {maxAge: 0, httpOnly:true, ...});`
+* `res.cookie("cfjs_user_id_srvr", "", {maxAge: 0, httpOnly:true, ...});`
 
 ### API Spec
 The spec of the actual `request` and `response` payloads are kept intentionally vague. The spec should fit a variety of server environments.

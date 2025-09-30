@@ -5,8 +5,8 @@ An example HTTPCookieService written as a Next.js API Route.
 ```Javascript
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const USER_COOKIE = "htjs_user_id";
-const ANON_COOKIE = "htjs_anonymous_id";
+const USER_COOKIE = "cfjs_user_id";
+const ANON_COOKIE = "cfjs_anonymous_id";
 
 function getDomain(request: NextApiRequest) {
   const domain = request.headers.host?.toString() ?? "";

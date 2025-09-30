@@ -1,7 +1,7 @@
 import { sleep } from '@ht-sdks/events-sdk-js-core'
 import { getBufferedPageCtxFixture } from '../../test-helpers/fixtures'
 import unfetch from 'unfetch'
-import { HtEventsBrowser } from '..'
+import { CfEventsBrowser } from '..'
 import { Analytics } from '../../core/analytics'
 import { createSuccess } from '../../test-helpers/factories'
 

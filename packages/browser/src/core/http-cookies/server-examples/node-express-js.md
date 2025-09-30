@@ -7,8 +7,8 @@ const express = require("express");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-const USER_COOKIE = "htjs_user_id";
-const ANON_COOKIE = "htjs_anonymous_id";
+const USER_COOKIE = "cfjs_user_id";
+const ANON_COOKIE = "cfjs_anonymous_id";
 
 function getDomain(req) {
   let domain = process.env.DOMAIN || req.headers["x-forwarded-for"] || req.get("host");

@@ -1,6 +1,6 @@
-import { HtEventsBrowser } from '.'
+import { CfEventsBrowser } from '.'
 import { embeddedWriteKey } from '../lib/embedded-write-key'
-import { HtEventsSnippet } from './standalone-interface'
+import { CfEventsSnippet } from './standalone-interface'
 import {
   getGlobalAnalytics,
   setGlobalAnalytics,
@@ -57,6 +57,6 @@ export async function install(): Promise<void> {
   }
 
   setGlobalAnalytics(
-    (await HtEventsBrowser.standalone(writeKey, options)) as HtEventsSnippet
+    (await CfEventsBrowser.standalone(writeKey, options)) as CfEventsSnippet
   )
 }

@@ -8,7 +8,7 @@ import { Analytics, InitOptions } from '../../core/analytics'
 import { LegacyDestination } from '../../plugins/ajs-destination'
 import { PersistedPriorityQueue } from '../../lib/priority-queue/persisted'
 // @ts-ignore loadLegacySettings mocked dependency is accused as unused
-import { CfEventsBrowser, loadLegacySettings, cfevents } from '..'
+import { CfEventsBrowser, loadLegacySettings } from '../index'
 // @ts-ignore isOffline mocked dependency is accused as unused
 import { isOffline } from '../../core/connection'
 import * as HightouchPlugin from '../../plugins/hightouchio'

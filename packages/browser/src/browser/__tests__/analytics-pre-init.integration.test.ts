@@ -1,4 +1,4 @@
-import { HtEventsBrowser } from '../..'
+import { CfEventsBrowser } from '../..'
 import unfetch from 'unfetch'
 import { Analytics } from '../../core/analytics'
 import { Context } from '../../core/context'
@@ -34,7 +34,7 @@ describe('Pre-initialization', () => {
     onSpy.mock.calls.filter(([arg1]) => arg1 === event)
 
   const readySpy = jest.spyOn(Analytics.prototype, 'ready')
-  const browserLoadSpy = jest.spyOn(HtEventsBrowser, 'load')
+  const browserLoadSpy = jest.spyOn(CfEventsBrowser, 'load')
   const consoleErrorSpy = jest.spyOn(console, 'error')
 
   beforeEach(() => {
@@ -45,8 +45,8 @@ describe('Pre-initialization', () => {
 
   describe('Smoke', () => {
     test('load should instantiate an object that resolves into an Analytics object', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
-      expect(ajsBrowser).toBeInstanceOf<typeof HtEventsBrowser>(HtEventsBrowser)
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
+      expect(ajsBrowser).toBeInstanceOf<typeof CfEventsBrowser>(CfEventsBrowser)
       expect(ajsBrowser.instance).toBeUndefined()
       const [ajs, ctx] = await ajsBrowser
       expect(ajsBrowser.instance).toBeInstanceOf<typeof Analytics>(Analytics)
@@ -56,7 +56,7 @@ describe('Pre-initialization', () => {
     })
 
     test('If a user sends a single pre-initialized track event, that event gets flushed', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       const trackCtxPromise = ajsBrowser.track('foo', { name: 'john' })
       const result = await trackCtxPromise
       expect(result).toBeInstanceOf(Context)
@@ -69,7 +69,7 @@ describe('Pre-initialization', () => {
     })
 
     test('"return types should not change over the lifecycle for async methods', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
 
       const trackCtxPromise1 = ajsBrowser.track('foo', { name: 'john' })
       expect(trackCtxPromise1).toBeInstanceOf(Promise)
@@ -84,7 +84,7 @@ describe('Pre-initialization', () => {
     })
 
     test('return types should not change over lifecycle for sync methods', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       const user = ajsBrowser.user()
       expect(user).toBeInstanceOf(Promise)
       await ajsBrowser
@@ -98,12 +98,12 @@ describe('Pre-initialization', () => {
     })
 
     test('version should return version', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       expect(typeof ajsBrowser.VERSION).toBe('string')
     })
 
     test('If a user sends multiple events, all of those event gets flushed', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       const trackCtxPromise = ajsBrowser.track('foo', { name: 'john' })
       const trackCtxPromise2 = ajsBrowser.track('bar', { age: 123 })
       const identifyCtxPromise = ajsBrowser.identify('hello')
@@ -129,7 +129,7 @@ describe('Pre-initialization', () => {
     // by default, we do not fetch settings from cdn
     test.skip('should not throw on initialization failures', async () => {
       mockFetchSettingsErrorResponse()
-      const ajs = HtEventsBrowser.load({ writeKey })
+      const ajs = CfEventsBrowser.load({ writeKey })
       await sleep(100)
       expect(ajs.instance).toBeUndefined()
       void ajs.track('foo')
@@ -146,7 +146,7 @@ describe('Pre-initialization', () => {
       const consoleSpy = jest
         .spyOn(console, 'error')
         .mockImplementationOnce(() => {})
-      HtEventsBrowser.load({ writeKey: 'abc' })
+      CfEventsBrowser.load({ writeKey: 'abc' })
       await sleep(500)
       expect(consoleSpy).toBeCalled()
     })
@@ -155,7 +155,7 @@ describe('Pre-initialization', () => {
   describe('Promise API', () => {
     describe('.then', () => {
       test('.then should be called on success', () => {
-        const ajsBrowser = HtEventsBrowser.load({ writeKey: 'abc' })
+        const ajsBrowser = CfEventsBrowser.load({ writeKey: 'abc' })
         const newPromise = ajsBrowser.then(([analytics, context]) => {
           expect(analytics).toBeInstanceOf<typeof Analytics>(Analytics)
           expect(context).toBeInstanceOf<typeof Context>(Context)
@@ -165,7 +165,7 @@ describe('Pre-initialization', () => {
       })
 
       it('.then should pass to the next .then', async () => {
-        const ajsBrowser = HtEventsBrowser.load({ writeKey: 'abc' })
+        const ajsBrowser = CfEventsBrowser.load({ writeKey: 'abc' })
         const obj = ajsBrowser.then(() => ({ foo: 123 } as const))
         expect(obj).toBeInstanceOf(Promise)
         await obj.then((el) => expect(el.foo).toBe(123))
@@ -177,14 +177,14 @@ describe('Pre-initialization', () => {
         browserLoadSpy.mockImplementationOnce((): any => Promise.reject(errMsg))
 
         await expect(() =>
-          HtEventsBrowser.load({ writeKey: 'abc' })
+          CfEventsBrowser.load({ writeKey: 'abc' })
         ).rejects.toEqual(errMsg)
       })
     })
 
     describe('.finally', () => {
       test('success', async () => {
-        const ajsBrowser = HtEventsBrowser.load({ writeKey: 'abc' })
+        const ajsBrowser = CfEventsBrowser.load({ writeKey: 'abc' })
         const thenCb = jest.fn()
         const finallyCb = jest.fn()
         const catchCb = jest.fn()
@@ -195,7 +195,7 @@ describe('Pre-initialization', () => {
       })
       test('rejection', async () => {
         browserLoadSpy.mockImplementationOnce((): any => Promise.reject(errMsg))
-        const ajsBrowser = HtEventsBrowser.load({ writeKey: 'abc' })
+        const ajsBrowser = CfEventsBrowser.load({ writeKey: 'abc' })
         const onFinallyCb = jest.fn()
         await ajsBrowser
           .catch((reason) => {
@@ -213,7 +213,7 @@ describe('Pre-initialization', () => {
   describe('Load failures', () => {
     test('rejected promise should work as expected for buffered analytics instances', async () => {
       trackSpy.mockImplementationOnce(() => Promise.reject(errMsg))
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       try {
         await ajsBrowser.track('foo', { name: 'john' })
       } catch (err) {
@@ -224,7 +224,7 @@ describe('Pre-initialization', () => {
 
     test('rejected promise should work as expected for initialized analytics instances', async () => {
       trackSpy.mockImplementationOnce(() => Promise.reject(errMsg))
-      const [analytics] = await HtEventsBrowser.load({ writeKey })
+      const [analytics] = await CfEventsBrowser.load({ writeKey })
       try {
         await analytics.track('foo', { name: 'john' })
       } catch (err) {
@@ -244,7 +244,7 @@ describe('Pre-initialization', () => {
 
       ;(window as any).cfevents = [onTrack, track, track2, identify]
 
-      await HtEventsBrowser.standalone(writeKey)
+      await CfEventsBrowser.standalone(writeKey)
 
       await sleep(100) // the snippet does not return a promise (pre-initialization) ... it sometimes has a callback as the third argument.
       expect(trackSpy).toBeCalledWith('foo', getBufferedPageCtxFixture())
@@ -272,7 +272,7 @@ describe('Pre-initialization', () => {
 
       ;(window as any).cfevents = [identify, onTrack, track, track2]
 
-      await HtEventsBrowser.standalone(writeKey)
+      await CfEventsBrowser.standalone(writeKey)
 
       await sleep(100) // the snippet does not return a promise (pre-initialization) ... it sometimes has a callback as the third argument.
       expect(trackSpy).toBeCalledWith('foo', getBufferedPageCtxFixture())
@@ -300,7 +300,7 @@ describe('Pre-initialization', () => {
 
       ;(window as any).hightouch = [onTrack, track, track2, identify]
 
-      await HtEventsBrowser.standalone(writeKey, {
+      await CfEventsBrowser.standalone(writeKey, {
         globalAnalyticsKey: 'hightouch',
       })
 
@@ -320,7 +320,7 @@ describe('Pre-initialization', () => {
 
   describe('Emitter methods', () => {
     test('If, before initialization, .on("track") is called, the .on method should be called after analytics load', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       const args = ['track', jest.fn()] as const
       ajsBrowser.on(...args)
       expect(onSpy).not.toHaveBeenCalledWith(...args)
@@ -332,7 +332,7 @@ describe('Pre-initialization', () => {
 
     test('If, before initialization .on("track") is called and then .track is called, the callback method should be called after analytics loads', async () => {
       const onFnCb = jest.fn()
-      const analytics = HtEventsBrowser.load({ writeKey })
+      const analytics = CfEventsBrowser.load({ writeKey })
       analytics.on('track', onFnCb)
       const trackCtxPromise = analytics.track('foo', { name: 123 })
 
@@ -349,7 +349,7 @@ describe('Pre-initialization', () => {
 
     test('If, before initialization, .ready is called, the callback method should be called after analytics loads', async () => {
       const onReadyCb = jest.fn()
-      const analytics = HtEventsBrowser.load({ writeKey })
+      const analytics = CfEventsBrowser.load({ writeKey })
       const onReadyPromise = analytics.ready(onReadyCb)
       expect(onReadyCb).not.toHaveBeenCalled()
       await onReadyPromise
@@ -360,7 +360,7 @@ describe('Pre-initialization', () => {
 
     test('Should work with "on" events if a track event is called after load is complete', async () => {
       const onTrackCb = jest.fn()
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       ajsBrowser.on('track', onTrackCb)
       await ajsBrowser
       await ajsBrowser.track('foo', { name: 123 })
@@ -369,20 +369,20 @@ describe('Pre-initialization', () => {
       expect(onTrackCb).toHaveBeenCalledWith('foo', { name: 123 }, undefined)
     })
     test('"on, off, once" should return ajsBrowser', () => {
-      const analytics = HtEventsBrowser.load({ writeKey })
+      const analytics = CfEventsBrowser.load({ writeKey })
       expect(
         [
           analytics.on('track', jest.fn),
           analytics.off('track', jest.fn),
           analytics.once('track', jest.fn),
-        ].map((el) => el instanceof HtEventsBrowser)
+        ].map((el) => el instanceof CfEventsBrowser)
       ).toEqual([true, true, true])
     })
 
     test('"emitted" events should be chainable', async () => {
       const onTrackCb = jest.fn()
       const onIdentifyCb = jest.fn()
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       const identifyResult = ajsBrowser.identify('bar')
       const result = ajsBrowser
         .on('track', onTrackCb)
@@ -390,7 +390,7 @@ describe('Pre-initialization', () => {
         .once('group', jest.fn)
         .off('alias', jest.fn)
 
-      expect(result instanceof HtEventsBrowser).toBeTruthy()
+      expect(result instanceof CfEventsBrowser).toBeTruthy()
       await ajsBrowser.track('foo', { name: 123 })
       expect(onTrackCb).toHaveBeenCalledTimes(1)
       expect(onTrackCb).toHaveBeenCalledWith('foo', { name: 123 }, undefined)
@@ -401,7 +401,7 @@ describe('Pre-initialization', () => {
     })
 
     test('the "this" value of "emitted" event callbacks should be Analytics', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
       ajsBrowser.on('track', function onTrackCb(this: any) {
         expect(this).toBeInstanceOf(Analytics)
       })
@@ -416,23 +416,23 @@ describe('Pre-initialization', () => {
     })
 
     test('"return types should not change over the lifecycle for chainable methods', async () => {
-      const ajsBrowser = HtEventsBrowser.load({ writeKey })
+      const ajsBrowser = CfEventsBrowser.load({ writeKey })
 
       const result1 = ajsBrowser.on('track', jest.fn)
-      expect(result1).toBeInstanceOf(HtEventsBrowser)
+      expect(result1).toBeInstanceOf(CfEventsBrowser)
       await result1
       // loaded
       const result2 = ajsBrowser.on('track', jest.fn)
-      expect(result2).toBeInstanceOf(HtEventsBrowser)
+      expect(result2).toBeInstanceOf(CfEventsBrowser)
     })
   })
 
   describe('Multi-instance', () => {
     it('should not throw an error', async () => {
-      const ajsBrowser1 = HtEventsBrowser.load({ writeKey: 'foo' })
-      const ajsBrowser2 = HtEventsBrowser.load({ writeKey: 'abc' })
-      expect(ajsBrowser1).toBeInstanceOf(HtEventsBrowser)
-      expect(ajsBrowser2).toBeInstanceOf(HtEventsBrowser)
+      const ajsBrowser1 = CfEventsBrowser.load({ writeKey: 'foo' })
+      const ajsBrowser2 = CfEventsBrowser.load({ writeKey: 'abc' })
+      expect(ajsBrowser1).toBeInstanceOf(CfEventsBrowser)
+      expect(ajsBrowser2).toBeInstanceOf(CfEventsBrowser)
       await ajsBrowser1
       await ajsBrowser2
     })

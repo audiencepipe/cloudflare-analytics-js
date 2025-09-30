@@ -1,4 +1,4 @@
-import { HtEventsBrowser, getGlobalAnalytics } from '../..'
+import { CfEventsBrowser, getGlobalAnalytics } from '../..'
 import unfetch from 'unfetch'
 import { createSuccess } from '../../test-helpers/factories'
 import { setGlobalCDNUrl } from '../../lib/parse-cdn'
@@ -20,7 +20,7 @@ jest
 it('supports overriding the CDN', async () => {
   const mockCdn = 'https://cdn.foobar.com'
 
-  await HtEventsBrowser.load({
+  await CfEventsBrowser.load({
     writeKey,
     cdnURL: mockCdn,
   })
@@ -29,7 +29,7 @@ it('supports overriding the CDN', async () => {
 })
 
 it('should not use the default CDN if not overridden', async () => {
-  await HtEventsBrowser.load({
+  await CfEventsBrowser.load({
     writeKey,
   })
   // by default, cdn settings are NOT fetched from the server
@@ -43,7 +43,7 @@ it('if CDN is overridden, sets the overridden CDN global variable', async () => 
 
   ;(window as any).cfevents = {}
 
-  await HtEventsBrowser.load({
+  await CfEventsBrowser.load({
     writeKey,
     cdnURL: mockCdn,
   })

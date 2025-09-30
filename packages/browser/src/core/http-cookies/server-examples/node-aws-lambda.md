@@ -3,8 +3,8 @@
 An example HTTPCookieService written as an AWS Lambda Function:
 
 ```Javascript
-const USER_COOKIE = "htjs_user_id";
-const ANON_COOKIE = "htjs_anonymous_id";
+const USER_COOKIE = "cfjs_user_id";
+const ANON_COOKIE = "cfjs_anonymous_id";
 const DOMAIN = "CHANGEME.example.com";
 
 function renewCookies(request, response, browserName, serverName) {
