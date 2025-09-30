@@ -666,7 +666,7 @@ describe('Alias', () => {
   })
 
   it('falls back to userID in cookies if no id passed', async () => {
-    jar.set('htjs_user_id', 'dan')
+    jar.set('cfjs_user_id', 'dan')
     const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],

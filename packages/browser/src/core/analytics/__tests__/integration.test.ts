@@ -246,13 +246,13 @@ describe('Analytics', () => {
 
       let storedData = getAjsBrowserStorage()
       expect(storedData).toEqual({
-        htjs_user_id: 'known-user',
-        htjs_anonymous_id: 'unknown-user',
-        htjs_group_id: 'known-group',
-        htjs_user_traits: {
+        cfjs_user_id: 'known-user',
+        cfjs_anonymous_id: 'unknown-user',
+        cfjs_group_id: 'known-group',
+        cfjs_user_traits: {
           job: 'engineer',
         },
-        htjs_group_properties: {
+        cfjs_group_properties: {
           team: 'analytics',
         },
       })
@@ -282,8 +282,8 @@ describe('Analytics', () => {
     it('handles custom priority storage', async () => {
       const setCookieSpy = jest.spyOn(jar, 'set')
       const expected = 'CookieValue'
-      jar.set('htjs_anonymous_id', expected)
-      localStorage.setItem('htjs_anonymous_id', 'localStorageValue')
+      jar.set('cfjs_anonymous_id', expected)
+      localStorage.setItem('cfjs_anonymous_id', 'localStorageValue')
 
       const analytics = new Analytics(
         { writeKey: '' },
@@ -308,8 +308,8 @@ describe('Analytics', () => {
     it('handles disabling storage', async () => {
       const setCookieSpy = jest.spyOn(jar, 'set')
       const expected = 'CookieValue'
-      jar.set('htjs_anonymous_id', expected)
-      localStorage.setItem('htjs_anonymous_id', 'localStorageValue')
+      jar.set('cfjs_anonymous_id', expected)
+      localStorage.setItem('cfjs_anonymous_id', 'localStorageValue')
 
       const analytics = new Analytics(
         { writeKey: '' },
@@ -326,7 +326,7 @@ describe('Analytics', () => {
       expect(analytics.user().id()).toEqual('known-user')
       expect(setCookieSpy).toHaveBeenCalled()
       // Local storage shouldn't change
-      expect(localStorage.getItem('htjs_anonymous_id')).toBe(
+      expect(localStorage.getItem('cfjs_anonymous_id')).toBe(
         'localStorageValue'
       )
     })

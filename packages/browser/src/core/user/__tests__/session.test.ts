@@ -29,7 +29,7 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-const seshKey = 'htjs_sesh'
+const seshKey = 'cfjs_sesh'
 
 describe('user anonymousId migration', () => {
   describe('()', () => {

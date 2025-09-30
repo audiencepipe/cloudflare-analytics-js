@@ -62,19 +62,19 @@ export interface UserOptions {
 const defaults = {
   persist: true,
   cookie: {
-    key: 'htjs_user_id',
+    key: 'cfjs_user_id',
     oldKey: 'ajs_user',
   },
   localStorage: {
-    key: 'htjs_user_traits',
+    key: 'cfjs_user_traits',
   },
   sessions: {
     autoTrack: true,
   },
 }
 
-const sessionKey = 'htjs_sesh'
-const anonymousIdKey = 'htjs_anonymous_id'
+const sessionKey = 'cfjs_sesh'
+const anonymousIdKey = 'cfjs_anonymous_id'
 const rudderHtAnonymousIdKey = 'htev_anonymous_id'
 const segmentAnonymousIdKey = 'ajs_anonymous_id'
 const rudderAnonymousIdKey = 'rl_anonymous_id'
@@ -418,10 +418,10 @@ export class User {
 const groupDefaults: UserOptions = {
   persist: true,
   cookie: {
-    key: 'htjs_group_id',
+    key: 'cfjs_group_id',
   },
   localStorage: {
-    key: 'htjs_group_properties',
+    key: 'cfjs_group_properties',
   },
 }
 

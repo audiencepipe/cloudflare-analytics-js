@@ -20,7 +20,7 @@ beforeEach(function () {
   jest.spyOn(console, 'warn').mockImplementation(() => {}) // silence console spam.
 })
 
-const anonymousIdKey = 'htjs_anonymous_id'
+const anonymousIdKey = 'cfjs_anonymous_id'
 const rudderHtAnonymousIdKey = 'htev_anonymous_id'
 const segmentAnonymousIdKey = 'ajs_anonymous_id'
 const rudderAnonymousIdKey = 'rl_anonymous_id'

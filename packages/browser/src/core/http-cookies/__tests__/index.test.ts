@@ -277,13 +277,13 @@ describe('Analytics - HTTPCookieService - Integration', () => {
       },
       { httpCookieService: cookieService }
     )
-    analytics.storage.clear('htjs_anonymous_id')
-    analytics.storage.clear('htjs_user_id')
+    analytics.storage.clear('cfjs_anonymous_id')
+    analytics.storage.clear('cfjs_user_id')
   })
 
   afterEach(async () => {
-    analytics.storage.clear('htjs_anonymous_id')
-    analytics.storage.clear('htjs_user_id')
+    analytics.storage.clear('cfjs_anonymous_id')
+    analytics.storage.clear('cfjs_user_id')
   })
 
   it('does not stop normal functioning on wrong url', async () => {
@@ -315,8 +315,8 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(1)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
   })
 
   it('calls dispatchCreate() when calling track without a current user', async () => {
@@ -333,8 +333,8 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(1)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
   })
 
   it('calls dispatchCreate() when calling userId for the first time', async () => {
@@ -351,8 +351,8 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(1)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
   })
 
   it('calls dispatchCreate() when calling identify without a current user', async () => {
@@ -370,8 +370,8 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(2)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
   })
 
   it('calls no additional dispatchCreate()s when calling track with a current user', async () => {
@@ -385,8 +385,8 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyClear).toHaveBeenCalledTimes(0)
     expect(spyCreate).toHaveBeenCalledTimes(2)
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
 
     // we expect NO ADDITIONAL dispatchCreates or dispatchClears
     await analytics.track('Checkout')
@@ -397,14 +397,14 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(2)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
   })
 
   it('calls dispatchClear() when manually clearing anonymousId()', async () => {
     await analytics.user().anonymousId()
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
 
     const spyCreate = jest.spyOn(cookieService, 'dispatchCreate')
     const spyClear = jest.spyOn(cookieService, 'dispatchClear')
@@ -418,14 +418,14 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(0)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
   })
 
   it('calls dispatchClear() when manually clearing userId()', async () => {
     await analytics.user().id('bob')
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
 
     const spyCreate = jest.spyOn(cookieService, 'dispatchCreate')
     const spyClear = jest.spyOn(cookieService, 'dispatchClear')
@@ -439,15 +439,15 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(0)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
   })
 
   it('calls dispatchClear() when reseting the user info', async () => {
     await analytics.user().id('bob')
     await analytics.user().anonymousId()
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
 
     const spyCreate = jest.spyOn(cookieService, 'dispatchCreate')
     const spyClear = jest.spyOn(cookieService, 'dispatchClear')
@@ -462,13 +462,13 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(0)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
   })
 
   it('calls dispatchClear() when reseting the user info--even with no pre-existing user', async () => {
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
 
     const spyCreate = jest.spyOn(cookieService, 'dispatchCreate')
     const spyClear = jest.spyOn(cookieService, 'dispatchClear')
@@ -483,15 +483,15 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(0)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
   })
 
   it('calls dispatch methods when changing the identity of a user', async () => {
     await analytics.user().id('bob')
     await analytics.user().anonymousId()
-    expect(analytics.storage.get('htjs_anonymous_id')).toBeTruthy()
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
 
     const spyCreate = jest.spyOn(cookieService, 'dispatchCreate')
     const spyClear = jest.spyOn(cookieService, 'dispatchClear')
@@ -520,10 +520,10 @@ describe('Analytics - HTTPCookieService - Integration', () => {
       ])
     })
 
-    expect(analytics.storage.get('htjs_user_id')).toBeTruthy()
+    expect(analytics.storage.get('cfjs_user_id')).toBeTruthy()
     // pre-existing behavior clears anonymousId when changing userId.
     // can use analytics.alias('bob', 'tim') if customer-dev wants to workaround this
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe(null)
   })
 
   it('calls dispatchCreate() when migrating anonymousId from segment', async () => {
@@ -542,9 +542,9 @@ describe('Analytics - HTTPCookieService - Integration', () => {
     expect(spyCreate).toHaveBeenCalledTimes(1)
     spyCreate.mockRestore()
 
-    expect(analytics.storage.get('htjs_anonymous_id')).toBe('456-789')
+    expect(analytics.storage.get('cfjs_anonymous_id')).toBe('456-789')
     // pre-existing behavior is to not migrate the userId
-    expect(analytics.storage.get('htjs_user_id')).toBe(null)
+    expect(analytics.storage.get('cfjs_user_id')).toBe(null)
 
     analytics.storage.clear('ajs_anonymous_id')
     analytics.storage.clear('ajs_user_id')
