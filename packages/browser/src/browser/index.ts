@@ -257,11 +257,13 @@ async function registerPlugins(
     toRegister.push(schemaFilter)
   }
 
-  const shouldIgnoreHightouchio =
-    (opts.integrations?.All === false && !opts.integrations['Cloudflare']) ||
-    (opts.integrations && opts.integrations['Cloudflare'] === false)
+  
 
-  if (!shouldIgnoreHightouchio) {
+  const shouldIgnoreCloudflare =
+    (options.integrations?.All === false && !options.integrations['Cloudflare']) ||
+    (options.integrations && options.integrations['Cloudflare'] === false)
+
+  if (!shouldIgnoreCloudflare) {
     toRegister.push(
       await cloudflare(
         analytics,

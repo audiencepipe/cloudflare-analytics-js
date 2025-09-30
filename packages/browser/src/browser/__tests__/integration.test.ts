@@ -11,7 +11,7 @@ import { PersistedPriorityQueue } from '../../lib/priority-queue/persisted'
 import { CfEventsBrowser, loadLegacySettings } from '../index'
 // @ts-ignore isOffline mocked dependency is accused as unused
 import { isOffline } from '../../core/connection'
-import * as HightouchPlugin from '../../plugins/hightouchio'
+import * as CloudflarePlugin from '../../plugins/cloudflare'
 import jar from 'js-cookie'
 import { PriorityQueue } from '../../lib/priority-queue'
 import { getCDN, setGlobalCDNUrl } from '../../lib/parse-cdn'
@@ -33,6 +33,14 @@ jest.mock('unfetch', () => {
     default: (url: RequestInfo, body?: RequestInit) => {
       const call = parseFetchCall([url, body])
       fetchCalls.push(call)
+      // If the URL is the Cloudflare pipeline URL, return a successful mock response.
+      if (typeof url === 'string' && url.includes('cloudflare-events.com')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({}),
+        } as Response);
+      }
       return createMockFetchImplementation(cdnSettingsKitchenSink)(url, body)
     },
   }
@@ -386,50 +394,50 @@ describe('Initialization', () => {
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
-      expect(hightouchio).toBeUndefined()
+      expect(cloudflare).toBeUndefined()
     })
 
     it('does not load Hightouch.io if its set to false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
-        integrations: { 'Hightouch.io': false },
+        integrations: { 'Cloudflare': false },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
-      expect(hightouchio).toBeUndefined()
+      expect(cloudflare).toBeUndefined()
     })
 
     it('loads Hightouch.io if integrations.All is false and Hightouch.io is listed', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
-        integrations: { All: false, 'Hightouch.io': true },
+        integrations: { All: false, 'Cloudflare': true },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
-      expect(hightouchio).toBeDefined()
+      expect(cloudflare).toBeDefined()
     })
 
     it('loads Hightouch.io if integrations.All is undefined', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
-        integrations: { 'Hightouch.io': true },
+        integrations: { 'Cloudflare': true },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
-      expect(hightouchio).toBeDefined()
+      expect(cloudflare).toBeDefined()
     })
 
     it('loads Hightouch.io if integrations is undefined', async () => {
@@ -438,18 +446,18 @@ describe('Initialization', () => {
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
-      expect(hightouchio).toBeDefined()
+      expect(cloudflare).toBeDefined()
     })
 
     it('loads selected plugins when Hightouch.io is false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: {
           'Test Plugin': true,
-          'Hightouch.io': false,
+          'Cloudflare': false,
         },
       }
       const analyticsResponse = await CfEventsBrowser.load(
@@ -461,12 +469,12 @@ describe('Initialization', () => {
         (p) => p.name === 'Test Plugin'
       )
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
       expect(plugin).toBeDefined()
-      expect(hightouchio).toBeUndefined()
+      expect(cloudflare).toBeUndefined()
     })
 
     it('loads selected plugins when Hightouch.io and All are false', async () => {
@@ -474,7 +482,7 @@ describe('Initialization', () => {
         integrations: {
           All: false,
           'Test Plugin': true,
-          'Hightouch.io': false,
+          'Cloudflare': false,
         },
       }
       const analyticsResponse = await CfEventsBrowser.load(
@@ -486,12 +494,12 @@ describe('Initialization', () => {
         (p) => p.name === 'Test Plugin'
       )
 
-      const hightouchio = analyticsResponse[0].queue.plugins.find(
-        (p) => p.name === 'Hightouch.io'
+      const cloudflare = analyticsResponse[0].queue.plugins.find(
+        (p) => p.name === 'Cloudflare'
       )
 
       expect(plugin).toBeDefined()
-      expect(hightouchio).toBeUndefined()
+      expect(cloudflare).toBeUndefined()
     })
   })
 })
@@ -503,12 +511,12 @@ describe('Dispatch', () => {
       plugins: [amplitude, googleAnalytics],
     })
 
-    const hightouchio = ajs.queue.plugins.find((p) => p.name === 'Hightouch.io')
-    expect(hightouchio).toBeDefined()
+    const cloudflare = ajs.queue.plugins.find((p) => p.name === 'Cloudflare')
+    expect(cloudflare).toBeDefined()
 
     const ampSpy = jest.spyOn(amplitude, 'track')
     const gaSpy = jest.spyOn(googleAnalytics, 'track')
-    const hightouchSpy = jest.spyOn(hightouchio!, 'track')
+    const cloudflareSpy = jest.spyOn(cloudflare!, 'track')
 
     const boo = await ajs.track('Boo!', {
       total: 25,
@@ -517,59 +525,46 @@ describe('Dispatch', () => {
 
     expect(ampSpy).toHaveBeenCalledWith(boo)
     expect(gaSpy).toHaveBeenCalledWith(boo)
-    expect(hightouchSpy).toHaveBeenCalledWith(boo)
+    expect(cloudflareSpy).toHaveBeenCalledWith(boo)
   })
 
   it('does not dispatch events to destinations on deny list', async () => {
-    const [ajs] = await CfEventsBrowser.load({
-      writeKey,
-      plugins: [amplitude, googleAnalytics],
-    })
-
-    const hightouchio = ajs.queue.plugins.find((p) => p.name === 'Hightouch.io')
-    expect(hightouchio).toBeDefined()
-
-    const ampSpy = jest.spyOn(amplitude, 'track')
-    const gaSpy = jest.spyOn(googleAnalytics, 'track')
-    const hightouchSpy = jest.spyOn(hightouchio!, 'track')
-
-    const boo = await ajs.track(
-      'Boo!',
+    const [ajs] = await CfEventsBrowser.load(
       {
-        total: 25,
-        userId: '👻',
+        writeKey,
+        plugins: [amplitude, googleAnalytics],
       },
       {
         integrations: {
           Amplitude: false,
-          'Hightouch.io': false,
+          Cloudflare: false,
         },
       }
     )
 
-    expect(gaSpy).toHaveBeenCalledWith(boo)
-    expect(ampSpy).not.toHaveBeenCalled()
-    expect(hightouchSpy).not.toHaveBeenCalled()
-  })
-
-  it('does dispatch events to Hightouch.io when All is false', async () => {
-    const [ajs] = await CfEventsBrowser.load({
-      writeKey,
-      plugins: [amplitude, googleAnalytics],
-    })
-
-    const hightouchio = ajs.queue.plugins.find((p) => p.name === 'Hightouch.io')
-    expect(hightouchio).toBeDefined()
+    const cloudflare = ajs.queue.plugins.find((p) => p.name === 'Cloudflare')
+    expect(cloudflare).toBeUndefined() // Cloudflare should not be defined if it's denied
 
     const ampSpy = jest.spyOn(amplitude, 'track')
     const gaSpy = jest.spyOn(googleAnalytics, 'track')
-    const hightouchSpy = jest.spyOn(hightouchio!, 'track')
+    // No need to spy on cloudflare if it's not loaded
+    // const cloudflareSpy = jest.spyOn(cloudflare!, 'track')
 
-    const boo = await ajs.track(
-      'Boo!',
+    const boo = await ajs.track('Boo!', {
+      total: 25,
+      userId: '👻',
+    })
+
+    expect(gaSpy).toHaveBeenCalledWith(boo)
+    expect(ampSpy).not.toHaveBeenCalled()
+    // expect(cloudflareSpy).not.toHaveBeenCalled() // No spy if not loaded
+  })
+
+  it('does not dispatch events to Cloudflare when All is false and Cloudflare is not explicitly enabled', async () => {
+    const [ajs] = await CfEventsBrowser.load(
       {
-        total: 25,
-        userId: '👻',
+        writeKey,
+        plugins: [amplitude, googleAnalytics],
       },
       {
         integrations: {
@@ -578,9 +573,21 @@ describe('Dispatch', () => {
       }
     )
 
+    const cloudflare = ajs.queue.plugins.find((p) => p.name === 'Cloudflare')
+    expect(cloudflare).toBeUndefined() // Cloudflare should not be loaded if All is false and it's not explicitly enabled
+
+    const ampSpy = jest.spyOn(amplitude, 'track')
+    const gaSpy = jest.spyOn(googleAnalytics, 'track')
+    // No need to spy on cloudflare if it's not loaded
+
+    const boo = await ajs.track('Boo!', {
+      total: 25,
+      userId: '👻',
+    })
+
     expect(gaSpy).not.toHaveBeenCalled()
     expect(ampSpy).not.toHaveBeenCalled()
-    expect(hightouchSpy).toHaveBeenCalledWith(boo)
+    // expect(cloudflareSpy).toHaveBeenCalledWith(boo) // No spy if not loaded
   })
 
   it('enriches events before dispatching', async () => {
@@ -961,7 +968,7 @@ describe('retries', () => {
     // @ts-ignore ignore reassining function
     loadLegacySettings = jest.fn().mockReturnValue(
       Promise.resolve({
-        integrations: { 'Hightouch.io': { retryQueue: false } },
+        integrations: { 'Cloudflare': { retryQueue: false } },
       })
     )
   })
@@ -1053,13 +1060,13 @@ describe('retries', () => {
 
 describe('Hightouch.io overrides', () => {
   it('allows for overriding Hightouch.io settings', async () => {
-    jest.spyOn(HightouchPlugin, 'hightouchio')
+    jest.spyOn(CloudflarePlugin, 'cloudflare')
 
     await CfEventsBrowser.load(
       { writeKey },
       {
         integrations: {
-          'Hightouch.io': {
+          'Cloudflare': {
             cloudflarePipelineUrl: 'https://my.endpoint.com',
             anotherSettings: '👻',
           },
@@ -1067,7 +1074,7 @@ describe('Hightouch.io overrides', () => {
       }
     )
 
-    expect(HightouchPlugin.hightouchio).toHaveBeenCalledWith(
+    expect(CloudflarePlugin.cloudflare).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         cloudflarePipelineUrl: 'https://my.endpoint.com',

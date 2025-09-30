@@ -7,7 +7,7 @@ describe('Plugins', () => {
       await analytics.ready
 
       const ajsNodeXt = analytics['_queue'].plugins.find(
-        (xt) => xt.name === 'Hightouch.io'
+        (xt) => xt.name === 'Cloudflare'
       )
       expect(ajsNodeXt).toBeDefined()
       expect(ajsNodeXt?.isLoaded()).toBeTruthy()

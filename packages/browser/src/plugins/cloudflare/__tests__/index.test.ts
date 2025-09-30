@@ -13,7 +13,7 @@ jest.mock('unfetch', () => {
 describe('Cloudflare', () => {
   let options: CloudflareSettings
   let analytics: Analytics
-  let cloudflare: Plugin
+  let cloudflarePlugin: Plugin
   let spyMock: jest.SpyInstance
 
   beforeEach(async () => {
@@ -23,9 +23,9 @@ describe('Cloudflare', () => {
     // Use a mock Cloudflare Pipeline URL for testing
     options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
     analytics = new Analytics({ writeKey: options.apiKey })
-    cloudflare = await cloudflare(analytics, options, {})
+    cloudflarePlugin = await cloudflare(analytics, options, {})
 
-    await analytics.register(cloudflare, envEnrichment)
+    await analytics.register(cloudflarePlugin, envEnrichment)
 
     window.localStorage.clear()
 
@@ -69,11 +69,11 @@ describe('Cloudflare', () => {
     it('should default to no keepalive', async () => {
       const analytics = new Analytics({ writeKey: 'foo' })
 
-      const cloudflare = await cloudflare(analytics, {
+      const cloudflarePlugin = await cloudflare(analytics, {
         apiKey: '',
         cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
       })
-      await analytics.register(await cloudflare)
+      await analytics.register(cloudflarePlugin)
       await analytics.track('foo')
 
       const [_, params] = spyMock.mock.lastCall

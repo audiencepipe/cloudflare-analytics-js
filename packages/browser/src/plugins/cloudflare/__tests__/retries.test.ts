@@ -14,9 +14,9 @@ jest.mock('../schedule-flush')
 type QueueType = 'priority' | 'persisted'
 
 describe('Cloudflare retries', () => {
-  let options: HightouchioSettings
+  let options: CloudflareSettings
   let analytics: Analytics
-  let hightouch: Plugin
+  let cloudflarePlugin: Plugin // Renamed to avoid conflict with imported 'cloudflare' function
   let queue: (PPQ.PersistedPriorityQueue | PQ.PriorityQueue<Context>) & {
     __type?: QueueType
   }
@@ -49,7 +49,7 @@ describe('Cloudflare retries', () => {
         } else {
           queue = new PPQ.PersistedPriorityQueue(
             3,
-            `${options.apiKey}:test-hightouch.io`
+            `${options.apiKey}:test-cloudflare` // Changed from hightouch.io
           )
           queue['__type'] = 'persisted'
           Object.defineProperty(PPQ, 'PersistedPriorityQueue', {
@@ -58,9 +58,9 @@ describe('Cloudflare retries', () => {
           })
         }
 
-        cloudflare = await cloudflare(analytics, options, {})
+        cloudflarePlugin = await cloudflare(analytics, options, {}) // Renamed variable
 
-        await analytics.register(hightouch, envEnrichment)
+        await analytics.register(cloudflarePlugin, envEnrichment) // Used renamed variable
       })
 
       test(`add events to the queue`, async () => {
