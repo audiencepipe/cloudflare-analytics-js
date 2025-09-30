@@ -6,13 +6,13 @@ To integrate the JavaScript SDK with your website, place the following code snip
 
 ```javascript
 <script type="text/javascript">
-!function(){var e=window.htevents=window.htevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Hightouch snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="https://cdn.hightouch-events.com/browser/release/v1-latest/events.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
+!function(){var e=window.cfevents=window.cfevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Hightouch snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="https://cdn.hightouch-events.com/browser/release/v1-latest/events.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
 e.load(<WRITE_KEY>,{apiHost:<DATA_PLANE_URL>}),
 e.page()}}();
 </script>
 ```
 
-`window.htevents.track(...)` will then be available for use.
+`window.cfevents.track(...)` will then be available for use.
 
 ### Alternative installation using NPM
 
@@ -32,29 +32,29 @@ pnpm add @ht-sdks/events-sdk-js-browser
 2. Import the package into your project and you're good to go (with working types)!
 
 ```ts
-import { HtEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
+import { CfEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
 
-const htevents = HtEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
+const cfevents = CfEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
 
-htevents.identify('hello world')
+cfevents.identify('hello world')
 
 document.body?.addEventListener('click', () => {
-  htevents.track('document body clicked!')
+  cfevents.track('document body clicked!')
 })
 ```
 
 ## Lazy / Delayed Loading
-You can load a buffered version of htevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to hightouch.
+You can load a buffered version of cfevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to hightouch.
 
 - ⚠️ ️`.load` should only be called _once_.
 
 ```ts
-export const htevents = new HtEventsBrowser()
+export const cfevents = new CfEventsBrowser()
 
-htevents.identify("hello world")
+cfevents.identify("hello world")
 
 if (userConsentsToBeingTracked) {
-    htevents.load({ writeKey: '<YOUR_WRITE_KEY>' }) // destinations loaded, enqueued events are flushed
+    cfevents.load({ writeKey: '<YOUR_WRITE_KEY>' }) // destinations loaded, enqueued events are flushed
 }
 ```
 
@@ -62,8 +62,8 @@ if (userConsentsToBeingTracked) {
 ### Handling initialization errors
 If you want to catch initialization errors, you can do the following:
 ```ts
-export const htevents = new HtEventsBrowser();
-htevents
+export const cfevents = new CfEventsBrowser();
+cfevents
   .load({ writeKey: "MY_WRITE_KEY" })
   .catch((err) => ...);
 ```
@@ -72,14 +72,14 @@ htevents
 
 ### Vanilla React
 ```tsx
-import { HtEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
+import { CfEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
 
 // We can export this instance to share with rest of our codebase.
-export const htevents = HtEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
+export const cfevents = CfEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
 
 const App = () => (
   <div>
-    <button onClick={() => htevents.track('hello world')}>Track</button>
+    <button onClick={() => cfevents.track('hello world')}>Track</button>
   </div>
 )
 ```
@@ -88,12 +88,12 @@ const App = () => (
 
 ### Vue
 
-1. Export htevents instance. E.g. `services/hightouch.ts`
+1. Export cfevents instance. E.g. `services/hightouch.ts`
 
 ```ts
-import { HtEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
+import { CfEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
 
-export const htevents = HtEventsBrowser.load({
+export const cfevents = CfEventsBrowser.load({
   writeKey: '<YOUR_WRITE_KEY>',
 })
 ```
@@ -107,12 +107,12 @@ export const htevents = HtEventsBrowser.load({
 
 <script>
 import { defineComponent } from 'vue'
-import { htevents } from './services/hightouch'
+import { cfevents } from './services/hightouch'
 
 export default defineComponent({
   setup() {
     function track() {
-      htevents.track('Hello world')
+      cfevents.track('Hello world')
     }
 
     return {
@@ -131,14 +131,14 @@ NPM installation should already have type support.
 
 1. Install npm package `@ht-sdks/events-sdk-js-browser` as a dev dependency.
 
-2. Create `./typings/htevents.d.ts`
+2. Create `./typings/cfevents.d.ts`
 ```ts
-// ./typings/htevents.d.ts
-import type { HtEventsSnippet } from "@ht-sdks/events-sdk-js-browser";
+// ./typings/cfevents.d.ts
+import type { CfEventsSnippet } from "@ht-sdks/events-sdk-js-browser";
 
 declare global {
   interface Window {
-    htevents: HtEventsSnippet;
+    cfevents: CfEventsSnippet;
   }
 }
 
@@ -212,7 +212,7 @@ export const lowercase: Plugin = {
   }
 }
 
-htevents.register(lowercase)
+cfevents.register(lowercase)
 ```
 
 For further examples check out our [existing plugins](/packages/browser/src/plugins).
@@ -222,7 +222,7 @@ For further examples check out our [existing plugins](/packages/browser/src/plug
 Source middleware allows for defining a function to manipulate the event payload and filter events on a per source basis. It's a specialized `before` [`Plugin`](#plugins) that makes it easy to do things like enriching the event `context` with custom fields.
 
 ```ts
-htevents.addSourceMiddleware(({ payload, next }) => {
+cfevents.addSourceMiddleware(({ payload, next }) => {
   const event = payload.obj;
   event.context = {
     ...event.context,
@@ -256,7 +256,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 You can then configure the Browser SDK to send events directly to Google Tag Manager by enabling the `Google Tag Manager` destination:
 
 ```js
-htevents.load('WRITE_KEY', {
+cfevents.load('WRITE_KEY', {
   destinations: {
     'Google Tag Manager': {},
   },
@@ -270,7 +270,7 @@ View the complete plugin documentation in [`google-tag-manager.ts`](src/plugins/
 Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `userId` and `hightouchAnonymousId` fields.
 
 ```js
-htevents.track('My Event', { prop: 'abc' })
+cfevents.track('My Event', { prop: 'abc' })
 // This results in the following Google Tag Manager event.
 // window.dataLayer.push({ event: 'My Event', prop: 'abc', user_id: '123', hightouch_anonymous_id: '456' })
 ```
@@ -299,7 +299,7 @@ Make sure your gtag.js setup scripts are configured on your website. Our impleme
 You can then configure the Browser SDK to send events directly to gtag.js by enabling the `gtag` destination:
 
 ```js
-htevents.load('WRITE_KEY', {
+cfevents.load('WRITE_KEY', {
   destinations: {
     gtag: {
       // Events are only forwarded to the configured measurement IDs.
@@ -318,7 +318,7 @@ View the complete plugin documentation in [`gtag.ts`](src/plugins/destinations/g
 Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `user_id` and `hightouch_anonymous_id` fields.
 
 ```js
-htevents.track('My Event', { prop: 'abc' })
+cfevents.track('My Event', { prop: 'abc' })
 // This results in the following gtag call.
 // gtag('event', 'My Event', { prop: 'abc', user_id: '123', hightouchAnonymousId: '456'  })
 ```
@@ -328,14 +328,14 @@ htevents.track('My Event', { prop: 'abc' })
 If you'd like to send events to a custom client-side destination that is not yet supported, you can do so using the `Destination` class as a template and implement the relevant tracking methods (`track`, `page`, etc).
 
 ```ts
-import { HtEventsBrowser, Destination } from "@ht-sdks/events-sdk-js-browser";
+import { CfEventsBrowser, Destination } from "@ht-sdks/events-sdk-js-browser";
 
-const htevents = new HtEventsBrowser();
+const cfevents = new CfEventsBrowser();
 
-htevents.load({ writeKey: "WRITE_KEY" });
+cfevents.load({ writeKey: "WRITE_KEY" });
 
 // register custom client-side destination
-htevents.register(
+cfevents.register(
   new Destination("Console", "1.2.3", {
     track: (ctx) => {
       console.log("[console.track]", ctx.event);
