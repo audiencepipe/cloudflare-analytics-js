@@ -7,7 +7,7 @@ import type {
   AnyAnalytics,
   CDNSettings,
   CfEventsBrowserSettings,
- Categories,
+  Categories,
 } from '../../types'
 import { CDNSettingsBuilder } from '@internal/test-helpers'
 import { assertIntegrationsContainOnly } from './assertions/integrations-assertions'
@@ -456,7 +456,7 @@ describe(createWrapper, () => {
         updatedCDNSettings
       )
     })
- })
+  })
 
   describe('shouldDisableConsentRequirement', () => {
     describe('if true on wrapper initialization', () => {
@@ -683,7 +683,7 @@ describe(createWrapper, () => {
         await expect(() =>
           getCategoriesFn()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"[Validation] Invariant: No consent categories defined in Cloudflare (Received: [])"`
+          `"[Validation] Invariant: No consent categories defined in Hightouch (Received: [])"`
         )
       })
 
@@ -791,7 +791,7 @@ describe(createWrapper, () => {
       expect(analyticsTrackSpy).toBeCalledWith(
         'Consent Updated',
         {
-          categoryPreferences: { C0001: true, C002: false },
+          categoryPreferences: { C0001: true, C0002: false },
         },
         {
           consent: {

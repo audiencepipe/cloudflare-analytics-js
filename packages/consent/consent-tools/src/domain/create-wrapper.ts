@@ -23,7 +23,7 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
   validateSettings(createWrapperOptions)
 
   const {
-    shouldDisableHightouch,
+    shouldDisableCloudflare,
     shouldDisableConsentRequirement,
     getCategories,
     shouldLoad,
@@ -49,7 +49,7 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
       options
     ): Promise<void> => {
       // do not load anything -- cloudflare included
-      if (await shouldDisableHightouch?.()) {
+      if (await shouldDisableCloudflare?.()) {
         return
       }
 
@@ -66,10 +66,10 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
         initialCategories =
           (await shouldLoad?.(new LoadContext())) || (await getCategories())
       } catch (e: unknown) {
-        // consumer can call ctx.abort({ loadHightouchNormally: true })
-        // to load Hightouch but disable consent requirement
+        // consumer can call ctx.abort({ loadCloudflareNormally: true })
+        // to load Cloudflare but disable consent requirement
         if (e instanceof AbortLoadError) {
-          if (e.loadHightouchNormally === true) {
+          if (e.loadCloudflareNormally === true) {
             ogLoad.call(analytics, settings, options)
           }
           // do not load anything, but do not log anything either
