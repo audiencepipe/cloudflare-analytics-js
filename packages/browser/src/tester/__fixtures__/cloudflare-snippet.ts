@@ -39,6 +39,7 @@ export const snippet = (writeKey: string, load: boolean = true, extra = '') => `
           cfevents.push(t)
           return cfevents
         }
+      }
       for (var e = 0; e < cfevents.methods.length; e++) {
         var key = cfevents.methods[e]
         cfevents[key] = cfevents.factory(key)
@@ -50,6 +51,7 @@ export const snippet = (writeKey: string, load: boolean = true, extra = '') => `
         t.src = 'https://cdn.cloudflare-events.com/browser/release/v1-latest/events.min.js'
         var n = document.getElementsByTagName('script')[0]
         n.parentNode.insertBefore(t, n)
+        cfevents._writeKey = key
         cfevents._loadOptions = e
       }
       var smw1 = function ({}) {}

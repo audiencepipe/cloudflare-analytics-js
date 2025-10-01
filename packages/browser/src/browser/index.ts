@@ -55,7 +55,7 @@ export interface LegacyIntegrationConfiguration {
     categories: string[]
   }
 
-  // Hightouch.io specific
+  // Cloudflare.io specific
   retryQueue?: boolean
 
   // any extra unknown settings
@@ -96,13 +96,13 @@ export interface LegacySettings {
 
 export interface CfEventsBrowserSettings extends AnalyticsSettings {
   /**
-   * The settings for the Hightouch Source.
+   * The settings for the Cloudflare Source.
    * If provided, `CfEventsBrowser` will not fetch remote settings
    * for the source.
    */
   cdnSettings?: LegacySettings & Record<string, unknown>
   /**
-   * If provided, will override the default Hightouch CDN (https://cdn.cloudflare-events.com) for this application.
+   * If provided, will override the default Cloudflare CDN (https://cdn.cloudflare-events.com) for this application.
    */
   cdnURL?: string
 }
@@ -427,7 +427,7 @@ async function loadAnalytics(
 }
 
 /**
- * The public browser interface for Hightouch Events
+ * The public browser interface for Cloudflare Events
  *
  * @example
  * ```ts

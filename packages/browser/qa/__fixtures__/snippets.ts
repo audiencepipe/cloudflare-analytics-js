@@ -9,7 +9,7 @@ export function next(writekey: string, obfuscate: boolean) {
           if (cfevents.invoked)
             window.console &&
               console.error &&
-              console.error('Hightouch snippet included twice.')
+              console.error('Cloudflare snippet included twice.')
           else {
             cfevents.invoked = !0
             cfevents.methods = [
@@ -83,7 +83,7 @@ export function classic(writekey: string) {
       if (cfevents.invoked)
         window.console &&
           console.error &&
-          console.error('Hightouch snippet included twice.')
+          console.error('Cloudflare snippet included twice.')
       else {
         cfevents.invoked = !0
         cfevents.methods = [

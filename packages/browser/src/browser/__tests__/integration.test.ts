@@ -388,7 +388,7 @@ describe('Initialization', () => {
   describe('options.integrations permutations', () => {
     const settings = { writeKey }
 
-    it('does not load Hightouch.io if integrations.All is false and Hightouch.io is not listed', async () => {
+    it('does not load Cloudflare if integrations.All is false and Cloudflare is not listed', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { All: false },
       }
@@ -401,7 +401,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeUndefined()
     })
 
-    it('does not load Hightouch.io if its set to false', async () => {
+    it('does not load Cloudflare if its set to false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: { 'Cloudflare': false },
       }
@@ -414,7 +414,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeUndefined()
     })
 
-    it('loads Hightouch.io if integrations.All is false and Hightouch.io is listed', async () => {
+    it('loads Cloudflare if integrations.All is false and Cloudflare is listed', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { All: false, 'Cloudflare': true },
       }
@@ -427,7 +427,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeDefined()
     })
 
-    it('loads Hightouch.io if integrations.All is undefined', async () => {
+    it('loads Cloudflare if integrations.All is undefined', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { 'Cloudflare': true },
       }
@@ -440,7 +440,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeDefined()
     })
 
-    it('loads Hightouch.io if integrations is undefined', async () => {
+    it('loads Cloudflare if integrations is undefined', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: undefined,
       }
@@ -453,7 +453,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeDefined()
     })
 
-    it('loads selected plugins when Hightouch.io is false', async () => {
+    it('loads selected plugins when Cloudflare is false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: {
           'Test Plugin': true,
@@ -477,7 +477,7 @@ describe('Initialization', () => {
       expect(cloudflare).toBeUndefined()
     })
 
-    it('loads selected plugins when Hightouch.io and All are false', async () => {
+    it('loads selected plugins when Cloudflare and All are false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: {
           All: false,
@@ -1058,8 +1058,8 @@ describe('retries', () => {
   })
 })
 
-describe('Hightouch.io overrides', () => {
-  it('allows for overriding Hightouch.io settings', async () => {
+describe('Cloudflare overrides', () => {
+  it('allows for overriding Cloudflare settings', async () => {
     jest.spyOn(CloudflarePlugin, 'cloudflare')
 
     await CfEventsBrowser.load(

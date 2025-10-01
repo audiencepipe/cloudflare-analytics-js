@@ -164,7 +164,7 @@ async function loadPluginFactory(
   remotePlugin: RemotePlugin,
   obfuscate?: boolean
 ): Promise<void | PluginFactory> {
-  const defaultCdn = new RegExp('https://cdn.cloudflare-events.(com|build)')
+  const defaultCdn = new RegExp('https://cdn\\.cloudflare-events\\.cloudflare\\.com')
   const cdn = getCDN()
 
   if (obfuscate) {

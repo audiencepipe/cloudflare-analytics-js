@@ -95,7 +95,7 @@ describe(mergedOptions, () => {
   it('works with boolean overrides', () => {
     const cdn = {
       integrations: {
-        'Cloudflare': { apiHost: 'us-east-1.cloudflare-events.com' },
+        Cloudflare: { apiHost: 'us-east-1.cloudflare-events.com' },
         'Google Tag Manager': {
           ghost: '👻',
         },
@@ -104,18 +104,18 @@ describe(mergedOptions, () => {
     const overrides = {
       integrations: {
         All: false,
-        'Cloudflare': { apiHost: 'mgs.instacart.com/v2' },
+        Cloudflare: { apiHost: 'mgs.instacart.com/v2' },
         'Google Tag Manager': true,
       },
     }
 
     expect(mergedOptions(cdn, overrides)).toMatchInlineSnapshot(`
       {
-        "Google Tag Manager": {
-          "ghost": "👻",
-        },
         "Cloudflare": {
           "apiHost": "mgs.instacart.com/v2",
+        },
+        "Google Tag Manager": {
+          "ghost": "👻",
         },
       }
     `)

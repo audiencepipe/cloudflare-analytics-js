@@ -220,7 +220,7 @@ describe('Event Factory', () => {
           },
         },
         {
-          'Hightouch.io': {
+          'Cloudflare': {
             apiHost: 'custom',
           },
           GoogleAnalytics: false,
@@ -230,8 +230,8 @@ describe('Event Factory', () => {
       )
 
       expect(track.integrations).toEqual({
-        // do not pass Hightouch.io global settings
-        'Hightouch.io': true,
+        // do not pass Cloudflare global settings
+        'Cloudflare': true,
         // accept amplitude event level settings
         Amplitude: {
           sessionId: 'session_123',

@@ -149,7 +149,7 @@ export interface InitOptions {
   httpCookieService?: HTTPCookieService
 
   /**
-   * Shortcuts for overriding the default Hightouch.io integration settings
+   * Shortcuts for overriding the default Cloudflare integration settings
    */
   apiHost?: string // Defaults to us-east-1.cloudflare-events.com
   protocol?: string // Defaults to https

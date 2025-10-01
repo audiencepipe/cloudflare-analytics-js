@@ -31,6 +31,6 @@ describe('topDomain', function () {
     assert.strictEqual(tld('https://google.com:443/stuff'), 'google.com')
     assert.strictEqual(tld('http://dev:3000'), undefined)
     assert.strictEqual(tld('http://app.jut.io'), 'jut.io')
-    assert.strictEqual(tld('http://app.hightouch.pages.dev'), 'hightouch.pages.dev')
+    assert.strictEqual(tld('http://app.cloudflare.com'), 'cloudflare.com')
   })
 })

@@ -132,7 +132,7 @@ describe('standalone bundle', () => {
     await loadLegacySettings(cloudflareUrl)
 
     expect(unfetch).toHaveBeenCalledWith(
-      'https://cdn.foo.com/v1/projects/foo/settings'
+      'https://cdn.cloudflare-events.com/v1/projects/foo/settings'
     )
   })
 

@@ -76,7 +76,7 @@ describe('remote metrics', () => {
     expect(spy).toHaveBeenCalled()
     const [url, request] = spy.mock.calls[0]
 
-    expect(url).toBe('https://us-east-1.hightouch-events.com/v1/m')
+    expect(url).toBe('https://us-east-1.cloudflare-events.com/v1/m')
     expect(request).toMatchInlineSnapshot(
       { body: expect.anything() },
       `
@@ -148,7 +148,7 @@ describe('remote metrics', () => {
     await remote.flush()
 
     expect(errorSpy).toHaveBeenCalledWith(
-      'Error sending hightouch performance metrics',
+      'Error sending cloudflare performance metrics',
       error
     )
   })
