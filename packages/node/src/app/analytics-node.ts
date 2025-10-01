@@ -94,15 +94,15 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     return timeout ? pTimeout(promise, timeout).catch(() => undefined) : promise
   }
 
-  private _dispatch(hightouchEvent: HightouchEvent, callback?: Callback) {
+  private _dispatch(cloudflareEvent: HightouchEvent, callback?: Callback) {
     if (this._isClosed) {
-      this.emit('call_after_close', hightouchEvent as HightouchEvent)
+      this.emit('call_after_close', cloudflareEvent as HightouchEvent)
       return undefined
     }
 
     this._pendingEvents++
 
-    dispatchAndEmit(hightouchEvent, this._queue, this, callback)
+    dispatchAndEmit(cloudflareEvent, this._queue, this, callback)
       .catch((ctx) => ctx)
       .finally(() => {
         this._pendingEvents--
@@ -120,12 +120,12 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     { userId, previousId, context, timestamp, integrations }: AliasParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.alias(userId, previousId, {
+    const cloudflareEvent = this._eventFactory.alias(userId, previousId, {
       context,
       integrations,
       timestamp,
     })
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**
@@ -143,7 +143,7 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     }: GroupParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.group(groupId, traits, {
+    const cloudflareEvent = this._eventFactory.group(groupId, traits, {
       context,
       anonymousId,
       userId,
@@ -151,7 +151,7 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
       integrations,
     })
 
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**
@@ -168,14 +168,14 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     }: IdentifyParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.identify(userId, traits, {
+    const cloudflareEvent = this._eventFactory.identify(userId, traits, {
       context,
       anonymousId,
       userId,
       timestamp,
       integrations,
     })
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**
@@ -194,13 +194,13 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     }: PageParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.page(
+    const cloudflareEvent = this._eventFactory.page(
       category ?? null,
       name ?? null,
       properties,
       { context, anonymousId, userId, timestamp, integrations }
     )
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**
@@ -222,14 +222,14 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     }: PageParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.screen(
+    const cloudflareEvent = this._eventFactory.screen(
       category ?? null,
       name ?? null,
       properties,
       { context, anonymousId, userId, timestamp, integrations }
     )
 
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**
@@ -247,7 +247,7 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     }: TrackParams,
     callback?: Callback
   ): void {
-    const hightouchEvent = this._eventFactory.track(event, properties, {
+    const cloudflareEvent = this._eventFactory.track(event, properties, {
       context,
       userId,
       anonymousId,
@@ -255,7 +255,7 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
       integrations,
     })
 
-    this._dispatch(hightouchEvent, callback)
+    this._dispatch(cloudflareEvent, callback)
   }
 
   /**

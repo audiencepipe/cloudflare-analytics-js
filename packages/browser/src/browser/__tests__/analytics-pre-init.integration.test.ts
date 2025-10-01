@@ -298,10 +298,10 @@ describe('Pre-initialization', () => {
       const track2 = ['track', 'bar']
       const identify = ['identify']
 
-      ;(window as any).hightouch = [onTrack, track, track2, identify]
+      ;(window as any).cfevents = [onTrack, track, track2, identify]
 
       await CfEventsBrowser.standalone(writeKey, {
-        globalAnalyticsKey: 'hightouch',
+        globalAnalyticsKey: 'cfevents',
       })
 
       await sleep(100) // the snippet does not return a promise (pre-initialization) ... it sometimes has a callback as the third argument.

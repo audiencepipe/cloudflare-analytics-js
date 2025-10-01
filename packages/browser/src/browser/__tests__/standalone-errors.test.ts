@@ -1,6 +1,6 @@
 import jsdom, { JSDOM } from 'jsdom'
 import { CfEventsBrowser, LegacySettings } from '..'
-import { snippet } from '../../tester/__fixtures__/hightouch-snippet'
+import { snippet } from '../../tester/__fixtures__/cloudflare-snippet'
 import { pWhile } from '../../lib/p-while'
 import unfetch from 'unfetch'
 import { RemoteMetrics } from '../../core/stats/remote-metrics'
@@ -32,7 +32,7 @@ jest.mock('unfetch', () => {
 })
 
 describe('standalone bundle', () => {
-  const hightouchDotCom = `foo`
+  const cloudflareUrl = `foo`
 
   let jsd: JSDOM
 
@@ -51,7 +51,7 @@ describe('standalone bundle', () => {
     <!DOCTYPE html>
       <head>
         <script>
-          ${snippet(hightouchDotCom, true)}
+          ${snippet(cloudflareUrl, true)}
         </script>
       </head>
       <body>
@@ -63,7 +63,7 @@ describe('standalone bundle', () => {
     jsd = new JSDOM(html, {
       runScripts: 'dangerously',
       resources: 'usable',
-      url: 'https://hightouch.com',
+      url: 'https://cloudflare.com',
       virtualConsole,
     })
 

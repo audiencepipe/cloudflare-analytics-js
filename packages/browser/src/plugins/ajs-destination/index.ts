@@ -204,14 +204,14 @@ export class LegacyDestination implements DestinationPlugin {
     const plan = this.options?.plan?.track
     const ev = ctx.event.event
 
-    if (plan && ev && this.name !== 'Hightouch.io') {
+    if (plan && ev && this.name !== 'Cloudflare') {
       // events are always sent to hightouch (legacy behavior)
       const planEvent = plan[ev]
       if (!isPlanEventEnabled(plan, planEvent)) {
         ctx.updateEvent('integrations', {
           ...ctx.event.integrations,
           All: false,
-          'Hightouch.io': true,
+          'Cloudflare': true,
         })
         ctx.cancel(
           new ContextCancelation({

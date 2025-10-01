@@ -96,7 +96,7 @@ withOneTrust(htevents).load({ writeKey: 'WRITE_KEY' })
 
 - `cjs/esm` - Support modern JS syntax (ES2020). These are our npm library users, so we expect them to transpile this module themselves using something like babel/webpack if they need extra legacy browser support.
 
-- `umd` - Support back to IE11, but **do not** polyfill . See our docs on [supported browsers](https://hightouch.com/docs/connections/sources/catalog/libraries/website/javascript/supported-browsers).
+- `umd` - Support back to IE11, but **do not** polyfill . See our docs on [supported browsers](https://cloudflare.com/docs/connections/sources/catalog/libraries/website/javascript/supported-browsers).
 
 In order to get full ie11 support, you are expected to bring your own polyfills. e.g. adding the following to your script tag:
 

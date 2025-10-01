@@ -46,7 +46,7 @@ const gtag: DestinationFactory<GtagSettings> = ({
         user_id: event.userId,
       }),
       ...(event.anonymousId && {
-        hightouch_anonymous_id: event.anonymousId,
+        cloudflare_anonymous_id: event.anonymousId,
       }),
       ...(measurementIds.length > 0 && {
         send_to: measurementIds,

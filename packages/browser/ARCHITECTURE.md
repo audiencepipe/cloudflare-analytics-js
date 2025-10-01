@@ -24,7 +24,7 @@ The general end to end flow of events-sdk-js core is as follows:
 1. Legacy settings and destinations are loaded from a settings object passed at initialization
 2. The HtEvents object is instantiated with the loaded settings, and sets up things such as new/existing users and an event queue.
 3. Events are built and queued when a user makes a call (ie. analytics.track())
-4. The event is dispatched, goes through all enabled plugins, and is finally sent through the hightouch.io plugin to get the data into hightouch
+4. The event is dispatched, goes through all enabled plugins, and is finally sent through the cloudflare plugin to get the data into hightouch
 
 ## Everything is a Plugin
 
@@ -38,7 +38,7 @@ Plugins can be of two different priorities:
 and can be of five different types:
 
 - Before: Pleguns that need to be run before any other plugins are run. An example of this would be validating events before passing them along to other plugins.
-- After: Plugins that need to run after all other plugins have run. An example of this is the hightouch.io integration, which will wait for destinations to succeed or fail so that it can send its observability metrics.
+- After: Plugins that need to run after all other plugins have run. An example of this is the cloudflare integration, which will wait for destinations to succeed or fail so that it can send its observability metrics.
 - Destination: Destinations to send the event to (ie. legacy destinations). Does not modify the event and failure does not halt execution.
 - Enrichment: Modifies an event, failure here could halt the event pipeline.
 - Utility: Plugins that change events-sdk-js functionality and don't fall into the other categories.

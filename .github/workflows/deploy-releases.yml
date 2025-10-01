@@ -7,7 +7,7 @@ on:
 env:
   HUSKY: 0
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-  PROD_BUCKET: 'hightouch-events'
+  PROD_BUCKET: 'cloudflare-events'
 
 permissions:
   id-token: write # allows the JWT to be requested from GitHub's OIDC provider

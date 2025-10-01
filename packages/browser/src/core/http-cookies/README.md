@@ -43,7 +43,7 @@ import { HtEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
 const htevents = HtEventsBrowser.load(
   { writeKey: '<YOUR_WRITE_KEY>'},
   { 
-    apiHost: "us-east-1.hightouch-events.com", // HtEvents API remains the same
+    apiHost: "us-east-1.cloudflare-events.com", // HtEvents API remains the same
     httpCookieServiceOptions: {
       clearUrl: '/ht/clear', // route hosted on *your* domain and infra
       renewUrl: '/ht/renew', // route hosted on *your* domain and infra

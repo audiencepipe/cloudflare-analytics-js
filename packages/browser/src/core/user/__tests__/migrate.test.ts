@@ -27,13 +27,13 @@ const rudderAnonymousIdKey = 'rl_anonymous_id'
 
 describe('user anonymousId migration', () => {
   describe('()', () => {
-    it('should get the hightouch anonymousId', () => {
+    it('should get the Cloudflare anonymousId', () => {
       store.set(anonymousIdKey, '1234')
       const user = new User()
       expect(user.anonymousId()).toEqual('1234')
     })
 
-    it('should decrypt the "legacy" hightouch anonymousId', () => {
+    it('should decrypt the "legacy" Cloudflare anonymousId', () => {
       store.set(
         rudderHtAnonymousIdKey,
         'HtEvEncrypt:U2FsdGVkX1+BxLsjF52p24D/rVEQfG9ACRjvLRoSgbnfLYlWBmBCWABZPMsDHWySVO4c26kYs2hxrT13q8amlw=='
@@ -79,7 +79,7 @@ describe('user anonymousId migration', () => {
       expect(user.anonymousId()).toEqual('1wefk7M3Y1D6EDX4ZpIE00LpKAE')
     })
 
-    it('should always choose the hightouch anonymousId when present', () => {
+    it('should always choose the Cloudflare anonymousId when present', () => {
       store.set(segmentAnonymousIdKey, '56789')
       jar.set(anonymousIdKey, '1234')
       const user = new User()

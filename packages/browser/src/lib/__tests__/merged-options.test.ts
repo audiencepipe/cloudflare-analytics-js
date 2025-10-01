@@ -95,7 +95,7 @@ describe(mergedOptions, () => {
   it('works with boolean overrides', () => {
     const cdn = {
       integrations: {
-        'Hightouch.io': { apiHost: 'us-east-1.hightouch-events.com' },
+        'Cloudflare': { apiHost: 'us-east-1.cloudflare-events.com' },
         'Google Tag Manager': {
           ghost: '👻',
         },
@@ -104,7 +104,7 @@ describe(mergedOptions, () => {
     const overrides = {
       integrations: {
         All: false,
-        'Hightouch.io': { apiHost: 'mgs.instacart.com/v2' },
+        'Cloudflare': { apiHost: 'mgs.instacart.com/v2' },
         'Google Tag Manager': true,
       },
     }
@@ -114,7 +114,7 @@ describe(mergedOptions, () => {
         "Google Tag Manager": {
           "ghost": "👻",
         },
-        "Hightouch.io": {
+        "Cloudflare": {
           "apiHost": "mgs.instacart.com/v2",
         },
       }

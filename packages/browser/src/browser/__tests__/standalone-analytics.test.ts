@@ -1,7 +1,7 @@
 import jsdom, { JSDOM } from 'jsdom'
 import { InitOptions, getGlobalAnalytics } from '../../'
 import { CfEventsBrowser, loadLegacySettings } from '../../browser'
-import { snippet } from '../../tester/__fixtures__/hightouch-snippet'
+import { snippet } from '../../tester/__fixtures__/cloudflare-snippet'
 import { install } from '../standalone-analytics'
 import unfetch from 'unfetch'
 import { PersistedPriorityQueue } from '../../lib/priority-queue/persisted'
@@ -37,11 +37,11 @@ jest.mock('../../core/analytics', () => ({
 const fetchSettings = Factory.createSuccess({ integrations: {} })
 
 jest.mock('unfetch', () => {
-  return jest.fn()
+ return jest.fn()
 })
 
 describe('standalone bundle', () => {
-  const hightouchDotCom = `foo`
+ const cloudflareUrl = `foo`
 
   beforeEach(async () => {
     ;(window as any).cfevents = undefined
@@ -50,11 +50,11 @@ describe('standalone bundle', () => {
       <head>
         <script>
           ${snippet(
-            hightouchDotCom,
+            cloudflareUrl,
             true,
             `
             window.cfevents.track('fruit basket', { fruits: ['🍌', '🍇'] })
-            window.cfevents.identify('netto', { employer: 'hightouch' })
+            window.cfevents.identify('netto', { employer: 'cloudflare' })
             window.cfevents.setAnonymousId('anonNetto')
             window.cfevents.on('initialize', () => ({ user: 'ariel' }))
           `
@@ -71,7 +71,7 @@ describe('standalone bundle', () => {
     const jsd = new JSDOM(html, {
       runScripts: 'dangerously',
       resources: 'usable',
-      url: 'https://hightouch.com',
+      url: 'https://cloudflare.com',
       virtualConsole,
     })
 
@@ -120,7 +120,7 @@ describe('standalone bundle', () => {
 
     await install()
 
-    expect(spy).toHaveBeenCalledWith(hightouchDotCom, {})
+    expect(spy).toHaveBeenCalledWith(cloudflareUrl, {})
   })
 
   it('derives the CDN from scripts on the page', async () => {
@@ -129,7 +129,7 @@ describe('standalone bundle', () => {
       // @ts-ignore ignore Response required fields
       .mockImplementation((): Promise<Response> => fetchSettings)
 
-    await loadLegacySettings(hightouchDotCom)
+    await loadLegacySettings(cloudflareUrl)
 
     expect(unfetch).toHaveBeenCalledWith(
       'https://cdn.foo.com/v1/projects/foo/settings'
@@ -144,7 +144,7 @@ describe('standalone bundle', () => {
     const mockCdn = 'http://my-overridden-cdn.com'
 
     getGlobalAnalytics()!._cdn = mockCdn
-    await loadLegacySettings(hightouchDotCom)
+    await loadLegacySettings(cloudflareUrl)
 
     expect(unfetch).toHaveBeenCalledWith(expect.stringContaining(mockCdn))
   })
@@ -169,7 +169,7 @@ describe('standalone bundle', () => {
     expect(identify).toHaveBeenCalledWith(
       'netto',
       {
-        employer: 'hightouch',
+        employer: 'cloudflare',
       },
       getBufferedPageCtxFixture()
     )
@@ -293,7 +293,7 @@ describe('standalone bundle', () => {
     expect(identify).toHaveBeenCalledWith(
       'netto',
       {
-        employer: 'hightouch',
+        employer: 'cloudflare',
       },
       getBufferedPageCtxFixture()
     )

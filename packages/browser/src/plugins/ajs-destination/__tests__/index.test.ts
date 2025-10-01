@@ -41,7 +41,7 @@ const cdnResponse: LegacySettings = {
     Amplitude: {
       type: 'browser',
     },
-    Hightouchio: {
+    Cloudflare: {
       type: 'browser',
     },
     Iterable: {
@@ -176,7 +176,7 @@ describe.skip('loading ajsDestinations', () => {
   // we do not support the legacy destination
   it.skip('loads type:browser legacy ajs destinations from cdn', () => {
     const destinations = ajsDestinations(writeKey, cdnResponse, {}, {})
-    // ignores hightouch.io
+    // ignores cloudflare
     expect(destinations.length).toBe(5)
   })
 
@@ -253,7 +253,7 @@ describe.skip('loading ajsDestinations', () => {
       {
         All: false,
         Amplitude: true,
-        Hightouchio: false,
+        Cloudflare: false,
       },
       {}
     )
@@ -395,7 +395,7 @@ describe.skip('remote loading', () => {
     )
   })
 
-  it('loads integrations from the Hightouch CDN', async () => {
+  it('loads integrations from the Cloudflare CDN', async () => {
     await loadAmplitude()
 
     const sources = Array.from(window.document.querySelectorAll('script'))
@@ -404,16 +404,16 @@ describe.skip('remote loading', () => {
 
     expect(sources).toMatchObject(
       expect.arrayContaining([
-        'https://cdn.hightouch-events.com/next-integrations/integrations/amplitude/latest/amplitude.dynamic.js.gz',
+        'https://cdn.cloudflare-events.com/next-integrations/integrations/amplitude/latest/amplitude.dynamic.js.gz',
         expect.stringContaining(
-          'https://cdn.hightouch-events.com/next-integrations/integrations/vendor/commons'
+          'https://cdn.cloudflare-events.com/next-integrations/integrations/vendor/commons'
         ),
         'https://cdn.amplitude.com/libs/amplitude-5.2.2-min.gz.js',
       ])
     )
   })
 
-  it('loads obfuscated integrations from the Hightouch CDN', async () => {
+  it('loads obfuscated integrations from the Cloudflare CDN', async () => {
     await loadAmplitude(true)
 
     const sources = Array.from(window.document.querySelectorAll('script'))
@@ -422,9 +422,9 @@ describe.skip('remote loading', () => {
 
     expect(sources).toMatchObject(
       expect.arrayContaining([
-        'https://cdn.hightouch-events.com/next-integrations/integrations/YW1wbGl0dWRl/latest/YW1wbGl0dWRl.dynamic.js.gz',
+        'https://cdn.cloudflare-events.com/next-integrations/integrations/YW1wbGl0dWRl/latest/YW1wbGl0dWRl.dynamic.js.gz',
         expect.stringContaining(
-          'https://cdn.hightouch-events.com/next-integrations/integrations/vendor/commons'
+          'https://cdn.cloudflare-events.com/next-integrations/integrations/vendor/commons'
         ),
         'https://cdn.amplitude.com/libs/amplitude-5.2.2-min.gz.js',
       ])
@@ -579,7 +579,7 @@ describe.skip('plan', () => {
     expect(ctx.event.integrations).toMatchInlineSnapshot(`
       Object {
         "All": false,
-        "Hightouch.io": true,
+        "Cloudflare": true,
       }
     `)
   })
@@ -609,7 +609,7 @@ describe.skip('plan', () => {
     expect(ctx.event.integrations).toMatchInlineSnapshot(`
       Object {
         "All": false,
-        "Hightouch.io": true,
+        "Cloudflare": true,
       }
     `)
   })

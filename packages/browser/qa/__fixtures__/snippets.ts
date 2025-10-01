@@ -128,7 +128,7 @@ export function classic(writekey: string) {
           t.type = 'text/javascript'
           t.async = !0
           t.src =
-            'https://cdn.hightouch-events.com/cfevents.js/v1/' +
+            'https://cdn.cloudflare-events.com/cfevents.js/v1/' +
             key +
             '/cfevents.classic.js'
           var n = document.getElementsByTagName('script')[0]

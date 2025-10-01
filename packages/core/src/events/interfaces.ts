@@ -107,7 +107,7 @@ export interface CoreExtraContext {
      */
     title?: string
     /**
-     * @example https://hightouch.com/academy/
+     * @example https://cloudflare.com/academy/
      */
     url?: string
   }

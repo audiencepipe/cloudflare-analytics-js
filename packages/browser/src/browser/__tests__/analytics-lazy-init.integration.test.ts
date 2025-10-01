@@ -44,7 +44,7 @@ describe('Lazy initialization', () => {
     expect(fetched).toBeCalledTimes(1)
     expect(fetched).toBeCalledWith(
       expect.stringContaining(
-        'https://cdn.hightouch-events.com/v1/projects/my-write-key/settings'
+        'https://cdn.cloudflare-events.com/v1/projects/my-write-key/settings'
       )
     )
   })

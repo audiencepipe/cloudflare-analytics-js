@@ -34,7 +34,7 @@ it('should not use the default CDN if not overridden', async () => {
   })
   // by default, cdn settings are NOT fetched from the server
   expect(unfetch).not.toBeCalledWith(
-    expect.stringContaining('https://cdn.hightouch-events.com')
+    expect.stringContaining('https://cdn.cloudflare-events.com')
   )
 })
 

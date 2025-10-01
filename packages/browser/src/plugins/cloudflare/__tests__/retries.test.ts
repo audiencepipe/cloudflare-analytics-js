@@ -1,6 +1,6 @@
 import { cloudflare, CloudflareSettings } from '..'
 import { Analytics } from '../../../core/analytics'
-// @ts-ignore isOffline mocked dependency is accused as unused
+// Suppress TS error for mocked dependency
 import { isOffline } from '../../../core/connection'
 import { Plugin } from '../../../core/plugin'
 import { envEnrichment } from '../../env-enrichment'
@@ -16,7 +16,7 @@ type QueueType = 'priority' | 'persisted'
 describe('Cloudflare retries', () => {
   let options: CloudflareSettings
   let analytics: Analytics
-  let cloudflarePlugin: Plugin // Renamed to avoid conflict with imported 'cloudflare' function
+  let cloudflarePlugin: Plugin // Variable renamed to avoid conflict with imported 'cloudflare' function
   let queue: (PPQ.PersistedPriorityQueue | PQ.PriorityQueue<Context>) & {
     __type?: QueueType
   }
@@ -26,7 +26,7 @@ describe('Cloudflare retries', () => {
         jest.resetAllMocks()
         jest.restoreAllMocks()
 
-        // @ts-expect-error reassign import
+        // Override the imported 'isOffline' function with a mock implementation
         isOffline = jest.fn().mockImplementation(() => true)
 
         // Use a mock Cloudflare Pipeline URL for testing
@@ -49,7 +49,7 @@ describe('Cloudflare retries', () => {
         } else {
           queue = new PPQ.PersistedPriorityQueue(
             3,
-            `${options.apiKey}:test-cloudflare` // Changed from hightouch.io
+            `${options.apiKey}:test-cloudflare` // Using test-specific queue key
           )
           queue['__type'] = 'persisted'
           Object.defineProperty(PPQ, 'PersistedPriorityQueue', {
@@ -58,9 +58,9 @@ describe('Cloudflare retries', () => {
           })
         }
 
-        cloudflarePlugin = await cloudflare(analytics, options, {}) // Renamed variable
+        cloudflarePlugin = await cloudflare(analytics, options, {}) // Assign result to renamed variable
 
-        await analytics.register(cloudflarePlugin, envEnrichment) // Used renamed variable
+        await analytics.register(cloudflarePlugin, envEnrichment) // Register the renamed variable
       })
 
       test(`add events to the queue`, async () => {
@@ -69,7 +69,7 @@ describe('Cloudflare retries', () => {
         const ctx = await analytics.track('event')
 
         expect(scheduleFlush).toHaveBeenCalled()
-        /* eslint-disable  @typescript-eslint/unbound-method */
+        /* eslint-disable @typescript-eslint/unbound-method */
         expect(queue.push).toHaveBeenCalled()
         expect(queue.length).toBe(1)
         expect(ctx.attempts).toBe(1)

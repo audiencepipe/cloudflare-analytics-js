@@ -40,7 +40,7 @@ const googleTagManager: DestinationFactory<GoogleTagManagerSettings> = ({
         userId: event.userId,
       }),
       ...(event.anonymousId && {
-        hightouchAnonymousId: event.anonymousId,
+        cloudflareAnonymousId: event.anonymousId,
       }),
       event: event.event,
       ...event.properties,

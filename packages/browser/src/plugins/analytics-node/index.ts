@@ -18,7 +18,7 @@ export async function post(
   writeKey: string
 ): Promise<HightouchEvent> {
   const res = await fetch(
-    `https://us-east-1.hightouch-events.com/v1/${event.type}`,
+    `https://us-east-1.cloudflare-events.com/v1/${event.type}`,
     {
       method: 'POST',
       headers: {

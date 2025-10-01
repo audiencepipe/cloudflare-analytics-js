@@ -6,7 +6,7 @@ To integrate the JavaScript SDK with your website, place the following code snip
 
 ```javascript
 <script type="text/javascript">
-!function(){var e=window.cfevents=window.cfevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Hightouch snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="https://cdn.hightouch-events.com/browser/release/v1-latest/events.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
+!function(){var e=window.cfevents=window.cfevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Cloudflare snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="https://cdn.cloudflare-events.com/browser/release/v1-latest/events.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
 e.load(<WRITE_KEY>,{apiHost:<DATA_PLANE_URL>}),
 e.page()}}();
 </script>
@@ -44,7 +44,7 @@ document.body?.addEventListener('click', () => {
 ```
 
 ## Lazy / Delayed Loading
-You can load a buffered version of cfevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to hightouch.
+You can load a buffered version of cfevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to cloudflare.
 
 - ⚠️ ️`.load` should only be called _once_.
 
@@ -88,7 +88,7 @@ const App = () => (
 
 ### Vue
 
-1. Export cfevents instance. E.g. `services/hightouch.ts`
+1. Export cfevents instance. E.g. `services/cloudflare.ts`
 
 ```ts
 import { CfEventsBrowser } from '@ht-sdks/events-sdk-js-browser'
@@ -107,7 +107,7 @@ export const cfevents = CfEventsBrowser.load({
 
 <script>
 import { defineComponent } from 'vue'
-import { cfevents } from './services/hightouch'
+import { cfevents } from './services/cloudflare'
 
 export default defineComponent({
   setup() {
@@ -267,12 +267,12 @@ View the complete plugin documentation in [`google-tag-manager.ts`](src/plugins/
 
 ### Usage
 
-Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `userId` and `hightouchAnonymousId` fields.
+Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `userId` and `cloudflareAnonymousId` fields.
 
 ```js
 cfevents.track('My Event', { prop: 'abc' })
 // This results in the following Google Tag Manager event.
-// window.dataLayer.push({ event: 'My Event', prop: 'abc', user_id: '123', hightouch_anonymous_id: '456' })
+// window.dataLayer.push({ event: 'My Event', prop: 'abc', user_id: '123', cloudflare_anonymous_id: '456' })
 ```
 
 ## gtag.js
@@ -315,12 +315,12 @@ View the complete plugin documentation in [`gtag.ts`](src/plugins/destinations/g
 
 ### Usage
 
-Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `user_id` and `hightouch_anonymous_id` fields.
+Once the destination is configured, all applicable `identify`, `track`, and `page` events will be sent. The integration also automatically populates the `user_id` and `cloudflare_anonymous_id` fields.
 
 ```js
 cfevents.track('My Event', { prop: 'abc' })
 // This results in the following gtag call.
-// gtag('event', 'My Event', { prop: 'abc', user_id: '123', hightouchAnonymousId: '456'  })
+// gtag('event', 'My Event', { prop: 'abc', user_id: '123', cloudflareAnonymousId: '456'  })
 ```
 
 ## Custom client-side destinations

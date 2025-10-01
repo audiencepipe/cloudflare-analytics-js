@@ -69,7 +69,7 @@ describe('CSP Detection', () => {
     jsd = new JSDOM(html, {
       runScripts: 'dangerously',
       resources: 'usable',
-      url: 'https://hightouch.com',
+      url: 'https://hightouch.cloudflare.com',
       virtualConsole,
     })
 
@@ -103,7 +103,7 @@ describe('CSP Detection', () => {
     handlers['securitypolicyviolation'].forEach((handler) => {
       handler({
         // @ts-ignore
-        blockedURI: 'cdn.hightouch-events.com',
+        blockedURI: 'cdn.hightouch.cloudflare.com',
       })
     })
 
@@ -131,7 +131,7 @@ describe('CSP Detection', () => {
 
     const event = new window.Event('securitypolicyviolation') as any
     event.disposition = 'report'
-    event.blockedURI = 'cdn.hightouch-events.com'
+    event.blockedURI = 'cdn.hightouch.cloudflare.com'
     document.dispatchEvent(event)
     expect(cspSpy).toBeCalled()
     expect(warnSpy).not.toHaveBeenCalled()

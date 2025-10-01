@@ -6,8 +6,8 @@ import type {
   CreateWrapperSettings,
   AnyAnalytics,
   CDNSettings,
-  HtEventsBrowserSettings,
-  Categories,
+  CfEventsBrowserSettings,
+ Categories,
 } from '../../types'
 import { CDNSettingsBuilder } from '@internal/test-helpers'
 import { assertIntegrationsContainOnly } from './assertions/integrations-assertions'
@@ -40,7 +40,7 @@ const getAnalyticsLoadLastCall = () => {
   const updateCDNSettings = arg2!.updateCDNSettings || ((id) => id)
   const updatedCDNSettings = updateCDNSettings(cdnSettings) as CDNSettings
   return {
-    args: [arg1 as HtEventsBrowserSettings, arg2!] as const,
+    args: [arg1 as CfEventsBrowserSettings, arg2!] as const,
     cdnSettings,
     updatedCDNSettings,
   }
@@ -141,7 +141,7 @@ describe(createWrapper, () => {
 
       it('should throw a special error if ctx.abort is called', async () => {
         const { shouldLoad, getError } = createShouldLoadThatThrows({
-          loadHightouchNormally: true,
+          loadCloudflareNormally: true,
         })
         wrapTestAnalytics({
           shouldLoad,
@@ -151,8 +151,8 @@ describe(createWrapper, () => {
       })
 
       it.each([
-        { loadHightouchNormally: true },
-        { loadHightouchNormally: false },
+        { loadCloudflareNormally: true },
+        { loadCloudflareNormally: false },
       ])(
         `should not log a console error or throw an error if ctx.abort is called (%p)`,
         async (args) => {
@@ -165,11 +165,11 @@ describe(createWrapper, () => {
         }
       )
 
-      it('should allow hightouch to be loaded normally (with all consent wrapper behavior disabled) via ctx.abort', async () => {
+      it('should allow cloudflare to be loaded normally (with all consent wrapper behavior disabled) via ctx.abort', async () => {
         wrapTestAnalytics({
           shouldLoad: (ctx) => {
             ctx.abort({
-              loadHightouchNormally: true, // magic config option
+              loadCloudflareNormally: true, // magic config option
             })
           },
         })
@@ -178,11 +178,11 @@ describe(createWrapper, () => {
         expect(analyticsLoadSpy).toBeCalled()
       })
 
-      it('should allow hightouch loading to be completely aborted via ctx.abort', async () => {
+      it('should allow cloudflare loading to be completely aborted via ctx.abort', async () => {
         wrapTestAnalytics({
           shouldLoad: (ctx) => {
             ctx.abort({
-              loadHightouchNormally: false, // magic config option
+              loadCloudflareNormally: false, // magic config option
             })
             throw new Error('Fail')
           },
@@ -456,7 +456,7 @@ describe(createWrapper, () => {
         updatedCDNSettings
       )
     })
-  })
+ })
 
   describe('shouldDisableConsentRequirement', () => {
     describe('if true on wrapper initialization', () => {
@@ -527,10 +527,10 @@ describe(createWrapper, () => {
     })
   })
 
-  describe('shouldDisableHightouch', () => {
+  describe('shouldDisableCloudflare', () => {
     it('should load analytics if disableAll returns false', async () => {
       wrapTestAnalytics({
-        shouldDisableHightouch: () => false,
+        shouldDisableCloudflare: () => false,
       })
       await analytics.load(DEFAULT_LOAD_SETTINGS)
       expect(analyticsLoadSpy).toBeCalled()
@@ -538,7 +538,7 @@ describe(createWrapper, () => {
 
     it('should not load analytics if disableAll returns true', async () => {
       wrapTestAnalytics({
-        shouldDisableHightouch: () => true,
+        shouldDisableCloudflare: () => true,
       })
       await analytics.load(DEFAULT_LOAD_SETTINGS)
       expect(mockGetCategories).not.toBeCalled()
@@ -683,7 +683,7 @@ describe(createWrapper, () => {
         await expect(() =>
           getCategoriesFn()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"[Validation] Invariant: No consent categories defined in Hightouch (Received: [])"`
+          `"[Validation] Invariant: No consent categories defined in Cloudflare (Received: [])"`
         )
       })
 
@@ -791,7 +791,7 @@ describe(createWrapper, () => {
       expect(analyticsTrackSpy).toBeCalledWith(
         'Consent Updated',
         {
-          categoryPreferences: { C0001: true, C0002: false },
+          categoryPreferences: { C0001: true, C002: false },
         },
         {
           consent: {

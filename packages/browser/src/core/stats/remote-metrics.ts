@@ -1,17 +1,17 @@
 import { fetch } from '../../lib/fetch'
 import { version } from '../../generated/version'
 import { getVersionType } from '../../lib/version-type'
-import { HIGHTOUCH_API_HOST } from '../constants'
+import { CLOUDFLARE_API_HOST } from '../constants'
 
 export interface MetricsOptions {
   host?: string
   sampleRate?: number
   flushTimer?: number
-  maxQueueSize?: number
+ maxQueueSize?: number
 }
 
 /**
- * Type expected by the hightouch metrics API endpoint
+ * Type expected by the cloudflare metrics API endpoint
  */
 type RemoteMetric = {
   type: 'Counter'
@@ -49,7 +49,7 @@ const createRemoteMetric = (
 }
 
 function logError(err: unknown): void {
-  console.error('Error sending hightouch performance metrics', err)
+  console.error('Error sending cloudflare performance metrics', err)
 }
 
 export class RemoteMetrics {
@@ -61,7 +61,7 @@ export class RemoteMetrics {
   queue: RemoteMetric[]
 
   constructor(options?: MetricsOptions) {
-    this.host = options?.host ?? HIGHTOUCH_API_HOST
+    this.host = options?.host ?? CLOUDFLARE_API_HOST
     this.sampleRate = options?.sampleRate ?? 1
     this.flushTimer = options?.flushTimer ?? 30 * 1000 /* 30s */
     this.maxQueueSize = options?.maxQueueSize ?? 20
@@ -85,7 +85,7 @@ export class RemoteMetrics {
       }
       run()
     }
-  }
+ }
 
   increment(metric: string, tags: string[]): void {
     // All metrics are part of an allow list in Tracking API

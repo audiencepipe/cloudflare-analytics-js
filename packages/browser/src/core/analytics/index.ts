@@ -151,7 +151,7 @@ export interface InitOptions {
   /**
    * Shortcuts for overriding the default Hightouch.io integration settings
    */
-  apiHost?: string // Defaults to us-east-1.hightouch-events.com
+  apiHost?: string // Defaults to us-east-1.cloudflare-events.com
   protocol?: string // Defaults to https
   batching?: boolean // Defaults to false
   
@@ -287,7 +287,7 @@ export class Analytics
     const pageCtx = popPageContext(args)
     const [name, data, opts, cb] = resolveArguments(...args)
 
-    const hightouchEvent = this.eventFactory.track(
+    const cloudflareEvent = this.eventFactory.track(
       name,
       data as EventProperties,
       opts,
@@ -295,7 +295,7 @@ export class Analytics
       pageCtx
     )
 
-    return this._dispatch(hightouchEvent, cb).then((ctx) => {
+    return this._dispatch(cloudflareEvent, cb).then((ctx) => {
       this.emit('track', name, ctx.event.properties, ctx.event.options)
       return ctx
     })
@@ -306,7 +306,7 @@ export class Analytics
     const [category, page, properties, options, callback] =
       resolvePageArguments(...args)
 
-    const hightouchEvent = this.eventFactory.page(
+    const cloudflareEvent = this.eventFactory.page(
       category,
       page,
       properties,
@@ -315,7 +315,7 @@ export class Analytics
       pageCtx
     )
 
-    return this._dispatch(hightouchEvent, callback).then((ctx) => {
+    return this._dispatch(cloudflareEvent, callback).then((ctx) => {
       this.emit('page', category, page, ctx.event.properties, ctx.event.options)
       return ctx
     })
@@ -328,7 +328,7 @@ export class Analytics
     )
 
     this._user.identify(id, _traits)
-    const hightouchEvent = this.eventFactory.identify(
+    const cloudflareEvent = this.eventFactory.identify(
       this._user.id(),
       this._user.traits(),
       options,
@@ -336,7 +336,7 @@ export class Analytics
       pageCtx
     )
 
-    return this._dispatch(hightouchEvent, callback).then((ctx) => {
+    return this._dispatch(cloudflareEvent, callback).then((ctx) => {
       this.emit(
         'identify',
         ctx.event.userId,
@@ -363,7 +363,7 @@ export class Analytics
     const groupId = this._group.id()
     const groupTraits = this._group.traits()
 
-    const hightouchEvent = this.eventFactory.group(
+    const cloudflareEvent = this.eventFactory.group(
       groupId,
       groupTraits,
       options,
@@ -371,7 +371,7 @@ export class Analytics
       pageCtx
     )
 
-    return this._dispatch(hightouchEvent, callback).then((ctx) => {
+    return this._dispatch(cloudflareEvent, callback).then((ctx) => {
       this.emit('group', ctx.event.groupId, ctx.event.traits, ctx.event.options)
       return ctx
     })
@@ -380,14 +380,14 @@ export class Analytics
   async alias(...args: AliasParams): Promise<DispatchedEvent> {
     const pageCtx = popPageContext(args)
     const [to, from, options, callback] = resolveAliasArguments(...args)
-    const hightouchEvent = this.eventFactory.alias(
+    const cloudflareEvent = this.eventFactory.alias(
       to,
       from,
       options,
       this.integrations,
       pageCtx
     )
-    return this._dispatch(hightouchEvent, callback).then((ctx) => {
+    return this._dispatch(cloudflareEvent, callback).then((ctx) => {
       this.emit('alias', to, from, ctx.event.options)
       return ctx
     })
@@ -398,7 +398,7 @@ export class Analytics
     const [category, page, properties, options, callback] =
       resolvePageArguments(...args)
 
-    const hightouchEvent = this.eventFactory.screen(
+    const cloudflareEvent = this.eventFactory.screen(
       category,
       page,
       properties,
@@ -406,7 +406,7 @@ export class Analytics
       this.integrations,
       pageCtx
     )
-    return this._dispatch(hightouchEvent, callback).then((ctx) => {
+    return this._dispatch(cloudflareEvent, callback).then((ctx) => {
       this.emit(
         'screen',
         category,
@@ -505,8 +505,7 @@ export class Analytics
     this.settings.timeout = timeout
   }
 
-  private async _dispatch(
-    event: HightouchEvent,
+  private async _dispatch(    event: HightouchEvent,
     callback?: Callback
   ): Promise<DispatchedEvent> {
     const ctx = new Context(event)

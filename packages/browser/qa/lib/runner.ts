@@ -29,7 +29,7 @@ export async function run(params: ComparisonParams) {
       const request = route.request()
 
       if (
-        request.url().includes('cdn.hightouch-events') ||
+        request.url().includes('cdn.cloudflare-events') ||
         request.url().includes('cdn-settings') ||
         request.url().includes('localhost') ||
         request.url().includes('unpkg')
@@ -76,7 +76,7 @@ export async function run(params: ComparisonParams) {
         // bot
         call.url.includes('bat.bing') ||
         // there's no need to assert on metrics, especially as they're sampled
-        call.url.includes('us-east-1.hightouch-events.com/v1/m') ||
+        call.url.includes('us-east-1.cloudflare-events.com/v1/m') ||
         (request.method() === 'POST' && data === null)
       ) {
         return

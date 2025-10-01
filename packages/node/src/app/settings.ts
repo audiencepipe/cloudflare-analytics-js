@@ -7,7 +7,7 @@ export interface HtEventsSettings {
    */
   writeKey: string
   /**
-   * The base URL of the API. Default: "https://us-east-1.hightouch-events.com"
+   * The base URL of the API. Default: "https://us-east-1.cloudflare-events.com"
    */
   host?: string
   /**

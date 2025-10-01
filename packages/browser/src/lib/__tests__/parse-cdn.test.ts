@@ -40,18 +40,18 @@ beforeEach(async () => {
   jest.resetAllMocks()
 })
 
-it('detects the existing hightouch cdn', () => {
+it('detects the existing cloudflare cdn', () => {
   withTag(`
-    <script src="https://cdn.hightouch-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
+    <script src="https://cdn.cloudflare-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
-  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.hightouch-events.com"`)
+  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.cloudflare-events.com"`)
 })
 
 it('should return the overridden cdn if window.cfevents._cdn is mutated', () => {
-  withTag(`
-  <script src="https://cdn.hightouch-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
+ withTag(`
+  <script src="https://cdn.cloudflare-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
-  // @ts-ignore
+ // @ts-ignore
   ;(window.cfevents as any) = {
     _cdn: 'http://foo.cdn.com',
   }
@@ -63,26 +63,26 @@ it('if analytics is not loaded yet, should still return cdn', () => {
   // @ts-ignore
   window.cfevents = undefined as any
   withTag(`
-  <script src="https://cdn.hightouch-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
+  <script src="https://cdn.cloudflare-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
-  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.hightouch-events.com"`)
+  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.cloudflare-events.com"`)
 })
 
-it('detects custom cdns that match Hightouch in domain instrumentation patterns', () => {
+it('detects custom cdns that match Cloudflare in domain instrumentation patterns', () => {
   withTag(`
     <script src="https://my.cdn.domain/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
-  expect(getCDN()).toMatchInlineSnapshot(`"https://my.cdn.domain"`)
+ expect(getCDN()).toMatchInlineSnapshot(`"https://my.cdn.domain"`)
 })
 
-it('falls back to Hightouch if CDN is used as a proxy', () => {
+it('falls back to Cloudflare if CDN is used as a proxy', () => {
   withTag(`
     <script src="https://my.cdn.proxy/custom-analytics.min.js" />
   `)
-  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.hightouch-events.com"`)
+  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.cloudflare-events.com"`)
 })
 
-it('falls back to Hightouch if the script is not at all present on the page', () => {
-  withTag('')
-  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.hightouch-events.com"`)
+it('falls back to Cloudflare if the script is not at all present on the page', () => {
+ withTag('')
+  expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.cloudflare-events.com"`)
 })

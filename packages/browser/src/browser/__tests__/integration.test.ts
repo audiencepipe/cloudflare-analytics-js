@@ -205,7 +205,7 @@ describe('Initialization', () => {
 
   describe('cdn', () => {
     it('should get the correct CDN in plugins if the CDN overridden', async () => {
-      const overriddenCDNUrl = 'http://cdn.hightouch-events.com' // http instead of https
+      const overriddenCDNUrl = 'http://cdn.cloudflare-events.com' // http instead of https
       await CfEventsBrowser.load({
         cdnURL: overriddenCDNUrl,
         writeKey,

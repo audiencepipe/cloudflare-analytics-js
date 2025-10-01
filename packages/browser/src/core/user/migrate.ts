@@ -30,7 +30,7 @@ import { Utf8 } from './vendor/crypto-es/lib/core'
  * @returns bytes array
  */
 const base64ToBytes = (base64Str: string): Uint8Array => {
-  const binString = (window as any)?.atob(base64Str) ?? ''
+ const binString = (window as any)?.atob(base64Str) ?? ''
   const bytes = binString.split('').map((char: string) => char.charCodeAt(0))
   return new Uint8Array(bytes)
 }
@@ -51,17 +51,17 @@ function parse(value: any) {
   // if not parsable, return as is without json parse
   try {
     return value ? JSON.parse(value) : null
-  } catch (e) {
+ } catch (e) {
     return value || null
   }
 }
 
-const rudderHtEncryptKey = 'HTEV'
-export const rudderHtPrefix = 'HtEvEncrypt:'
+const cloudflareHtEncryptKey = 'HTEV'
+export const cloudflareHtPrefix = 'HtEvEncrypt:'
 
 /**
  * DEPRECATED
- * decrypt value originally made by Ht fork of rudder v1 encryption
+ * decrypt value originally made by Cloudflare fork of rudder v1 encryption
  */
 export function decryptRudderHtValue(value: string): string | null {
   try {
@@ -69,22 +69,22 @@ export function decryptRudderHtValue(value: string): string | null {
       return null
     }
 
-    // Try if its hightouch-fork-of-rudder v1 encrypted
+    // Try if its cloudflare-fork-of-rudder v1 encrypted
     // We should be able to delete this shortly
     // We do not intend to encrypt future anonymousIds
-    if (value.substring(0, rudderHtPrefix.length) === rudderHtPrefix) {
+    if (value.substring(0, cloudflareHtPrefix.length) === cloudflareHtPrefix) {
       return parse(
         // @ts-ignore 2554
         AES.decrypt(
-          value.substring(rudderHtPrefix.length),
-          rudderHtEncryptKey
+          value.substring(cloudflareHtPrefix.length),
+          cloudflareHtEncryptKey
         ).toString(Utf8)
       )
     }
   } catch (error) {
     console.error(error)
   }
-  return value
+ return value
 }
 
 const rudderEncryptKey = 'Rudder'
