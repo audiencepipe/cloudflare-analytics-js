@@ -1,6 +1,6 @@
 import { EventFactory } from '..'
 import { User } from '../../user'
-import { CoreHightouchEvent } from '../..'
+import { CoreCloudflareEvent } from '../..'
 import { isDate } from 'lodash'
 
 describe('Event Factory', () => {
@@ -354,7 +354,7 @@ describe('Event Factory', () => {
 
   describe('normalize', () => {
     it('should merge original with normalized', () => {
-      const msg: CoreHightouchEvent = {
+      const msg: CoreCloudflareEvent = {
         type: 'track',
         event: 'My Event',
         properties: {},

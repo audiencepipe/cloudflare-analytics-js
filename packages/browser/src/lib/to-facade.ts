@@ -8,14 +8,14 @@ import {
   Screen,
   Track,
 } from '@segment/facade'
-import { HightouchEvent } from '../core/events'
+import { CloudflareEvent } from '../core/events'
 
-export type SegmentFacade = Facade<HightouchEvent> & {
-  obj: HightouchEvent
+export type SegmentFacade = Facade<CloudflareEvent> & {
+  obj: CloudflareEvent
 }
 
 export function toFacade(
-  evt: HightouchEvent,
+  evt: CloudflareEvent,
   options?: Options
 ): SegmentFacade {
   let fcd = new Facade(evt, options)

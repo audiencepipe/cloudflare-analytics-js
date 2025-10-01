@@ -43,8 +43,8 @@ export function validateSettings(options: {
   options.shouldEnableIntegration &&
     assertIsFunction(options.shouldEnableIntegration, 'shouldEnableIntegration')
 
-  options.shouldDisableHightouch &&
-    assertIsFunction(options.shouldDisableHightouch, 'shouldDisableHightouch')
+  options.shouldDisableCloudflare &&
+    assertIsFunction(options.shouldDisableCloudflare, 'shouldDisableCloudflare')
 
   options.integrationCategoryMappings &&
     assertIsObject(

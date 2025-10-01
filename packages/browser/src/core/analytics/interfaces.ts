@@ -9,7 +9,7 @@ import type {
   GroupParams,
 } from '../arguments-resolver'
 import type { Context } from '../context'
-import type { HightouchEvent } from '../events'
+import type { CloudflareEvent } from '../events'
 import type { Group, User } from '../user'
 import type { LegacyIntegration } from '../../plugins/ajs-destination/types'
 import { CoreAnalytics } from '@ht-sdks/events-sdk-js-core'
@@ -58,7 +58,7 @@ export interface AnalyticsClassic extends AnalyticsClassicStubs {
   noConflict(): Analytics
 
   /** @deprecated */
-  normalize(msg: HightouchEvent): HightouchEvent
+  normalize(msg: CloudflareEvent): CloudflareEvent
 
   /** @deprecated */
   readonly failedInitializations: string[]

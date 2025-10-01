@@ -5,14 +5,14 @@ import {
   SerializedContext,
   CancelationOptions,
 } from '@ht-sdks/events-sdk-js-core'
-import { HightouchEvent } from '../events/interfaces'
+import { CloudflareEvent } from '../events/interfaces'
 import { Stats } from '../stats'
 
-export class Context extends CoreContext<HightouchEvent> {
+export class Context extends CoreContext<CloudflareEvent> {
   static override system() {
     return new this({ type: 'track', event: 'system' })
   }
-  constructor(event: HightouchEvent, id?: string) {
+  constructor(event: CloudflareEvent, id?: string) {
     super(event, id, new Stats())
   }
 }

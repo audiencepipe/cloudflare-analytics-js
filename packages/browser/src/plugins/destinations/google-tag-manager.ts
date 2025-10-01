@@ -1,5 +1,5 @@
 import type { Context } from '../../core/context'
-import type { HightouchEvent } from '../../core/events/interfaces'
+import type { CloudflareEvent } from '../../core/events/interfaces'
 import type { DestinationFactory } from './types'
 import { Destination } from './destination'
 
@@ -34,7 +34,7 @@ const googleTagManager: DestinationFactory<GoogleTagManagerSettings> = ({
   trackNamedPages = true,
   trackCategorizedPages = true,
 }) => {
-  const pushEvent = (event: HightouchEvent) => {
+  const pushEvent = (event: CloudflareEvent) => {
     window.dataLayer.push({
       ...(event.userId && {
         userId: event.userId,

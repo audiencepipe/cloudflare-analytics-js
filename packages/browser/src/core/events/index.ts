@@ -6,7 +6,7 @@ import {
   Integrations,
   EventProperties,
   Traits,
-  HightouchEvent,
+  CloudflareEvent,
 } from './interfaces'
 import md5 from 'spark-md5'
 import { addPageContext, PageContext } from '../page'
@@ -22,7 +22,7 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
+  ): CloudflareEvent {
     return this.normalize(
       {
         ...this.baseEvent(),
@@ -43,8 +43,8 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
-    const event: Partial<HightouchEvent> = {
+  ): CloudflareEvent {
+    const event: Partial<CloudflareEvent> = {
       type: 'page' as const,
       properties: { ...properties },
       options: { ...options },
@@ -65,7 +65,7 @@ export class EventFactory {
       {
         ...this.baseEvent(),
         ...event,
-      } as HightouchEvent,
+      } as CloudflareEvent,
       pageCtx
     )
   }
@@ -77,8 +77,8 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
-    const event: Partial<HightouchEvent> = {
+  ): CloudflareEvent {
+    const event: Partial<CloudflareEvent> = {
       type: 'screen' as const,
       properties: { ...properties },
       options: { ...options },
@@ -96,7 +96,7 @@ export class EventFactory {
       {
         ...this.baseEvent(),
         ...event,
-      } as HightouchEvent,
+      } as CloudflareEvent,
       pageCtx
     )
   }
@@ -107,7 +107,7 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
+  ): CloudflareEvent {
     return this.normalize(
       {
         ...this.baseEvent(),
@@ -127,7 +127,7 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
+  ): CloudflareEvent {
     return this.normalize(
       {
         ...this.baseEvent(),
@@ -147,8 +147,8 @@ export class EventFactory {
     options?: Options,
     globalIntegrations?: Integrations,
     pageCtx?: PageContext
-  ): HightouchEvent {
-    const base: Partial<HightouchEvent> = {
+  ): CloudflareEvent {
+    const base: Partial<CloudflareEvent> = {
       userId: to,
       type: 'alias' as const,
       options: { ...options },
@@ -163,20 +163,20 @@ export class EventFactory {
       return this.normalize({
         ...base,
         ...this.baseEvent(),
-      } as HightouchEvent)
+      } as CloudflareEvent)
     }
 
     return this.normalize(
       {
         ...this.baseEvent(),
         ...base,
-      } as HightouchEvent,
+      } as CloudflareEvent,
       pageCtx
     )
   }
 
-  private baseEvent(): Partial<HightouchEvent> {
-    const base: Partial<HightouchEvent> = {
+  private baseEvent(): Partial<CloudflareEvent> {
+    const base: Partial<CloudflareEvent> = {
       integrations: {},
       options: {},
     }
@@ -198,7 +198,7 @@ export class EventFactory {
    * Builds the context part of an event based on "foreign" keys that
    * are provided in the `Options` parameter for an Event
    */
-  private context(event: HightouchEvent): [object, object] {
+  private context(event: CloudflareEvent): [object, object] {
     const optionsKeys = ['integrations', 'anonymousId', 'timestamp', 'userId']
 
     const options = event.options ?? {}
@@ -225,9 +225,9 @@ export class EventFactory {
   }
 
   public normalize(
-    event: HightouchEvent,
+    event: CloudflareEvent,
     pageCtx?: PageContext
-  ): HightouchEvent {
+  ): CloudflareEvent {
     // set anonymousId globally if we encounter an override
     event.options?.anonymousId &&
       this.user.anonymousId(event.options.anonymousId)
@@ -257,7 +257,7 @@ export class EventFactory {
     const [context, overrides] = this.context(event)
     const { options, ...rest } = event
 
-    const newEvent: HightouchEvent = {
+    const newEvent: CloudflareEvent = {
       timestamp: new Date(),
       ...rest,
       context,

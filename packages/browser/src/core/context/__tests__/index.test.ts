@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Context } from '..'
-import { HightouchEvent } from '../../events'
+import { CloudflareEvent } from '../../events'
 
 describe(Context, () => {
   // hide console spam when running tests
@@ -70,14 +70,14 @@ describe(Context, () => {
   })
 
   describe('events', () => {
-    const evt: HightouchEvent = {
+    const evt: CloudflareEvent = {
       type: 'identify',
       traits: {
         banana: 'phone',
       },
     }
 
-    const anothaOne: HightouchEvent = {
+    const anothaOne: CloudflareEvent = {
       type: 'identify',
       traits: {
         name: 'DJ Khaled',
@@ -117,14 +117,14 @@ describe(Context, () => {
     })
 
     it('allows updating integrations set to true', () => {
-      const trueEvt: HightouchEvent = {
+      const trueEvt: CloudflareEvent = {
         type: 'identify',
         integrations: {
           Amplitude: true,
         },
       }
 
-      const falseEvt: HightouchEvent = {
+      const falseEvt: CloudflareEvent = {
         type: 'identify',
         integrations: {
           Amplitude: false,
@@ -153,7 +153,7 @@ describe(Context, () => {
   })
 
   it('serializes a context to JSON', () => {
-    const evt: HightouchEvent = {
+    const evt: CloudflareEvent = {
       type: 'track',
       properties: {
         serializable: true,

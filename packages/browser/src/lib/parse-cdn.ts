@@ -46,7 +46,7 @@ export const getCDN = (): string => {
     // - the script is loaded through a proxy
     // - the script is removed after execution
     // in this case, we fall back to the default Hightouch CDN
-    return `https://cdn.hightouch-events.com`
+    return `https://cdn.cloudflare-events.com`
   }
 }
 

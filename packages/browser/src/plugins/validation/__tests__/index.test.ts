@@ -1,8 +1,8 @@
 import { validation } from '..'
 import { Context } from '../../../core/context'
-import { HightouchEvent } from '../../../core/events'
+import { CloudflareEvent } from '../../../core/events'
 
-const validEvent: HightouchEvent = {
+const validEvent: CloudflareEvent = {
   type: 'track',
   anonymousId: 'abc',
   event: 'test',

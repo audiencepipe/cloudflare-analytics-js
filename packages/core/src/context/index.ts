@@ -1,4 +1,4 @@
-import { CoreHightouchEvent } from '../events/interfaces'
+import { CoreCloudflareEvent } from '../events/interfaces'
 
 import { v4 as uuid } from '@lukeed/uuid'
 import { dset } from 'dset'
@@ -7,7 +7,7 @@ import { CoreStats, CoreMetric, NullStats } from '../stats'
 
 export interface SerializedContext {
   id: string
-  event: CoreHightouchEvent
+  event: CoreCloudflareEvent
   logs: LogMessage[]
   metrics?: CoreMetric[]
 }
@@ -35,7 +35,7 @@ export class ContextCancelation {
 }
 
 export abstract class CoreContext<
-  Event extends CoreHightouchEvent = CoreHightouchEvent
+  Event extends CoreCloudflareEvent = CoreCloudflareEvent
 > {
   event: Event
   logger: CoreLogger

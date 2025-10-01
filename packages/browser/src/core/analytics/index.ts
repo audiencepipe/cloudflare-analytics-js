@@ -20,7 +20,7 @@ import {
   Integrations,
   Plan,
   EventProperties,
-  HightouchEvent,
+  CloudflareEvent,
 } from '../events'
 import type { Plugin } from '../plugin'
 import { EventQueue } from '../queue/event-queue'
@@ -505,7 +505,7 @@ export class Analytics
     this.settings.timeout = timeout
   }
 
-  private async _dispatch(    event: HightouchEvent,
+  private async _dispatch(    event: CloudflareEvent,
     callback?: Callback
   ): Promise<DispatchedEvent> {
     const ctx = new Context(event)
@@ -601,7 +601,7 @@ export class Analytics
     return this
   }
 
-  normalize(msg: HightouchEvent): HightouchEvent {
+  normalize(msg: CloudflareEvent): CloudflareEvent {
     console.warn(deprecationWarning)
     return this.eventFactory.normalize(msg)
   }

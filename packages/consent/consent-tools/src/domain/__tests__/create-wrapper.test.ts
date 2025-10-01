@@ -70,6 +70,7 @@ beforeEach(() => {
     addSourceMiddleware = addSourceMiddlewareSpy
   }
   analytics = new MockAnalytics()
+  jest.clearAllMocks()
 })
 
 const wrapTestAnalytics = (overrides: Partial<CreateWrapperSettings> = {}) =>

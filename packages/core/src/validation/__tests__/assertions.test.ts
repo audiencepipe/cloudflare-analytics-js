@@ -1,7 +1,7 @@
-import { CoreHightouchEvent } from '../../events'
+import { CoreCloudflareEvent } from '../../events'
 import { validateEvent } from '../assertions'
 
-const baseEvent: Partial<CoreHightouchEvent> = {
+const baseEvent: Partial<CoreCloudflareEvent> = {
   userId: 'foo',
   event: 'Test Event',
 }

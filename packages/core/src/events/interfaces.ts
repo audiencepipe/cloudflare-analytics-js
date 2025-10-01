@@ -6,7 +6,7 @@ export type Callback<Ctx extends CoreContext = CoreContext> = (
   ctx: Ctx
 ) => Promise<unknown> | unknown
 
-export type HightouchEventType =
+export type CloudflareEventType =
   | 'track'
   | 'page'
   | 'identify'
@@ -192,9 +192,9 @@ export interface CoreExtraContext {
   [key: string]: any
 }
 
-export interface CoreHightouchEvent {
+export interface CoreCloudflareEvent {
   messageId?: string
-  type: HightouchEventType
+  type: CloudflareEventType
 
   // page specific
   category?: string
@@ -219,12 +219,12 @@ export interface CoreHightouchEvent {
 
   sentAt?: Date
 
-  _metadata?: HightouchEventMetadata
+  _metadata?: CloudflareEventMetadata
 
   timestamp?: Timestamp
 }
 
-export interface HightouchEventMetadata {
+export interface CloudflareEventMetadata {
   failedInitializations?: unknown[]
   bundled?: string[]
   unbundled?: string[]
@@ -269,7 +269,7 @@ type PhoneNumber = string | number // TODO: the docs say this can only be a stri
 
 /**
  * Traits are pieces of information you know about a group.
- * This interface represents reserved traits that Hightouch has standardized.
+ * This interface represents reserved traits that Cloudflare has standardized.
  */
 type BaseGroupTraits = DeepNullable<{
   /**
@@ -283,7 +283,7 @@ type BaseGroupTraits = DeepNullable<{
   avatar?: BaseUserTraits['avatar']
 
   /**
-   * Date the group's account was first created. Hightouch recommends ISO-8601 date strings.
+   * Date the group's account was first created. Cloudflare recommends ISO-8601 date strings.
    */
   createdAt?: BaseUserTraits['createdAt']
 
@@ -333,7 +333,7 @@ type BaseGroupTraits = DeepNullable<{
 
 /**
  * Traits are pieces of information you know about a user.
- * This interface represents reserved traits that Hightouch has standardized.
+ * This interface represents reserved traits that Cloudflare has standardized.
  */
 type BaseUserTraits = DeepNullable<{
   /**
@@ -357,7 +357,7 @@ type BaseUserTraits = DeepNullable<{
   lastName?: string
 
   /**
-   * Full name of a user. If you only pass a first and last name Hightouch automatically fills in the full name for you.
+   * Full name of a user. If you only pass a first and last name Cloudflare automatically fills in the full name for you.
    */
   name?: string
 
@@ -426,7 +426,7 @@ type BaseUserTraits = DeepNullable<{
   plan?: string
 
   /**
-   * 	Date the user's account was first created. Hightouch recommends using ISO-8601 date strings.
+   * 	Date the user's account was first created. Cloudflare recommends using ISO-8601 date strings.
    */
   createdAt?: Timestamp
 
@@ -448,7 +448,7 @@ type BaseUserTraits = DeepNullable<{
 
 /**
  * Traits are pieces of information you know about a group.
- * This interface represents reserved traits that Hightouch has standardized.
+ * This interface represents reserved traits that Cloudflare has standardized.
  */
 export type GroupTraits = BaseGroupTraits & {
   [customTrait: string]: any
@@ -456,7 +456,7 @@ export type GroupTraits = BaseGroupTraits & {
 
 /**
  * Traits are pieces of information you know about a user.
- * This interface represents reserved traits that Hightouch has standardized.
+ * This interface represents reserved traits that Cloudflare has standardized.
  */
 export type UserTraits = BaseUserTraits & {
   [customTrait: string]: any

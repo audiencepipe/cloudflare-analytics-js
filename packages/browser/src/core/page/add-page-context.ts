@@ -1,5 +1,5 @@
 import { pick } from '../../lib/pick'
-import { EventProperties, HightouchEvent } from '../events'
+import { EventProperties, CloudflareEvent } from '../events'
 import { getDefaultPageContext } from './get-page-context'
 
 /**
@@ -9,7 +9,7 @@ import { getDefaultPageContext } from './get-page-context'
  * We prefer not to add this information to this function, as it increases the main bundle size.
  */
 export const addPageContext = (
-  event: HightouchEvent,
+  event: CloudflareEvent,
   pageCtx = getDefaultPageContext()
 ): void => {
   const evtCtx = event.context! // Context should be set earlier in the flow

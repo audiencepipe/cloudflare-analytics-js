@@ -77,7 +77,7 @@ export interface CreateWrapperSettings {
    * Called on wrapper initialization. This can be useful in dev environments (e.g. 'devMode').
    * **shouldLoad will never be called**
    **/
-  shouldDisableHightouch?: () => boolean | Promise<boolean>
+  shouldDisableCloudflare?: () => boolean | Promise<boolean>
 
   /**
    * Object that maps `integrationName -> categories`. Typically, this is not needed, as this data comes from the CDN and is attached to each integration.
@@ -106,7 +106,7 @@ export interface CreateWrapperSettings {
   ) => boolean
 
   /**
-   * Prune consent categories from the `context.consent.categoryPreferences` payload if that category is not mapped to any integration in your Hightouch.io source.
+   * Prune consent categories from the `context.consent.categoryPreferences` payload if that category is not mapped to any integration in your Cloudflare source.
    * This is helpful if you want to save on bytes sent to Hightouch and do need the complete list of CMP's categories for debugging or other reasons.
    * By default, all consent categories returned by `getCategories()` are sent to Hightouch.
    * @default false

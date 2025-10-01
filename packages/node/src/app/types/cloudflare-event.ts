@@ -1,7 +1,10 @@
-import type { CoreHightouchEvent } from '@ht-sdks/events-sdk-js-core'
+import type { CoreCloudflareEvent } from '@ht-sdks/events-sdk-js-core'
 
-type HightouchEventType = 'track' | 'page' | 'identify' | 'alias' | 'screen'
+type CloudflareEventType = 'track' | 'page' | 'identify' | 'alias' | 'screen'
 
-export interface HightouchEvent extends CoreHightouchEvent {
-  type: HightouchEventType
+export interface CloudflareEvent extends CoreCloudflareEvent {
+  type: CloudflareEventType
 }
+
+// Create an alias for backwards compatibility
+export type HightouchEvent = CloudflareEvent

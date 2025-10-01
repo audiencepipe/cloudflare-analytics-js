@@ -3,7 +3,7 @@ import cookie from 'js-cookie'
 import { CloudflareSettings } from '..'
 import { normalize } from '../normalize'
 import { Analytics } from '../../../core/analytics'
-import { HightouchEvent } from '../../../core/events'
+import { CloudflareEvent } from '../../../core/events'
 import { JSDOM } from 'jsdom'
 
 describe('before loading', () => {
@@ -53,7 +53,7 @@ describe('before loading', () => {
   })
 
   describe('#normalize', () => {
-    let object: HightouchEvent
+    let object: CloudflareEvent
     let defaultCtx: any
 
     beforeEach(() => {

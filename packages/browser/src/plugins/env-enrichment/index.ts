@@ -2,7 +2,7 @@ import jar from 'js-cookie'
 import type { Context } from '../../core/context'
 import type { Plugin } from '../../core/plugin'
 import { version } from '../../generated/version'
-import { HightouchEvent } from '../../core/events'
+import { CloudflareEvent } from '../../core/events'
 import { Campaign, PluginType } from '@ht-sdks/events-sdk-js-core'
 import { getVersionType } from '../../lib/version-type'
 import { tld } from '../../core/user/tld'
@@ -84,7 +84,7 @@ export function ampId(): string | undefined {
 
 function referrerId(
   query: string,
-  ctx: HightouchEvent['context'],
+  ctx: CloudflareEvent['context'],
   disablePersistance: boolean
 ): void {
   const storage = new UniversalStorage<{

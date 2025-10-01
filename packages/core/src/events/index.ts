@@ -4,7 +4,7 @@ import { ID, User } from '../user'
 import {
   Integrations,
   EventProperties,
-  CoreHightouchEvent,
+  CoreCloudflareEvent,
   CoreOptions,
   CoreExtraContext,
   UserTraits,
@@ -50,8 +50,8 @@ export class EventFactory {
     properties?: EventProperties,
     options?: CoreOptions,
     globalIntegrations?: Integrations
-  ): CoreHightouchEvent {
-    const event: CoreHightouchEvent = {
+  ): CoreCloudflareEvent {
+    const event: CoreCloudflareEvent = {
       type: 'page',
       properties: { ...properties },
       options: { ...options },
@@ -80,8 +80,8 @@ export class EventFactory {
     properties?: EventProperties,
     options?: CoreOptions,
     globalIntegrations?: Integrations
-  ): CoreHightouchEvent {
-    const event: CoreHightouchEvent = {
+  ): CoreCloudflareEvent {
+    const event: CoreCloudflareEvent = {
       type: 'screen',
       properties: { ...properties },
       options: { ...options },
@@ -107,7 +107,7 @@ export class EventFactory {
     traits?: UserTraits,
     options?: CoreOptions,
     globalIntegrations?: Integrations
-  ): CoreHightouchEvent {
+  ): CoreCloudflareEvent {
     return this.normalize({
       ...this.baseEvent(),
       type: 'identify',
@@ -123,7 +123,7 @@ export class EventFactory {
     traits?: GroupTraits,
     options?: CoreOptions,
     globalIntegrations?: Integrations
-  ): CoreHightouchEvent {
+  ): CoreCloudflareEvent {
     return this.normalize({
       ...this.baseEvent(),
       type: 'group',
@@ -139,8 +139,8 @@ export class EventFactory {
     from: string | null, // TODO: can we make this undefined?
     options?: CoreOptions,
     globalIntegrations?: Integrations
-  ): CoreHightouchEvent {
-    const base: CoreHightouchEvent = {
+  ): CoreCloudflareEvent {
+    const base: CoreCloudflareEvent = {
       userId: to,
       type: 'alias',
       options: { ...options },
@@ -164,8 +164,8 @@ export class EventFactory {
     })
   }
 
-  private baseEvent(): Partial<CoreHightouchEvent> {
-    const base: Partial<CoreHightouchEvent> = {
+  private baseEvent(): Partial<CoreCloudflareEvent> {
+    const base: Partial<CoreCloudflareEvent> = {
       integrations: {},
       options: {},
     }
@@ -191,7 +191,7 @@ export class EventFactory {
    */
   private context(
     options: CoreOptions
-  ): [CoreExtraContext, Partial<CoreHightouchEvent>] {
+  ): [CoreExtraContext, Partial<CoreCloudflareEvent>] {
     type CoreOptionKeys = keyof RemoveIndexSignature<CoreOptions>
     /**
      * If the event options are known keys from this list, we move them to the top level of the event.
@@ -227,7 +227,7 @@ export class EventFactory {
     return [context, eventOverrides]
   }
 
-  public normalize(event: CoreHightouchEvent): CoreHightouchEvent {
+  public normalize(event: CoreCloudflareEvent): CoreCloudflareEvent {
     const integrationBooleans = Object.keys(event.integrations ?? {}).reduce(
       (integrationNames, name) => {
         return {
@@ -269,7 +269,7 @@ export class EventFactory {
       ...overrides,
     }
 
-    const evt: CoreHightouchEvent = {
+    const evt: CoreCloudflareEvent = {
       ...body,
       messageId: this.createMessageId(),
     }

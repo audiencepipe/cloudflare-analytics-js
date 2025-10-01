@@ -10,7 +10,7 @@ import {
   JSONObject,
   Options,
   EventProperties,
-  HightouchEvent,
+  CloudflareEvent,
   Traits,
   GroupTraits,
   UserTraits,
@@ -21,7 +21,7 @@ import { ID, User } from '../user'
  * Helper for the track method
  */
 export function resolveArguments(
-  eventName: string | HightouchEvent,
+  eventName: string | CloudflareEvent,
   properties?: EventProperties | Callback,
   options?: Options | Callback,
   callback?: Callback

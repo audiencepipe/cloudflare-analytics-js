@@ -1,12 +1,12 @@
 import { Context, ContextCancelation } from '../../core/context'
-import { HightouchEvent } from '../../core/events'
+import { CloudflareEvent } from '../../core/events'
 import { Plugin } from '../../core/plugin'
 import { SegmentFacade, toFacade } from '../../lib/to-facade'
 
 export interface MiddlewareParams {
   payload: SegmentFacade
 
-  integrations?: HightouchEvent['integrations']
+  integrations?: CloudflareEvent['integrations']
   next: (payload: MiddlewareParams['payload'] | null) => void
 }
 
@@ -26,20 +26,20 @@ export type DestinationMiddlewareFunction = (
 
 export async function applyDestinationMiddleware(
   destination: string,
-  evt: HightouchEvent,
+  evt: CloudflareEvent,
   middleware: DestinationMiddlewareFunction[]
-): Promise<HightouchEvent | null> {
+): Promise<CloudflareEvent | null> {
   // Clone the event so mutations are localized to a single destination.
   let modifiedEvent = toFacade(evt, {
     clone: true,
     traverse: false,
-  }).rawEvent() as HightouchEvent
+  }).rawEvent() as CloudflareEvent
   async function applyMiddleware(
-    event: HightouchEvent,
+    event: CloudflareEvent,
     fn: DestinationMiddlewareFunction
-  ): Promise<HightouchEvent | null> {
+  ): Promise<CloudflareEvent | null> {
     let nextCalled = false
-    let returnedEvent: HightouchEvent | null = null
+    let returnedEvent: CloudflareEvent | null = null
 
     await fn({
       payload: toFacade(event, {
@@ -61,7 +61,7 @@ export async function applyDestinationMiddleware(
     })
 
     if (!nextCalled && returnedEvent !== null) {
-      returnedEvent = returnedEvent as HightouchEvent
+      returnedEvent = returnedEvent as CloudflareEvent
       returnedEvent.integrations = {
         ...event.integrations,
         [destination]: false,
@@ -84,7 +84,7 @@ export async function applyDestinationMiddleware(
 
 export function sourceMiddlewarePlugin(
   fn: MiddlewareFunction,
-  integrations: HightouchEvent['integrations']
+  integrations: CloudflareEvent['integrations']
 ): Plugin {
   async function apply(ctx: Context): Promise<Context> {
     let nextCalled = false

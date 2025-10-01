@@ -3,7 +3,7 @@ import { range, uniq } from 'lodash'
 import { EventFactory } from '..'
 import { getDefaultPageContext } from '../../page'
 import { User } from '../../user'
-import { HightouchEvent, Options } from '../interfaces'
+import { CloudflareEvent, Options } from '../interfaces'
 
 describe('Event Factory', () => {
   let user: User
@@ -395,7 +395,7 @@ describe('Event Factory', () => {
   })
 
   describe('normalize', function () {
-    const msg: HightouchEvent = { type: 'track' }
+    const msg: CloudflareEvent = { type: 'track' }
     const opts: Options = (msg.options = {})
 
     describe('message', function () {

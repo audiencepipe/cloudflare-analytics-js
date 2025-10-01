@@ -1,6 +1,6 @@
 import {
   CoreOptions,
-  CoreHightouchEvent,
+  CoreCloudflareEvent,
   Callback,
   Integrations,
   Plan,
@@ -21,7 +21,7 @@ export type { GroupTraits, UserTraits, Traits }
 
 export type EventProperties = Record<string, any>
 
-export interface HightouchEvent extends CoreHightouchEvent {}
+export interface CloudflareEvent extends CoreCloudflareEvent {}
 
 export type {
   Integrations,

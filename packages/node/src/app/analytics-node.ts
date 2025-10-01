@@ -12,7 +12,7 @@ import {
   PageParams,
   TrackParams,
   Plugin,
-  HightouchEvent,
+  CloudflareEvent,
 } from './types'
 import { Context } from './context'
 import { NodeEventQueue } from './event-queue'
@@ -94,9 +94,9 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     return timeout ? pTimeout(promise, timeout).catch(() => undefined) : promise
   }
 
-  private _dispatch(cloudflareEvent: HightouchEvent, callback?: Callback) {
+  private _dispatch(cloudflareEvent: CloudflareEvent, callback?: Callback) {
     if (this._isClosed) {
-      this.emit('call_after_close', cloudflareEvent as HightouchEvent)
+      this.emit('call_after_close', cloudflareEvent as CloudflareEvent)
       return undefined
     }
 
