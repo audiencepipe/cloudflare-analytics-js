@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/audiencepipe/cloudflare-analytics-js-browser",
+    "url": "git+https://github.com/audiencepipe/cloudflare-analytics-js-browser.git",
     "directory": "packages/browser"
   },
   "license": "MIT",
@@ -98,5 +98,11 @@
     "webpack": "^5.76.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
-  }
+  },
+  "description": "To integrate the JavaScript SDK with your website, place the following code snippet in the `<head>` section of your website.",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/audiencepipe/cloudflare-analytics-js-browser/issues"
+  },
+  "homepage": "https://github.com/audiencepipe/cloudflare-analytics-js-browser#readme"
 }

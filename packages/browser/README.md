@@ -20,19 +20,19 @@ e.page()}}();
 
 ```sh
 # npm
-npm install cf-events-sdk-js-browser
+npm install @audiencepipe/cloudflare-analytics-js-browser
 
 # yarn
-yarn add cf-events-sdk-js-browser
+yarn add @audiencepipe/cloudflare-analytics-js-browser
 
 # pnpm
-pnpm add cf-events-sdk-js-browser
+pnpm add @audiencepipe/cloudflare-analytics-js-browser
 ```
 
 2. Import the package into your project and you're good to go (with working types)!
 
 ```ts
-import { CfEventsBrowser } from 'cf-events-sdk-js-browser'
+import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 const cfevents = CfEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
 
@@ -72,7 +72,7 @@ cfevents
 
 ### Vanilla React
 ```tsx
-import { CfEventsBrowser } from 'cf-events-sdk-js-browser'
+import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 // We can export this instance to share with rest of our codebase.
 export const cfevents = CfEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
@@ -89,7 +89,7 @@ const App = () => (
 1. Export cfevents instance. E.g. `services/cloudflare.ts`
 
 ```ts
-import { CfEventsBrowser } from 'cf-events-sdk-js-browser'
+import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 export const cfevents = CfEventsBrowser.load({
   writeKey: '<YOUR_WRITE_KEY>',
@@ -127,12 +127,12 @@ NOTE: this is only required for snippet installation.
 
 NPM installation should already have type support.
 
-1. Install npm package `cf-events-sdk-js-browser` as a dev dependency.
+1. Install npm package `@audiencepipe/cloudflare-analytics-js-browser` as a dev dependency.
 
 2. Create `./typings/cfevents.d.ts`
 ```ts
 // ./typings/cfevents.d.ts
-import type { CfEventsSnippet } from "cf-events-sdk-js-browser";
+import type { CfEventsSnippet } from "@audiencepipe/cloudflare-analytics-js-browser";
 
 declare global {
   interface Window {
@@ -194,7 +194,7 @@ and can be of five different types:
 Here is an example of a simple plugin that would convert all track events event names to lowercase before the event gets sent through the rest of the pipeline:
 
 ```ts
-import type { Plugin } from 'cf-events-sdk-js-browser'
+import type { Plugin } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 export const lowercase: Plugin = {
   name: 'Lowercase Event Name',
@@ -326,7 +326,7 @@ cfevents.track('My Event', { prop: 'abc' })
 If you'd like to send events to a custom client-side destination that is not yet supported, you can do so using the `Destination` class as a template and implement the relevant tracking methods (`track`, `page`, etc).
 
 ```ts
-import { CfEventsBrowser, Destination } from "cf-events-sdk-js-browser";
+import { CfEventsBrowser, Destination } from "@audiencepipe/cloudflare-analytics-js-browser";
 
 const cfevents = new CfEventsBrowser();
 
