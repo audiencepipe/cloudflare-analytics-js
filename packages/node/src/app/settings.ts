@@ -11,7 +11,7 @@ export interface HtEventsSettings {
    */
   host?: string
   /**
-   * The API path route. Default: "/v1/batch"
+   * The API path route.
    */
   path?: string
   /**

@@ -68,7 +68,7 @@ export class Publisher {
     this._auth = b64encode(`${writeKey}:`)
     this._url = tryCreateFormattedUrl(
       host ?? 'https://us-east-1.cloudflare-events.com',
-      path ?? '/v1/batch'
+      path
     )
     this._httpRequestTimeout = httpRequestTimeout ?? 10000
     this._disable = Boolean(disable)

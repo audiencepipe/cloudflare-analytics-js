@@ -1,9 +1,9 @@
 {
-  "name": "@ht-sdks/events-sdk-js-browser",
+  "name": "@audiencepipe/cloudflare-analytics-js-browser",
   "version": "1.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ht-sdks/events-sdk-js-mono",
+    "url": "https://github.com/audiencepipe/cloudflare-analytics-js-browser",
     "directory": "packages/browser"
   },
   "license": "MIT",

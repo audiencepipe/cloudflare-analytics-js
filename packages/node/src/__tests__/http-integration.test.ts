@@ -45,7 +45,7 @@ describe('Method Smoke Tests', () => {
     const calls: any[] = []
     beforeEach(async () => {
       scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
-        .post('/v1/batch', function (_body: any) {
+        .post('/', function (_body: any) {
           calls.push(_body)
           return true
         })
@@ -71,7 +71,7 @@ describe('Method Smoke Tests', () => {
     test(`A request should have the expected headers`, async () => {
       let headers = null
       scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
-        .post('/v1/batch')
+        .post('/')
         .reply(201, function () {
           headers = this.req.headers
         })
@@ -101,7 +101,7 @@ describe('Method Smoke Tests', () => {
     beforeEach(async () => {
       calls = []
       scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
-        .post('/v1/batch', function (_body: any) {
+        .post('/', function (_body: any) {
           calls.push(_body)
           return true
         })
@@ -339,7 +339,7 @@ describe('Method Smoke Tests', () => {
 describe('Client: requestTimeout', () => {
   beforeEach(async () => {
     nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
-      .post('/v1/batch')
+      .post('/')
       .reply(201)
   })
   it('should timeout immediately if request timeout is set to 0', async () => {
