@@ -25,7 +25,6 @@ export function assertHTTPRequestOptions(
   expect(method).toBe('POST')
   expect(headers).toMatchInlineSnapshot(`
     {
-      "Authorization": "Basic Og==",
       "Content-Type": "application/json",
       "User-Agent": "events-sdk-js-node/latest",
     }

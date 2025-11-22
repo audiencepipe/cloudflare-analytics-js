@@ -20,7 +20,6 @@ const helpers = {
   ) => {
     expect(url).toBe('https://test-pipeline.com')
     expect(options.headers).toEqual({
-      Authorization: 'Basic Zm9vOg==',
       'Content-Type': 'application/json',
       'User-Agent': 'events-sdk-js-node/latest',
     })

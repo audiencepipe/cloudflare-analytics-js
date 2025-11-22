@@ -4,7 +4,6 @@ import { tryCreateFormattedUrl } from '../../lib/create-url'
 import { extractPromiseParts } from '../../lib/extract-promise-parts'
 import { ContextBatch } from './context-batch'
 import { NodeEmitter } from '../../app/emitter'
-import { b64encode } from '../../lib/base-64-encode'
 import { HTTPClient, HTTPClientRequest } from '../../lib/http-client'
 
 function sleep(timeoutInMs: number): Promise<void> {
@@ -19,12 +18,15 @@ interface PendingItem {
 }
 
 export interface PublisherProps {
+  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in HtEventsSettings instead. */
   host?: string
+  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in HtEventsSettings instead. */
   path?: string
   cloudflarePipelineBearerToken?: string
   flushInterval: number
   maxEventsInBatch: number
   maxRetries: number
+  /** @deprecated This setting is no longer used for authentication. */
   writeKey: string
   httpRequestTimeout?: number
   disable?: boolean
@@ -55,7 +57,6 @@ export class Publisher {
       maxRetries,
       maxEventsInBatch,
       flushInterval,
-      writeKey,
       httpRequestTimeout,
       httpClient,
       disable,
@@ -67,9 +68,10 @@ export class Publisher {
     this._maxRetries = maxRetries
     this._maxEventsInBatch = Math.max(maxEventsInBatch, 1)
     this._flushInterval = flushInterval
+    // Only use Bearer token authentication if provided, otherwise no auth
     this._auth = cloudflarePipelineBearerToken
       ? `Bearer ${cloudflarePipelineBearerToken}`
-      : `Basic ${b64encode(`${writeKey}:`)}`
+      : ''
     this._url = tryCreateFormattedUrl(
       host ?? 'https://us-east-1.cloudflare-events.com',
       path
@@ -202,14 +204,20 @@ export class Publisher {
           return batch.resolveEvents()
         }
 
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+          'User-Agent': 'events-sdk-js-node/latest',
+        }
+
+        // Only add Authorization header if Bearer token is provided
+        if (this._auth) {
+          headers.Authorization = this._auth
+        }
+
         const request: HTTPClientRequest = {
           url: this._url,
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: this._auth,
-            'User-Agent': 'events-sdk-js-node/latest',
-          },
+          headers,
           data: events,
           httpRequestTimeout: this._httpRequestTimeout,
         }

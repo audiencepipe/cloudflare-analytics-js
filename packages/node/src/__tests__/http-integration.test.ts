@@ -78,9 +78,6 @@ describe('Method Smoke Tests', () => {
       expect(pick(headers, 'authorization', 'user-agent', 'content-type'))
         .toMatchInlineSnapshot(`
         {
-          "authorization": [
-            "Basic Zm9vOg==",
-          ],
           "content-type": [
             "application/json",
           ],
@@ -340,10 +337,10 @@ describe('Client: requestTimeout', () => {
   })
   it('does not retry on 401', async () => {
     const { FetchHTTPClient } = await import('../lib/http-client')
-    
+
     jest.useRealTimers()
     let reqCount = 0
-    
+
     const mockFetch = jest.fn(async () => {
       reqCount++
       return {
@@ -355,23 +352,21 @@ describe('Client: requestTimeout', () => {
       } as any
     })
 
-    const analytics = createTestAnalytics(
-      {
-        cloudflarePipelineUrl: 'https://test-pipeline.com',
-        maxRetries: 3,
-        flushInterval: 10,
-        httpClient: new FetchHTTPClient(mockFetch),
-      }
-    )
+    const analytics = createTestAnalytics({
+      cloudflarePipelineUrl: 'https://test-pipeline.com',
+      maxRetries: 3,
+      flushInterval: 10,
+      httpClient: new FetchHTTPClient(mockFetch),
+    })
 
     analytics.track({ event: 'foo', userId: 'bar' })
-    
+
     try {
       await resolveCtx(analytics, 'track')
     } catch (e) {
       // Expected to fail after retries
     }
-    
+
     expect(reqCount).toBe(1)
   })
 })

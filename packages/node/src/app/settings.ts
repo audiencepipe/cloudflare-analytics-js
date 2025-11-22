@@ -3,14 +3,17 @@ import { HTTPClient, HTTPFetchFn } from '../lib/http-client'
 
 export interface HtEventsSettings {
   /**
+   * @deprecated Use cloudflarePipelineBearerToken instead. This setting is no longer used for authentication.
    * Key that corresponds to your Hightouch.io project
    */
   writeKey?: string
   /**
+   * @deprecated Use cloudflarePipelineUrl instead. This setting is ignored.
    * The base URL of the API. Default: "https://us-east-1.cloudflare-events.com"
    */
   host?: string
   /**
+   * @deprecated Include the full path in cloudflarePipelineUrl instead. This setting is ignored.
    * The API path route.
    */
   path?: string
