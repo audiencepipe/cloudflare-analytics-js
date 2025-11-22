@@ -108,9 +108,13 @@ export interface CfEventsBrowserSettings extends AnalyticsSettings {
 }
 
 export function loadLegacySettings(
-  writeKey: string,
+  writeKey?: string, // Made optional
   cdnURL?: string,
 ): Promise<LegacySettings> {
+  if (!writeKey) {
+    // If writeKey is not provided, return default settings instead of fetching
+    return Promise.resolve(defaultSettings);
+  }
   const baseUrl = cdnURL ?? getCDN()
 
   return fetch(`${baseUrl}/v1/projects/${writeKey}/settings`)
@@ -175,13 +179,13 @@ async function flushFinalBuffer(
 }
 
 async function registerPlugins(
-  writeKey: string,
   legacySettings: LegacySettings,
   analytics: Analytics,
   opts: InitOptions,
   options: InitOptions,
   pluginLikes: (Plugin | PluginFactory)[] = [],
-  legacyIntegrationSources: ClassicIntegrationSource[]
+  legacyIntegrationSources: ClassicIntegrationSource[],
+  writeKey?: string // Moved to the end to be optional
 ): Promise<Context> {
   const plugins = pluginLikes?.filter(
     (pluginLike) => typeof pluginLike === 'object'
@@ -396,13 +400,13 @@ async function loadAnalytics(
   flushPreBuffer(analytics, preInitBuffer)
 
   const ctx = await registerPlugins(
-    settings.writeKey,
     legacySettings,
     analytics,
     opts,
     options,
     plugins,
-    classicIntegrations
+    classicIntegrations,
+    settings.writeKey // Pass potentially undefined writeKey
   )
 
   const search = window.location.search ?? ''
@@ -499,7 +503,7 @@ export class CfEventsBrowser extends AnalyticsBuffered {
   }
 
   static standalone(
-    writeKey: string,
+    writeKey?: string, // Made optional
     options?: InitOptions
   ): Promise<Analytics> {
     return CfEventsBrowser.load({ writeKey }, options).then((res) => res[0])

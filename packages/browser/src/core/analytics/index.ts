@@ -81,7 +81,7 @@ function createDefaultQueue(
 }
 
 export interface AnalyticsSettings {
-  writeKey: string
+  writeKey?: string // Made optional
   timeout?: number
   plugins?: (Plugin | PluginFactory)[]
   classicIntegrations?: ClassicIntegrationSource[]
@@ -197,7 +197,7 @@ export class Analytics
     this.queue =
       queue ??
       createDefaultQueue(
-        `${settings.writeKey}:event-queue`,
+        `${settings.writeKey ?? 'default'}:event-queue`, // Handle potentially undefined writeKey
         options?.retryQueue,
         disablePersistance
       )

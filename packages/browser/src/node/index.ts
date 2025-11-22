@@ -8,7 +8,7 @@ import { PriorityQueue } from '../lib/priority-queue'
 
 export class AnalyticsNode {
   static async load(settings: {
-    writeKey: string
+    writeKey?: string // Made optional
   }): Promise<[Analytics, Context]> {
     const cookieOptions = {
       persist: false,
@@ -19,7 +19,7 @@ export class AnalyticsNode {
     const analytics = new Analytics(settings, options, queue)
 
     const nodeSettings = {
-      writeKey: settings.writeKey,
+      writeKey: settings.writeKey, // This can now be undefined
       name: 'events-sdk-js-node',
       type: 'after' as Plugin['type'],
       version: 'latest',

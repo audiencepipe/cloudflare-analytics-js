@@ -5,7 +5,7 @@ import fetch from 'node-fetch'
 import { version } from '../../generated/version'
 
 interface AnalyticsNodeSettings {
-  writeKey: string
+  writeKey?: string // Made optional
   name: string
   type: Plugin['type']
   version: string
@@ -15,17 +15,23 @@ const btoa = (val: string): string => Buffer.from(val).toString('base64')
 
 export async function post(
   event: CloudflareEvent,
-  writeKey: string
+  writeKey?: string // Made optional
 ): Promise<CloudflareEvent> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'User-Agent': 'events-sdk-js-node/latest',
+  }
+
+  // Only add the Authorization header if writeKey is provided
+  if (writeKey) {
+    headers.Authorization = `Basic ${btoa(writeKey)}`
+  }
+
   const res = await fetch(
     `https://us-east-1.cloudflare-events.com/v1/${event.type}`,
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'events-sdk-js-node/latest',
-        Authorization: `Basic ${btoa(writeKey)}`,
-      },
+      headers,
       body: JSON.stringify(event),
     }
   )

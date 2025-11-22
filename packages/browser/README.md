@@ -2,14 +2,12 @@
 
 ## Installation via CDN
 
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
-
 To integrate the JavaScript SDK with your website, place the following code snippet in the `<head>` section of your website.
 
 ```javascript
 <script type="text/javascript">
 !function(){var e=window.cfevents=window.cfevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Cloudflare snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="https://cdn.audiencepipe.com/browser/release/v1-latest/events.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
-e.load("n/a",{cloudflarePipelineUrl:"https://yourpipelineurl.com"}),
+e.load({cloudflarePipelineUrl:"https://yourpipelineurl.com"}),
 e.page()}}();
 </script>
 ```
@@ -33,24 +31,20 @@ pnpm add @audiencepipe/cloudflare-analytics-js-browser
 
 2. Import the package into your project and you're good to go (with working types)!
 
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
-
 ```ts
 import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
-const cfevents = CfEventsBrowser.load({ writeKey: 'na', cloudflarePipelineUrl:"https://yourpipelineurl.com" })
+const cfevents = CfEventsBrowser.load({ cloudflarePipelineUrl:"https://yourpipelineurl.com" })
 
 cfevents.identify('hello world')
 
 document.body?.addEventListener('click', () => {
-  cfevents.track('document body clicked!')
+ cfevents.track('document body clicked!')
 })
 ```
 
 ## Lazy / Delayed Loading
 You can load a buffered version of cfevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to cloudflare.
-
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
 
 - ⚠️ ️`.load` should only be called _once_.
 
@@ -60,20 +54,19 @@ export const cfevents = new CfEventsBrowser()
 cfevents.identify("hello world")
 
 if (userConsentsToBeingTracked) {
-    cfevents.load({ writeKey: 'n/a' cloudflarePipelineUrl:"https://yourpipelineurl.com" }) // destinations loaded, enqueued events are flushed
+    cfevents.load({cloudflarePipelineUrl:"https://yourpipelineurl.com" }) // destinations loaded, enqueued events are flushed
 }
 ```
 
 ## Error Handling
 ### Handling initialization errors
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
+
 
 If you want to catch initialization errors, you can do the following:
 ```ts
 export const cfevents = new CfEventsBrowser();
 cfevents
   .load({
-    writeKey: "n/a" ,
     cloudflarePipelineUrl:"https://yourpipelineurl.com"})
   .catch((err) => ...);
 ```
@@ -81,14 +74,12 @@ cfevents
 ## Usage in Common Frameworks / SPAs
 
 ### Vanilla React
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
 
 ```tsx
 import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 // We can export this instance to share with rest of our codebase.
 export const cfevents = CfEventsBrowser.load({
-  writeKey: 'n/a',
   cloudflarePipelineUrl:"https://yourpipelineurl.com"})
 
 const App = () => (
@@ -98,16 +89,12 @@ const App = () => (
 )
 ```
 ### Vue
-
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
-
 1. Export cfevents instance. E.g. `services/cloudflare.ts`
 
 ```ts
 import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 export const cfevents = CfEventsBrowser.load({
-  writeKey: '<YOUR_WRITE_KEY>',
   cloudflarePipelineUrl:"https://yourpipelineurl.com"
 })
 ```
@@ -269,7 +256,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 ```
 
 You can then configure the Browser SDK to send events directly to Google Tag Manager by enabling the `Google Tag Manager` destination:
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
 
 ```js
 cfevents.load('WRITE_KEY', {
@@ -314,10 +300,9 @@ Make sure your gtag.js setup scripts are configured on your website. Our impleme
 ```
 
 You can then configure the Browser SDK to send events directly to gtag.js by enabling the `gtag` destination:
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
 
 ```js
-cfevents.load('WRITE_KEY', {
+cfevents.load({cloudflarePipelineUrl:"https://yourpipelineurl.com" }, {
   destinations: {
     gtag: {
       // Events are only forwarded to the configured measurement IDs.
@@ -343,8 +328,6 @@ cfevents.track('My Event', { prop: 'abc' })
 ```
 ## Custom client-side destinations
 
-> **Note**: The write key can be set to any value, but it is required as a parameter for the SDK to function properly.
-
 If you'd like to send events to a custom client-side destination that is not yet supported, you can do so using the `Destination` class as a template and implement the relevant tracking methods (`track`, `page`, etc).
 
 ```ts
@@ -352,7 +335,7 @@ import { CfEventsBrowser, Destination } from "@audiencepipe/cloudflare-analytics
 
 const cfevents = new CfEventsBrowser();
 
-cfevents.load({ writeKey: "WRITE_KEY" });
+cfevents.load({cloudflarePipelineUrl:"https://yourpipelineurl.com" });
 
 // register custom client-side destination
 cfevents.register(

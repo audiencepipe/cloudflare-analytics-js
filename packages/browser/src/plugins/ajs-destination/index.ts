@@ -319,7 +319,7 @@ export class LegacyDestination implements DestinationPlugin {
 }
 
 export function ajsDestinations(
-  writeKey: string,
+  writeKey: string | undefined, // Made optional
   settings: LegacySettings,
   globalIntegrations: Integrations = {},
   options: InitOptions = {},
@@ -374,7 +374,7 @@ export function ajsDestinations(
       const destination = new LegacyDestination(
         name,
         version,
-        writeKey,
+        writeKey || 'default', // Use 'default' if writeKey is undefined
         integrationOptions[name],
         options,
         adhocIntegrationSources?.[name]
