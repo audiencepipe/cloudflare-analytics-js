@@ -12,6 +12,7 @@ export const createTestAnalytics = (
 ) => {
   return new HtEvents({
     writeKey: 'foo',
+    cloudflarePipelineUrl: 'https://test-pipeline.com',
     flushInterval: 100,
     ...(useRealHTTPClient
       ? {}

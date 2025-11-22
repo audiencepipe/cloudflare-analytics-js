@@ -18,7 +18,7 @@ const helpers = {
   assertFetchCallRequest: (
     ...[url, options]: NonNullable<typeof testFetch['mock']['lastCall']>
   ) => {
-    expect(url).toBe('https://us-east-1.cloudflare-events.com')
+    expect(url).toBe('https://test-pipeline.com')
     expect(options.headers).toEqual({
       Authorization: 'Basic Zm9vOg==',
       'Content-Type': 'application/json',

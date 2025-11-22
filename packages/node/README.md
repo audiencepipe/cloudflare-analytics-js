@@ -29,7 +29,7 @@ import { HtEvents } from '@ht-sdks/events-sdk-js-node'
 const { HtEvents } = require('@ht-sdks/events-sdk-js-node')
 
 // instantiation
-const htevents = new HtEvents({ writeKey: '<MY_WRITE_KEY>' })
+const htevents = new HtEvents({ cloudflarePipelineUrl: '<MY_PIPELINE_URL>' })
 
 app.post('/login', (req, res) => {
    htevents.identify({
@@ -55,24 +55,44 @@ app.post('/cart', (req, res) => {
 You can also see the complete list of settings in the [HtEventsSettings interface](src/app/settings.ts).
 
 ### `cloudflarePipelineUrl`
-If you are using a Cloudflare Pipeline, you can set the `cloudflarePipelineUrl` to the URL of your pipeline. This will override the `host` setting.
+**Required**. The URL of your Cloudflare Pipeline. This setting is mandatory and takes precedence over the `host` setting.
 
 ```ts
 const htevents = new HtEvents({
-  writeKey: '<MY_WRITE_KEY>',
   cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>'
 })
 ```
 
-### `cloudflarePipelineAccessKey`
-If your Cloudflare Pipeline requires an Access Key (Bearer token), you can provide it via `cloudflarePipelineAccessKey`. This will override the default Basic authentication.
+### `cloudflarePipelineBearerToken`
+If your Cloudflare Pipeline requires an Access Key (Bearer token), you can provide it via `cloudflarePipelineBearerToken`. This will override the default Basic authentication.
 
 ```ts
 const htevents = new HtEvents({
-  writeKey: '<MY_WRITE_KEY>',
   cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>',
-  cloudflarePipelineAccessKey: '<MY_ACCESS_KEY>'
+  cloudflarePipelineBearerToken: '<MY_ACCESS_KEY>'
 })
+```
+
+## Error Handling
+
+### Initialization
+The SDK is designed to "fail fast" during initialization. If you provide an invalid configuration (e.g., missing `cloudflarePipelineUrl`), the `new HtEvents(...)` constructor will throw an error immediately. This ensures you don't deploy an application with a broken configuration.
+
+### Runtime
+Runtime errors (e.g., network issues, authentication failures) are handled asynchronously and **will not crash your process**. Instead, they are emitted as an `error` event. You should listen to this event to handle failures (e.g., logging them).
+
+```ts
+const htevents = new HtEvents({
+  cloudflarePipelineUrl: 'https://...',
+});
+
+// Listen for errors so they don't go unnoticed
+htevents.on('error', ({ reason }) => {
+  console.error('Analytics Error:', reason);
+});
+
+// This will NOT crash your app, even if the network is down
+htevents.track({ event: 'Test Event', userId: '123' });
 ```
 
 
@@ -88,7 +108,7 @@ const { HtEvents } = require('@ht-sdks/events-sdk-js-node');
 // to be on the safe side, we should instantiate a new instance of analytics on every request (the cost of instantiation is low).
 const htevents = () => new HtEvents({
       maxEventsInBatch: 1,
-      writeKey: '<MY_WRITE_KEY>',
+      cloudflarePipelineUrl: '<MY_PIPELINE_URL>',
     })
     .on('error', console.error);
 
@@ -113,7 +133,7 @@ import { HtEvents } from '@ht-sdks/events-sdk-js-node';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const htevents = new HtEvents({
-  writeKey: '<MY_WRITE_KEY>',
+  cloudflarePipelineUrl: '<MY_PIPELINE_URL>',
   maxEventsInBatch: 1,
 })
   .on('error', console.error)
@@ -142,7 +162,7 @@ export default {
   ): Promise<Response> {
     const htevents = new HtEvents({
       maxEventsInBatch: 1,
-      writeKey: '<MY_WRITE_KEY>',
+      cloudflarePipelineUrl: '<MY_PIPELINE_URL>',
     }).on('error', console.error);
 
     await new Promise((resolve, reject) =>

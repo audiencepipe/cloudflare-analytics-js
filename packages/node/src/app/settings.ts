@@ -5,7 +5,7 @@ export interface HtEventsSettings {
   /**
    * Key that corresponds to your Hightouch.io project
    */
-  writeKey: string
+  writeKey?: string
   /**
    * The base URL of the API. Default: "https://us-east-1.cloudflare-events.com"
    */
@@ -17,7 +17,7 @@ export interface HtEventsSettings {
   /**
    * The Cloudflare Pipeline URL. If provided, this will take precedence over the host option.
    */
-  cloudflarePipelineUrl?: string
+  cloudflarePipelineUrl: string
   /**
    * The Cloudflare Pipeline Access Key. If provided, this will be used as a Bearer token in the Authorization header.
    */
@@ -51,7 +51,10 @@ export interface HtEventsSettings {
 }
 
 export const validateSettings = (settings: HtEventsSettings) => {
-  if (!settings.writeKey) {
-    throw new ValidationError('writeKey', 'writeKey is missing.')
+  if (!settings.cloudflarePipelineUrl) {
+    throw new ValidationError(
+      'cloudflarePipelineUrl',
+      'cloudflarePipelineUrl is missing.'
+    )
   }
 }

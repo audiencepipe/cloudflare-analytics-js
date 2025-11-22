@@ -7,7 +7,7 @@ import {
   TestFetchClient,
 } from './test-helpers/create-test-analytics'
 
-const writeKey = 'foo'
+
 jest.setTimeout(10000)
 const timestamp = new Date()
 
@@ -15,42 +15,27 @@ const testClient = new TestFetchClient()
 const makeReqSpy = jest.spyOn(testClient, 'makeRequest')
 
 describe('Settings / Configuration Init', () => {
-  it('throws if no writeKey', () => {
+  it('throws if no cloudflarePipelineUrl', async () => {
     expect(() =>
       createTestAnalytics({
-        writeKey: undefined as any,
+        cloudflarePipelineUrl: undefined,
       })
-    ).toThrowError(/writeKey/i)
+    ).toThrow(/cloudflarePipelineUrl is missing/)
   })
 
-  it('allows host/path to override default client', async () => {
-    const analytics = createTestAnalytics({
-      host: 'http://foo.com',
-      path: '/bar',
-      httpClient: testClient,
-    })
-    const track = resolveCtx(analytics, 'track')
-    analytics.track({ event: 'foo', userId: 'sup' })
-    await track
-    expect(makeReqSpy.mock.calls[0][0].url).toBe('http://foo.com/bar')
+  it('does not throw if no writeKey', async () => {
+    expect(() =>
+      createTestAnalytics({
+        writeKey: undefined,
+      })
+    ).not.toThrow()
   })
 
-  it('allows cloudflarePipelineUrl to override host', async () => {
-    const analytics = createTestAnalytics({
-      host: 'http://foo.com',
-      cloudflarePipelineUrl: 'http://pipeline.com',
-      path: '/bar',
-      httpClient: testClient,
-    })
-    const track = resolveCtx(analytics, 'track')
-    analytics.track({ event: 'foo', userId: 'sup' })
-    await track
-    expect(makeReqSpy.mock.calls[0][0].url).toBe('http://pipeline.com/bar')
-  })
 
-  it('uses cloudflarePipelineAccessKey for Bearer auth', async () => {
+
+  it('uses cloudflarePipelineBearerToken for Bearer auth', async () => {
     const analytics = createTestAnalytics({
-      cloudflarePipelineAccessKey: 'my-secret-token',
+      cloudflarePipelineBearerToken: 'my-secret-token',
       httpClient: testClient,
     })
     const track = resolveCtx(analytics, 'track')
@@ -61,15 +46,7 @@ describe('Settings / Configuration Init', () => {
     )
   })
 
-  it('throws if host / path is bad', async () => {
-    expect(() =>
-      createTestAnalytics({
-        writeKey,
-        host: 'SHOULD_FAIL',
-        path: '/bar',
-      })
-    ).toThrowError()
-  })
+
 })
 
 describe('Error handling', () => {

@@ -22,6 +22,7 @@ describe('Ability for users to exit without losing events', () => {
   beforeEach(async () => {
     ajs = new HtEvents({
       writeKey: 'abc123',
+      cloudflarePipelineUrl: 'http://foo.com',
       maxEventsInBatch: 1,
       httpClient: testClient,
     })
@@ -88,6 +89,7 @@ describe('Ability for users to exit without losing events', () => {
       const flushInterval = 500
       ajs = new HtEvents({
         writeKey: 'abc123',
+        cloudflarePipelineUrl: 'http://foo.com',
         flushInterval,
         httpClient: testClient,
       })
@@ -189,6 +191,7 @@ describe('Ability for users to exit without losing events', () => {
     test('should flush immediately if close is called and there are events in the hightouch.io plugin, but no more are expected', async () => {
       const analytics = new HtEvents({
         writeKey: 'foo',
+        cloudflarePipelineUrl: 'http://foo.com',
         flushInterval: 10000,
         maxEventsInBatch: 15,
         httpClient: testClient,
@@ -220,6 +223,7 @@ describe('Ability for users to exit without losing events', () => {
       }
       const analytics = new HtEvents({
         writeKey: 'foo',
+        cloudflarePipelineUrl: 'http://foo.com',
         flushInterval: 10000,
         maxEventsInBatch: 15,
         httpClient: testClient,

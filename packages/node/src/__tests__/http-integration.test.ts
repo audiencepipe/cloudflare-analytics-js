@@ -41,7 +41,7 @@ describe('Method Smoke Tests', () => {
   describe('Metadata', () => {
     const calls: any[] = []
     beforeEach(async () => {
-      scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
+      scope = nock('https://test-pipeline.com') // using regex matching in nock changes the perf profile quite a bit
         .post('/', function (_body: any) {
           calls.push(_body)
           return true
@@ -67,7 +67,7 @@ describe('Method Smoke Tests', () => {
   describe('Headers', () => {
     test(`A request should have the expected headers`, async () => {
       let headers = null
-      scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
+      scope = nock('https://test-pipeline.com') // using regex matching in nock changes the perf profile quite a bit
         .post('/')
         .reply(201, function () {
           headers = this.req.headers
@@ -97,7 +97,7 @@ describe('Method Smoke Tests', () => {
     let calls: any[]
     beforeEach(async () => {
       calls = []
-      scope = nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
+      scope = nock('https://test-pipeline.com') // using regex matching in nock changes the perf profile quite a bit
         .post('/', function (_body: any) {
           calls.push(_body)
           return true
@@ -317,7 +317,7 @@ describe('Method Smoke Tests', () => {
 
 describe('Client: requestTimeout', () => {
   beforeEach(async () => {
-    nock('https://us-east-1.cloudflare-events.com') // using regex matching in nock changes the perf profile quite a bit
+    nock('https://test-pipeline.com') // using regex matching in nock changes the perf profile quite a bit
       .post('/')
       .reply(201)
   })
@@ -337,5 +337,41 @@ describe('Client: requestTimeout', () => {
     } catch (err: any) {
       expect(err.ctx).toBeInstanceOf(CoreContext)
     }
+  })
+  it('does not retry on 401', async () => {
+    const { FetchHTTPClient } = await import('../lib/http-client')
+    
+    jest.useRealTimers()
+    let reqCount = 0
+    
+    const mockFetch = jest.fn(async () => {
+      reqCount++
+      return {
+        status: 401,
+        statusText: 'Unauthorized',
+        ok: false,
+        text: async () => 'Unauthorized',
+        json: async () => ({}),
+      } as any
+    })
+
+    const analytics = createTestAnalytics(
+      {
+        cloudflarePipelineUrl: 'https://test-pipeline.com',
+        maxRetries: 3,
+        flushInterval: 10,
+        httpClient: new FetchHTTPClient(mockFetch),
+      }
+    )
+
+    analytics.track({ event: 'foo', userId: 'bar' })
+    
+    try {
+      await resolveCtx(analytics, 'track')
+    } catch (e) {
+      // Expected to fail after retries
+    }
+    
+    expect(reqCount).toBe(1)
   })
 })

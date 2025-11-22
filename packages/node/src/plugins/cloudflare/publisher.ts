@@ -59,7 +59,7 @@ export class Publisher {
       httpRequestTimeout,
       httpClient,
       disable,
-      cloudflarePipelineAccessKey,
+      cloudflarePipelineBearerToken,
     }: PublisherProps,
     emitter: NodeEmitter
   ) {
@@ -67,8 +67,8 @@ export class Publisher {
     this._maxRetries = maxRetries
     this._maxEventsInBatch = Math.max(maxEventsInBatch, 1)
     this._flushInterval = flushInterval
-    this._auth = cloudflarePipelineAccessKey
-      ? `Bearer ${cloudflarePipelineAccessKey}`
+    this._auth = cloudflarePipelineBearerToken
+      ? `Bearer ${cloudflarePipelineBearerToken}`
       : `Basic ${b64encode(`${writeKey}:`)}`
     this._url = tryCreateFormattedUrl(
       host ?? 'https://us-east-1.cloudflare-events.com',
@@ -227,7 +227,11 @@ export class Publisher {
           // Successfully sent events, so exit!
           batch.resolveEvents()
           return
-        } else if (response.status === 400) {
+        } else if (
+          response.status === 400 ||
+          response.status === 401 ||
+          response.status === 403
+        ) {
           // Request either malformed or size exceeded - don't retry.
           resolveFailedBatch(
             batch,

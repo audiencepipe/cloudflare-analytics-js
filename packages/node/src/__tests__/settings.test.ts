@@ -1,9 +1,9 @@
 import { validateSettings } from '../app/settings'
 
 describe('validateSettings', () => {
-  it('should throw an error if no write key', () => {
-    expect(() => validateSettings({ writeKey: undefined as any })).toThrowError(
-      /writeKey/i
-    )
+  it('should throw an error if no cloudflarePipelineUrl', () => {
+    expect(() =>
+      validateSettings({ cloudflarePipelineUrl: undefined as any })
+    ).toThrowError(/cloudflarePipelineUrl/i)
   })
 })
