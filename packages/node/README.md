@@ -54,6 +54,27 @@ app.post('/cart', (req, res) => {
 
 You can also see the complete list of settings in the [HtEventsSettings interface](src/app/settings.ts).
 
+### `cloudflarePipelineUrl`
+If you are using a Cloudflare Pipeline, you can set the `cloudflarePipelineUrl` to the URL of your pipeline. This will override the `host` setting.
+
+```ts
+const htevents = new HtEvents({
+  writeKey: '<MY_WRITE_KEY>',
+  cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>'
+})
+```
+
+### `cloudflarePipelineAccessKey`
+If your Cloudflare Pipeline requires an Access Key (Bearer token), you can provide it via `cloudflarePipelineAccessKey`. This will override the default Basic authentication.
+
+```ts
+const htevents = new HtEvents({
+  writeKey: '<MY_WRITE_KEY>',
+  cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>',
+  cloudflarePipelineAccessKey: '<MY_ACCESS_KEY>'
+})
+```
+
 
 ## Usage in non-node runtimes
 ### Usage in AWS Lambda

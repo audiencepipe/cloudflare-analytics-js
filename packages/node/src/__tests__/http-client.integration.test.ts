@@ -27,7 +27,7 @@ const helpers = {
     expect(options.method).toBe('POST')
     const getLastBatch = (): object[] => {
       const [, options] = testFetch.mock.lastCall!
-      const batch = JSON.parse(options.body!).batch
+      const batch = JSON.parse(options.body!)
       return batch
     }
     const batch = getLastBatch()

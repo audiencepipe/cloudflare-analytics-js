@@ -35,6 +35,32 @@ describe('Settings / Configuration Init', () => {
     expect(makeReqSpy.mock.calls[0][0].url).toBe('http://foo.com/bar')
   })
 
+  it('allows cloudflarePipelineUrl to override host', async () => {
+    const analytics = createTestAnalytics({
+      host: 'http://foo.com',
+      cloudflarePipelineUrl: 'http://pipeline.com',
+      path: '/bar',
+      httpClient: testClient,
+    })
+    const track = resolveCtx(analytics, 'track')
+    analytics.track({ event: 'foo', userId: 'sup' })
+    await track
+    expect(makeReqSpy.mock.calls[0][0].url).toBe('http://pipeline.com/bar')
+  })
+
+  it('uses cloudflarePipelineAccessKey for Bearer auth', async () => {
+    const analytics = createTestAnalytics({
+      cloudflarePipelineAccessKey: 'my-secret-token',
+      httpClient: testClient,
+    })
+    const track = resolveCtx(analytics, 'track')
+    analytics.track({ event: 'foo', userId: 'sup' })
+    await track
+    expect(makeReqSpy.mock.calls[0][0].headers.Authorization).toBe(
+      'Bearer my-secret-token'
+    )
+  })
+
   it('throws if host / path is bad', async () => {
     expect(() =>
       createTestAnalytics({
@@ -240,15 +266,7 @@ describe('screen', () => {
 })
 
 describe('track', () => {
-  it('sends sentAt field in payload', async () => {
-    const analytics = createTestAnalytics({
-      httpClient: testClient,
-    })
-    const track = resolveCtx(analytics, 'track')
-    analytics.track({ event: 'hello', userId: 'foo' })
-    await track
-    expect(makeReqSpy.mock.calls[0][0].data.sentAt).toBeInstanceOf(Date)
-  })
+
   it('generates track events', async () => {
     const analytics = createTestAnalytics()
     const eventName = 'Test Event'

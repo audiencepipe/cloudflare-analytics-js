@@ -23,10 +23,7 @@ const snapshotMatchers = {
     }
   },
   get defaultReqBody() {
-    return {
-      batch: [snapshotMatchers.batchEvent],
-      sentAt: expect.stringMatching(isoDateRegEx),
-    }
+    return [snapshotMatchers.batchEvent]
   },
 }
 
@@ -55,7 +52,7 @@ describe('Method Smoke Tests', () => {
     it('should show appropriate metadata', async () => {
       ajs.identify({ userId: 'my_user_id', traits: { foo: 'bar' } })
       await resolveCtx(ajs, 'identify')
-      expect(calls[0].batch[0]._metadata).toMatchInlineSnapshot(
+      expect(calls[0][0]._metadata).toMatchInlineSnapshot(
         { nodeVersion: expect.any(String), jsRuntime: 'node' },
         `
         {
@@ -121,7 +118,7 @@ describe('Method Smoke Tests', () => {
 
       ajs.track(event)
       await resolveCtx(ajs, 'track')
-      const call = calls[0].batch[0]
+      const call = calls[0][0]
       expect(call.timestamp).toStrictEqual(event.timestamp.toISOString())
       expect(call.userId).toStrictEqual(event.userId)
       expect(call.integrations).toEqual(event.integrations)
@@ -136,32 +133,29 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "integrations": {},
-              "messageId": Any<String>,
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "traits": {
-                "foo": "bar",
-              },
-              "type": "identify",
-              "userId": "my_user_id",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "integrations": {},
+            "messageId": Any<String>,
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "traits": {
+              "foo": "bar",
+            },
+            "type": "identify",
+            "userId": "my_user_id",
+          },
+        ]
       `
       )
 
-      const event = calls[0].batch[0]
+      const event = calls[0][0]
       expect(event.context.library.version).toBe(version)
       expect(isValidDate(event.timestamp)).toBeTruthy()
     })
@@ -172,29 +166,26 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "event": "foo",
-              "integrations": {},
-              "messageId": Any<String>,
-              "properties": {
-                "hello": "world",
-              },
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "type": "track",
-              "userId": "foo",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "event": "foo",
+            "integrations": {},
+            "messageId": Any<String>,
+            "properties": {
+              "hello": "world",
+            },
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "type": "track",
+            "userId": "foo",
+          },
+        ]
       `
       )
     })
@@ -205,27 +196,24 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "anonymousId": "foo",
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "anonymousId": "foo",
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "integrations": {},
-              "messageId": Any<String>,
-              "name": "page",
-              "properties": {},
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "type": "page",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "integrations": {},
+            "messageId": Any<String>,
+            "name": "page",
+            "properties": {},
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "type": "page",
+          },
+        ]
       `
       )
     })
@@ -240,29 +228,26 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "anonymousId": "foo",
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "anonymousId": "foo",
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "groupId": "myGroupId",
-              "integrations": {},
-              "messageId": Any<String>,
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "traits": {
-                "some_traits": 123,
-              },
-              "type": "group",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "groupId": "myGroupId",
+            "integrations": {},
+            "messageId": Any<String>,
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "traits": {
+              "some_traits": 123,
+            },
+            "type": "group",
+          },
+        ]
       `
       )
     })
@@ -273,26 +258,23 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "integrations": {},
-              "messageId": Any<String>,
-              "previousId": "previous",
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "type": "alias",
-              "userId": "alias",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "integrations": {},
+            "messageId": Any<String>,
+            "previousId": "previous",
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "type": "alias",
+            "userId": "alias",
+          },
+        ]
       `
       )
     })
@@ -307,29 +289,26 @@ describe('Method Smoke Tests', () => {
       expect(calls[0]).toMatchInlineSnapshot(
         snapshotMatchers.defaultReqBody,
         `
-        {
-          "batch": [
-            {
-              "_metadata": Any<Object>,
-              "anonymousId": "foo",
-              "context": {
-                "library": {
-                  "name": "@ht-sdks/events-sdk-js-node",
-                  "version": Any<String>,
-                },
+        [
+          {
+            "_metadata": Any<Object>,
+            "anonymousId": "foo",
+            "context": {
+              "library": {
+                "name": "@ht-sdks/events-sdk-js-node",
+                "version": Any<String>,
               },
-              "integrations": {},
-              "messageId": Any<String>,
-              "name": "screen",
-              "properties": {
-                "title": "wip",
-              },
-              "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-              "type": "screen",
             },
-          ],
-          "sentAt": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
-        }
+            "integrations": {},
+            "messageId": Any<String>,
+            "name": "screen",
+            "properties": {
+              "title": "wip",
+            },
+            "timestamp": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\}T\\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\\\\\.\\\\d\\{3\\}Z\\$/,
+            "type": "screen",
+          },
+        ]
       `
       )
     })

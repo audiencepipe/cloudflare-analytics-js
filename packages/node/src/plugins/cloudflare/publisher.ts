@@ -21,6 +21,7 @@ interface PendingItem {
 export interface PublisherProps {
   host?: string
   path?: string
+  cloudflarePipelineBearerToken?: string
   flushInterval: number
   maxEventsInBatch: number
   maxRetries: number
@@ -58,6 +59,7 @@ export class Publisher {
       httpRequestTimeout,
       httpClient,
       disable,
+      cloudflarePipelineAccessKey,
     }: PublisherProps,
     emitter: NodeEmitter
   ) {
@@ -65,7 +67,9 @@ export class Publisher {
     this._maxRetries = maxRetries
     this._maxEventsInBatch = Math.max(maxEventsInBatch, 1)
     this._flushInterval = flushInterval
-    this._auth = b64encode(`${writeKey}:`)
+    this._auth = cloudflarePipelineAccessKey
+      ? `Bearer ${cloudflarePipelineAccessKey}`
+      : `Basic ${b64encode(`${writeKey}:`)}`
     this._url = tryCreateFormattedUrl(
       host ?? 'https://us-east-1.cloudflare-events.com',
       path
@@ -203,10 +207,10 @@ export class Publisher {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${this._auth}`,
+            Authorization: this._auth,
             'User-Agent': 'events-sdk-js-node/latest',
           },
-          data: { batch: events, sentAt: new Date() },
+          data: events,
           httpRequestTimeout: this._httpRequestTimeout,
         }
 

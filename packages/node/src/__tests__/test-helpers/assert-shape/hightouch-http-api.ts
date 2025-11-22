@@ -31,10 +31,10 @@ export function assertHTTPRequestOptions(
     }
   `)
 
-  expect(data.batch).toHaveLength(contexts.length)
+  expect(data).toHaveLength(contexts.length)
   let idx = 0
   for (const context of contexts) {
-    expect(data.batch[idx]).toEqual({
+    expect(data[idx]).toEqual({
       ...context.event,
       ...httpClientOptionsBodyMatcher,
     })

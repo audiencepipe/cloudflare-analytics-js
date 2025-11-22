@@ -45,7 +45,8 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
     const { plugin, publisher } = createConfiguredNodePlugin(
       {
         writeKey: settings.writeKey,
-        host: settings.host,
+        host: settings.cloudflarePipelineUrl ?? settings.host,
+        cloudflarePipelineBearerToken: settings.cloudflarePipelineBearerToken,
         path: settings.path,
         maxRetries: settings.maxRetries ?? 3,
         maxEventsInBatch: settings.maxEventsInBatch ?? 15,

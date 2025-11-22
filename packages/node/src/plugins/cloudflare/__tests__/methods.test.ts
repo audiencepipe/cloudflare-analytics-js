@@ -55,8 +55,8 @@ test('alias', async () => {
   const [request] = fetcher.mock.lastCall!
   const data = request.data
 
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     type: 'alias',
     previousId: 'from',
@@ -85,8 +85,8 @@ test('group', async () => {
   const [request] = fetcher.mock.lastCall!
   const data = request.data
 
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     traits: {
       name: 'libraries',
@@ -113,8 +113,8 @@ test('identify', async () => {
 
   const [request] = fetcher.mock.lastCall!
   const data = request.data
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     traits: {
       name: 'Chris Radek',
@@ -144,8 +144,8 @@ test('page', async () => {
   const [request] = fetcher.mock.lastCall!
   const data = request.data
 
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     type: 'page',
     userId: 'foo-user-id',
@@ -178,8 +178,8 @@ test('screen', async () => {
   const [request] = fetcher.mock.lastCall!
   const data = request.data
 
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     type: 'screen',
     userId: 'foo-user-id',
@@ -210,8 +210,8 @@ test('track', async () => {
   const [request] = fetcher.mock.lastCall!
   const data = request.data
 
-  expect(data.batch).toHaveLength(1)
-  expect(data.batch[0]).toEqual({
+  expect(data).toHaveLength(1)
+  expect(data[0]).toEqual({
     ...httpClientOptionsBodyMatcher,
     type: 'track',
     event: 'test event',

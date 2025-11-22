@@ -15,6 +15,14 @@ export interface HtEventsSettings {
    */
   path?: string
   /**
+   * The Cloudflare Pipeline URL. If provided, this will take precedence over the host option.
+   */
+  cloudflarePipelineUrl?: string
+  /**
+   * The Cloudflare Pipeline Access Key. If provided, this will be used as a Bearer token in the Authorization header.
+   */
+  cloudflarePipelineBearerToken?: string
+  /**
    * The number of times to retry flushing a batch. Default: 3
    */
   maxRetries?: number
