@@ -1,6 +1,6 @@
-# @ht-sdks/events-sdk-js-node
+# @audiencepipe/cloudflare-analytics-node
 
-https://www.npmjs.com/package/@ht-sdks/events-sdk-js-node
+https://www.npmjs.com/package/@audiencepipe/cloudflare-analytics-node
 
 
 ## Runtime Support
@@ -14,19 +14,19 @@ https://www.npmjs.com/package/@ht-sdks/events-sdk-js-node
 ### Install library
 ```bash
 # npm
-npm install @ht-sdks/events-sdk-js-node
+npm install @audiencepipe/cloudflare-analytics-node
 # yarn
-yarn add @ht-sdks/events-sdk-js-node
+yarn add @audiencepipe/cloudflare-analytics-node
 # pnpm
-pnpm install @ht-sdks/events-sdk-js-node
+pnpm install @audiencepipe/cloudflare-analytics-node
 ```
 
 ### Usage
 Assuming some express-like web framework.
 ```ts
-import { CfEvents } from '@ht-sdks/events-sdk-js-node'
+import { CfEvents } from '@audiencepipe/cloudflare-analytics-node'
 // or, if you use require:
-const { CfEvents } = require('@ht-sdks/events-sdk-js-node')
+const { CfEvents } = require('@audiencepipe/cloudflare-analytics-node')
 
 // Note: You can also use HtEvents instead of CfEvents - they are the same
 
@@ -104,7 +104,7 @@ cfevents.track({ event: 'Test Event', userId: '123' });
 
 Here is an example of using CfEvents within a handler:
 ```ts
-const { CfEvents } = require('@ht-sdks/events-sdk-js-node');
+const { CfEvents } = require('@audiencepipe/cloudflare-analytics-node');
 
 // since analytics has the potential to be stateful if there are any plugins added,
 // to be on the safe side, we should instantiate a new instance of analytics on every request (the cost of instantiation is low).
@@ -131,7 +131,7 @@ module.exports.handler = async (event) => {
 
 ### Usage in Vercel Edge Functions
 ```ts
-import { CfEvents } from '@ht-sdks/events-sdk-js-node';
+import { CfEvents } from '@audiencepipe/cloudflare-analytics-node';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const cfevents = new CfEvents({
@@ -154,7 +154,7 @@ export default async (req: NextRequest) => {
 
 ### Usage in Cloudflare Workers
 ```ts
-import { CfEvents, Context } from '@ht-sdks/events-sdk-js-node';
+import { CfEvents, Context } from '@audiencepipe/cloudflare-analytics-node';
 
 export default {
   async fetch(

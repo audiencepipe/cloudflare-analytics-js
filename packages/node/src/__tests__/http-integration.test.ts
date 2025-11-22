@@ -135,7 +135,7 @@ describe('Method Smoke Tests', () => {
             "_metadata": Any<Object>,
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
@@ -168,7 +168,7 @@ describe('Method Smoke Tests', () => {
             "_metadata": Any<Object>,
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
@@ -199,7 +199,7 @@ describe('Method Smoke Tests', () => {
             "anonymousId": "foo",
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
@@ -231,7 +231,7 @@ describe('Method Smoke Tests', () => {
             "anonymousId": "foo",
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
@@ -260,7 +260,7 @@ describe('Method Smoke Tests', () => {
             "_metadata": Any<Object>,
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
@@ -292,7 +292,7 @@ describe('Method Smoke Tests', () => {
             "anonymousId": "foo",
             "context": {
               "library": {
-                "name": "@ht-sdks/events-sdk-js-node",
+                "name": "@audiencepipe/cloudflare-analytics-node",
                 "version": Any<String>,
               },
             },
