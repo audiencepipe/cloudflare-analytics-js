@@ -36,7 +36,7 @@ describe('destination', () => {
 
     await cfevents.register(destination)
 
-    // add middleware to destination via HtEvents
+    // add middleware to destination via cfevents
     await cfevents.addDestinationMiddleware('Test', ({ next, payload }) => {
       payload.obj.context!.cfevents = true
       next(payload)

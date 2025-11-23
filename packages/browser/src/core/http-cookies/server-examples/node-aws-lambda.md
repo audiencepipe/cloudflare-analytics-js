@@ -106,7 +106,7 @@ const writeKey = "WRITE KEY";
 const html = `
 <head>
 <script type="text/javascript">
-!function(){var e=window.htevents=window.htevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Hightouch snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="${cdnDomain}";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
+!function(){var e=window.cfevents=window.cfevents||[];if(!e.initialize)if(e.invoked)window.console&&console.error&&console.error("Hightouch snippet included twice.");else{e.invoked=!0,e.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"],e.factory=function(t){return function(){var n=Array.prototype.slice.call(arguments);return n.unshift(t),e.push(n),e}};for(var t=0;t<e.methods.length;t++){var n=e.methods[t];e[n]=e.factory(n)}e.load=function(t,n){var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src="${cdnDomain}";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(o,r),e._loadOptions=n,e._writeKey=t},e.SNIPPET_VERSION="0.0.1",
 e.load('${writeKey}',{
   apiHost:'us-east-1.cloudflare-events.com',
   httpCookieServiceOptions: {clearUrl: 'default/ht/clear', renewUrl: 'default/ht/renew', backoff: 5000},
@@ -118,7 +118,7 @@ e.page()}}();
 <body>
   Hightouch
   <a href="#" onClick="(function(){
-    htevents.identify(
+    cfevents.identify(
       '123', {
         email: 'bob@cloudflare.io'
       }, {},
@@ -131,7 +131,7 @@ e.page()}}();
   <br>
   <br>
   <a href="#" onClick="(function(){
-    htevents.track(
+    cfevents.track(
       'clickEvent', {
         revenue: 30,
         currency: 'USD',
@@ -146,8 +146,8 @@ e.page()}}();
   <br>
   <br>
     <a href="#" onClick="(function(){
-    htevents.reset();
-    htevents.identify('456', { email: 'george@cloudflare.com'})
+    cfevents.reset();
+    cfevents.identify('456', { email: 'george@cloudflare.com'})
     })();return false;">reset
   </a>
 </body>

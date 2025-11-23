@@ -38,12 +38,12 @@
 38 | ## Client SDK Setup
 39 | 
 40 | ```javascript
-41 | import { HtEventsBrowser } from 'cf-events-sdk-js-browser'
+41 | import { CfEventsBrowser } from 'cf-events-sdk-js-browser'
 42 | 
-43 | const htevents = HtEventsBrowser.load(
+43 | const cfevents = CfEventsBrowser.load(
 44 |   { writeKey: '<YOUR_WRITE_KEY>'},
 45 |   { 
-46 |     apiHost: "us-east-1.cloudflare-events.com", // HtEvents API remains the same
+46 |     apiHost: "us-east-1.cloudflare-events.com", // CfEvents API remains the same
 47 |     httpCookieServiceOptions: {
 48 |       clearUrl: '/ht/clear', // route hosted on *your* domain and infra
 49 |       renewUrl: '/ht/renew', // route hosted on *your* domain and infra
@@ -51,10 +51,10 @@
 51 |   },
 52 | )
 53 | 
-54 | htevents.identify('hello world')
+54 | cfevents.identify('hello world')
 55 | 
 56 | document.body?.addEventListener('click', () => {
-57 |   htevents.track('document body clicked!')
+57 |   cfevents.track('document body clicked!')
 58 | })
 59 | ```
 60 | 

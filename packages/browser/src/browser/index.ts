@@ -444,7 +444,7 @@ async function loadAnalytics(
  * @example
  * ```ts
  *  export const cfevents = new CfEventsBrowser()
- *  htevents.load({ writeKey: 'foo' })
+ *  cfevents.load({ writeKey: 'foo' })
  * ```
  * @link https://github.com/ht-sdks/events-sdk-js-mono/tree/master/packages/browser#readme
  */

@@ -1,8 +1,8 @@
 ### Advanced QA
 
-HtEvents contains a comprehensive QA test suite that verifies that E2E functionality is compatible with analytics.js classic.
+CfEvents contains a comprehensive QA test suite that verifies that E2E functionality is compatible with analytics.js classic.
 
-1. Compile HtEvents (browser)
+1. Compile CfEvents (browser)
 
 ```sh
 $ turbo build
@@ -27,7 +27,7 @@ or run individual tests (much faster)
 $ npx jest --runTestsByPath qa/__tests__/<test_path>
 ```
 
-2.1. QAing HtEvents against all destinations
+2.1. QAing CfEvents against all destinations
 
 ```sh
 make test-qa-destinations

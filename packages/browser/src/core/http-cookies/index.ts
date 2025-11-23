@@ -161,5 +161,5 @@ async function retry(
       await sleep(backoff)
     }
   }
-  throw Error('HtEvents: Problem with DeferredRequest')
+  throw Error('CfEvents: Problem with DeferredRequest')
 }

@@ -97,15 +97,15 @@ function compareSchema(results: RemovePromise<ReturnType<typeof run>>) {
 describe('Smoke Tests', () => {
   // needs to be written as a string so it's not transpiled
   const code = `(async () => {
-    await window.htevents.identify('Test', {
+    await window.cfevents.identify('Test', {
       email: 'test@mctesting.org',
     })
 
-    await window.htevents.track('Track!', {
+    await window.cfevents.track('Track!', {
       leProp: 'propé',
     })
 
-    await window.htevents.page()
+    await window.cfevents.page()
   })()`
 
   test.concurrent.each(samples)(`smoke test (writekey: %p)`, async (writekey) => {

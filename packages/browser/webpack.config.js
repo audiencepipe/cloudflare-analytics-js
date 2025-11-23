@@ -42,14 +42,14 @@ const config = {
     index: {
       import: path.resolve(__dirname, 'src/browser/browser-umd.ts'),
       library: {
-        name: 'HtEvents',
+        name: 'CfEvents',
         type: 'umd',
       },
     },
     'events.min': {
       import: path.resolve(__dirname, 'src/browser/standalone.ts'),
       library: {
-        name: 'HtEvents',
+        name: 'CfEvents',
         type: 'window',
       },
     },

@@ -56,8 +56,8 @@ export function cloudflare(
  // Attach `pagehide` before buffer is created so that inflight events are added
   // to the buffer before the buffer persists events in its own `pagehide` handler.
   window.addEventListener('pagehide', () => {
-    buffer.push(...Array.from(inflightEvents))
-    inflightEvents.clear()
+    buffer.push(...Array.from(infligcfevents))
+    infligcfevents.clear()
   })
 
   const writeKey = settings?.apiKey ?? ''
@@ -69,7 +69,7 @@ export function cloudflare(
         `${writeKey}:dest-Cloudflare`
       )
 
-  const inflightEvents = new Set<Context>()
+  const infligcfevents = new Set<Context>()
  const flushing = false
 
   // Use the cloudflarePipelineUrl directly, with a fallback
@@ -90,7 +90,7 @@ export function cloudflare(
       return ctx
     }
 
-    inflightEvents.add(ctx)
+    infligcfevents.add(ctx)
 
     let json = toFacade(ctx.event).json()
 
@@ -118,7 +118,7 @@ export function cloudflare(
         return ctx
       })
       .finally(() => {
-        inflightEvents.delete(ctx)
+        infligcfevents.delete(ctx)
       })
   }
 
