@@ -81,6 +81,9 @@ function createDefaultQueue(
 }
 
 export interface AnalyticsSettings {
+  /**
+   * @deprecated The writeKey is no longer needed on init.
+   */
   writeKey?: string // Made optional
   timeout?: number
   plugins?: (Plugin | PluginFactory)[]

@@ -96,6 +96,10 @@ export interface LegacySettings {
 
 export interface CfEventsBrowserSettings extends AnalyticsSettings {
   /**
+   * @deprecated The writeKey is no longer needed on init.
+   */
+  writeKey?: string // Made optional
+  /**
    * The settings for the Cloudflare Source.
    * If provided, `CfEventsBrowser` will not fetch remote settings
    * for the source.
@@ -105,6 +109,10 @@ export interface CfEventsBrowserSettings extends AnalyticsSettings {
    * If provided, will override the default Cloudflare CDN (https://cdn.cloudflare-events.com) for this application.
    */
   cdnURL?: string
+  /**
+   * If provided, will override the default Cloudflare Pipeline URL (https://us-east-1.cloudflare-events.com) for this application.
+   */
+  cloudflarePipelineUrl?: string
 }
 
 export function loadLegacySettings(
@@ -355,8 +363,8 @@ async function loadAnalytics(
     defaultSettings.integrations['Cloudflare'] = {
       ...defaultCloudflareIntegration,
       ...(settings.writeKey ? { apiKey: settings.writeKey } : {}),
-      // Remove apiHost and protocol, add cloudflarePipelineUrl if provided in options
-      ...(options.cloudflarePipelineUrl ? { cloudflarePipelineUrl: options.cloudflarePipelineUrl } : {}),
+      // Use settings.cloudflarePipelineUrl if provided, otherwise fallback to options.cloudflarePipelineUrl, then default
+      cloudflarePipelineUrl: settings.cloudflarePipelineUrl ?? options.cloudflarePipelineUrl ?? defaultCloudflareIntegration.cloudflarePipelineUrl,
       // defaultCloudflareIntegration defaults to 'standard'
       // allow a simple options override to turn on 'batching'
       ...(options.batching == true
@@ -373,7 +381,7 @@ async function loadAnalytics(
 
   if (options.updateCDNSettings) {
     legacySettings = options.updateCDNSettings(legacySettings)
- }
+  }
 
   const retryQueue: boolean =
     legacySettings.integrations['Cloudflare']?.retryQueue ?? true

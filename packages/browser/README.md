@@ -258,7 +258,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 You can then configure the Browser SDK to send events directly to Google Tag Manager by enabling the `Google Tag Manager` destination:
 
 ```js
-cfevents.load('WRITE_KEY', {
+cfevents.load({
   destinations: {
     'Google Tag Manager': {},
   },
