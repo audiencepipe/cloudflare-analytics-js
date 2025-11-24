@@ -16,6 +16,6 @@
     "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@ht-sdks/events-sdk-js-browser": "*"
+    "@audiencepipe/cloudflare-analytics-js-browser": "*"
   }
 }
