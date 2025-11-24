@@ -7,7 +7,6 @@ import {
   TestFetchClient,
 } from './test-helpers/create-test-analytics'
 
-
 jest.setTimeout(10000)
 const timestamp = new Date()
 
@@ -31,8 +30,6 @@ describe('Settings / Configuration Init', () => {
     ).not.toThrow()
   })
 
-
-
   it('uses cloudflarePipelineBearerToken for Bearer auth', async () => {
     const analytics = createTestAnalytics({
       cloudflarePipelineBearerToken: 'my-secret-token',
@@ -45,8 +42,6 @@ describe('Settings / Configuration Init', () => {
       'Bearer my-secret-token'
     )
   })
-
-
 })
 
 describe('Error handling', () => {
@@ -243,7 +238,6 @@ describe('screen', () => {
 })
 
 describe('track', () => {
-
   it('generates track events', async () => {
     const analytics = createTestAnalytics()
     const eventName = 'Test Event'

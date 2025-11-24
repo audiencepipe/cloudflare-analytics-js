@@ -53,7 +53,7 @@ export function cloudflare(
   settings?: CloudflareSettings,
   integrations?: LegacySettings['integrations']
 ): Plugin {
- // Attach `pagehide` before buffer is created so that inflight events are added
+  // Attach `pagehide` before buffer is created so that inflight events are added
   // to the buffer before the buffer persists events in its own `pagehide` handler.
   window.addEventListener('pagehide', () => {
     buffer.push(...Array.from(infligcfevents))
@@ -70,17 +70,21 @@ export function cloudflare(
       )
 
   const infligcfevents = new Set<Context>()
- const flushing = false
+  const flushing = false
 
   // Use the cloudflarePipelineUrl directly, with a fallback
-  const cloudflarePipelineUrl = settings?.cloudflarePipelineUrl ?? 'https://us-east-1.cloudflare-events.com'
+  const cloudflarePipelineUrl =
+    settings?.cloudflarePipelineUrl ?? 'https://us-east-1.cloudflare-events.com'
 
   const deliveryStrategy = settings?.deliveryStrategy
   // Pass the cloudflarePipelineUrl to both dispatchers
   const client =
     deliveryStrategy?.strategy === 'batching'
       ? batch(cloudflarePipelineUrl, deliveryStrategy.config)
-      : standard(cloudflarePipelineUrl, deliveryStrategy?.config as StandardDispatcherConfig)
+      : standard(
+          cloudflarePipelineUrl,
+          deliveryStrategy?.config as StandardDispatcherConfig
+        )
 
   async function send(ctx: Context): Promise<Context> {
     if (isOffline()) {
@@ -106,10 +110,7 @@ export function cloudflare(
     const payload = [normalize(analytics, json, settings, integrations)]
 
     return client
-      .dispatch(
-        cloudflarePipelineUrl,
-        payload
-      )
+      .dispatch(cloudflarePipelineUrl, payload)
       .then(() => ctx)
       .catch(() => {
         buffer.pushWithBackoff(ctx)

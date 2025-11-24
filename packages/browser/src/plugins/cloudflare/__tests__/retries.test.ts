@@ -30,7 +30,10 @@ describe('Cloudflare retries', () => {
         isOffline = jest.fn().mockImplementation(() => true)
 
         // Use a mock Cloudflare Pipeline URL for testing
-        options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
+        options = {
+          apiKey: 'foo',
+          cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
+        }
         analytics = new Analytics(
           { writeKey: options.apiKey },
           {

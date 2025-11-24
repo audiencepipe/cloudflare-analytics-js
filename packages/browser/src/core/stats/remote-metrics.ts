@@ -7,7 +7,7 @@ export interface MetricsOptions {
   host?: string
   sampleRate?: number
   flushTimer?: number
- maxQueueSize?: number
+  maxQueueSize?: number
 }
 
 /**
@@ -85,7 +85,7 @@ export class RemoteMetrics {
       }
       run()
     }
- }
+  }
 
   increment(metric: string, tags: string[]): void {
     // All metrics are part of an allow list in Tracking API

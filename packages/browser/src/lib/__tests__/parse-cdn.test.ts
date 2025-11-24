@@ -48,10 +48,10 @@ it('detects the existing cloudflare cdn', () => {
 })
 
 it('should return the overridden cdn if window.cfevents._cdn is mutated', () => {
- withTag(`
+  withTag(`
   <script src="https://cdn.cloudflare-events.com/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
- // @ts-ignore
+  // @ts-ignore
   ;(window.cfevents as any) = {
     _cdn: 'http://foo.cdn.com',
   }
@@ -72,7 +72,7 @@ it('detects custom cdns that match Cloudflare in domain instrumentation patterns
   withTag(`
     <script src="https://my.cdn.domain/analytics.js/v1/gA5MBlJXrtZaB5sMMZvCF6czfBcfzNO6/analytics.min.js" />
   `)
- expect(getCDN()).toMatchInlineSnapshot(`"https://my.cdn.domain"`)
+  expect(getCDN()).toMatchInlineSnapshot(`"https://my.cdn.domain"`)
 })
 
 it('falls back to Cloudflare if CDN is used as a proxy', () => {
@@ -83,6 +83,6 @@ it('falls back to Cloudflare if CDN is used as a proxy', () => {
 })
 
 it('falls back to Cloudflare if the script is not at all present on the page', () => {
- withTag('')
+  withTag('')
   expect(getCDN()).toMatchInlineSnapshot(`"https://cdn.cloudflare-events.com"`)
 })

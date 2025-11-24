@@ -18,7 +18,10 @@ import {
  */
 export default {
   'analytics.VERSION should be readonly': () => {
-    const analytics = new HtEvents({ writeKey: 'abc' })
+    const analytics = new HtEvents({
+      writeKey: 'abc',
+      cloudflarePipelineUrl: 'noop',
+    })
     // should work
     analytics.VERSION
 
@@ -33,23 +36,29 @@ export default {
 
     new HtEvents({
       writeKey: 'foo',
+      cloudflarePipelineUrl: 'noop',
       httpClient: new CustomClient(),
     })
 
     new HtEvents({
       writeKey: 'foo',
+      cloudflarePipelineUrl: 'noop',
       httpClient: new FetchHTTPClient(globalThis.fetch),
     })
 
     new HtEvents({
       writeKey: 'foo',
+      cloudflarePipelineUrl: 'noop',
       httpClient: new FetchHTTPClient(),
     })
   },
 
   'track/id/pg/screen/grp calls should require either userId or anonymousId':
     () => {
-      const analytics = new HtEvents({ writeKey: 'abc' })
+      const analytics = new HtEvents({
+        writeKey: 'abc',
+        cloudflarePipelineUrl: 'noop',
+      })
       const method: 'track' | 'identify' | 'page' | 'screen' | 'group' = 'track'
 
       // @ts-expect-error - no userID
@@ -61,7 +70,10 @@ export default {
     },
 
   'alias does not need a userId': () => {
-    const analytics = new HtEvents({ writeKey: 'abc' })
+    const analytics = new HtEvents({
+      writeKey: 'abc',
+      cloudflarePipelineUrl: 'noop',
+    })
 
     // @ts-expect-error - no userId
     analytics.alias({ previousId: 'old_id_either_anon_or_regular' })
@@ -93,15 +105,27 @@ export default {
   'HTTPFetchFn should be compatible with standard fetch and node-fetch interface, as well as functions':
     () => {
       const fetch: HTTPFetchFn = require('node-fetch')
-      new HtEvents({ writeKey: 'foo', httpClient: fetch })
-      new HtEvents({ writeKey: 'foo', httpClient: globalThis.fetch })
+      new HtEvents({
+        writeKey: 'foo',
+        cloudflarePipelineUrl: 'noop',
+        httpClient: fetch,
+      })
+      new HtEvents({
+        writeKey: 'foo',
+        cloudflarePipelineUrl: 'noop',
+        httpClient: globalThis.fetch,
+      })
     },
 
   'HTTPFetchFn options should be the expected type': () => {
     type BadFetch = (url: string, requestInit: { _bad_object?: string }) => any
 
-    // @ts-expect-error
-    new HtEvents({ writeKey: 'foo', httpClient: {} as BadFetch })
+    new HtEvents({
+      writeKey: 'foo',
+      cloudflarePipelineUrl: 'noop',
+      // @ts-expect-error
+      httpClient: {} as BadFetch,
+    })
   },
 
   'httpClient setting should be compatible with axios': () => {

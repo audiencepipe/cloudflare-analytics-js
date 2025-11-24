@@ -31,32 +31,35 @@ describe('validateSettings', () => {
   describe('fail-fast behavior (no fallback to host)', () => {
     it('should fail fast and NOT fall back to host setting when cloudflarePipelineUrl is missing', () => {
       // Even though 'host' is provided, it should still throw because cloudflarePipelineUrl is required
-      expect(() =>
-        new HtEvents({
-          cloudflarePipelineUrl: undefined as any,
-          host: 'https://fallback-host.com',
-          writeKey: 'test-key',
-        })
+      expect(
+        () =>
+          new HtEvents({
+            cloudflarePipelineUrl: undefined as any,
+            host: 'https://fallback-host.com',
+            writeKey: 'test-key',
+          })
       ).toThrowError(/cloudflarePipelineUrl/i)
     })
 
     it('should fail fast when cloudflarePipelineUrl is empty string, even with host provided', () => {
-      expect(() =>
-        new HtEvents({
-          cloudflarePipelineUrl: '',
-          host: 'https://fallback-host.com',
-          writeKey: 'test-key',
-        })
+      expect(
+        () =>
+          new HtEvents({
+            cloudflarePipelineUrl: '',
+            host: 'https://fallback-host.com',
+            writeKey: 'test-key',
+          })
       ).toThrowError(/cloudflarePipelineUrl/i)
     })
 
     it('should succeed when cloudflarePipelineUrl is provided (host is ignored)', () => {
-      expect(() =>
-        new HtEvents({
-          cloudflarePipelineUrl: 'https://primary-pipeline.com',
-          host: 'https://fallback-host.com',
-          writeKey: 'test-key',
-        })
+      expect(
+        () =>
+          new HtEvents({
+            cloudflarePipelineUrl: 'https://primary-pipeline.com',
+            host: 'https://fallback-host.com',
+            writeKey: 'test-key',
+          })
       ).not.toThrow()
     })
   })

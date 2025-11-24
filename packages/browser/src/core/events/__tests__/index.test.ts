@@ -220,7 +220,7 @@ describe('Event Factory', () => {
           },
         },
         {
-          'Cloudflare': {
+          Cloudflare: {
             apiHost: 'custom',
           },
           GoogleAnalytics: false,
@@ -231,7 +231,7 @@ describe('Event Factory', () => {
 
       expect(track.integrations).toEqual({
         // do not pass Cloudflare global settings
-        'Cloudflare': true,
+        Cloudflare: true,
         // accept amplitude event level settings
         Amplitude: {
           sessionId: 'session_123',

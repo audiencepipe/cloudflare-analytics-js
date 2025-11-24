@@ -211,7 +211,7 @@ export class LegacyDestination implements DestinationPlugin {
         ctx.updateEvent('integrations', {
           ...ctx.event.integrations,
           All: false,
-          'Cloudflare': true,
+          Cloudflare: true,
         })
         ctx.cancel(
           new ContextCancelation({

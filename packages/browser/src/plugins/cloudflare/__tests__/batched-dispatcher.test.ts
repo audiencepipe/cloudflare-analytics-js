@@ -27,7 +27,7 @@ const fatEvent = {
   latitude: 68.879515,
   longitude: -46.670697,
   tags: ['magna', 'ex', 'nostrud', 'mollit', 'laborum', 'exercitation', 'sit'],
- friends: [
+  friends: [
     {
       id: 0,
       name: 'Lynn Brock',

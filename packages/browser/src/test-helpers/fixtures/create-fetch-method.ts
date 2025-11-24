@@ -15,10 +15,7 @@ export const createMockFetchImplementation = (
       return createSuccess({ ...cdnSettingsMinimal, ...cdnSettings })
     }
 
-    if (
-      req?.method === 'post' &&
-      reqUrl.includes('pipelines.cloudflare.com')
-    ) {
+    if (req?.method === 'post' && reqUrl.includes('pipelines.cloudflare.com')) {
       // POST https://pipelines.cloudflare.com/v1/{event.type}
       return createSuccess({ success: true }, { status: 201 })
     }

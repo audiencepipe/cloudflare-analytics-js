@@ -37,11 +37,11 @@ jest.mock('../../core/analytics', () => ({
 const fetchSettings = Factory.createSuccess({ integrations: {} })
 
 jest.mock('unfetch', () => {
- return jest.fn()
+  return jest.fn()
 })
 
 describe('standalone bundle', () => {
- const cloudflareUrl = `foo`
+  const cloudflareUrl = `foo`
 
   beforeEach(async () => {
     ;(window as any).cfevents = undefined

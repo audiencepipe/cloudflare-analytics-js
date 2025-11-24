@@ -117,11 +117,11 @@ export interface CfEventsBrowserSettings extends AnalyticsSettings {
 
 export function loadLegacySettings(
   writeKey?: string, // Made optional
-  cdnURL?: string,
+  cdnURL?: string
 ): Promise<LegacySettings> {
   if (!writeKey) {
     // If writeKey is not provided, return default settings instead of fetching
-    return Promise.resolve(defaultSettings);
+    return Promise.resolve(defaultSettings)
   }
   const baseUrl = cdnURL ?? getCDN()
 
@@ -269,10 +269,9 @@ async function registerPlugins(
     toRegister.push(schemaFilter)
   }
 
-  
-
   const shouldIgnoreCloudflare =
-    (options.integrations?.All === false && !options.integrations['Cloudflare']) ||
+    (options.integrations?.All === false &&
+      !options.integrations['Cloudflare']) ||
     (options.integrations && options.integrations['Cloudflare'] === false)
 
   if (!shouldIgnoreCloudflare) {
@@ -364,7 +363,10 @@ async function loadAnalytics(
       ...defaultCloudflareIntegration,
       ...(settings.writeKey ? { apiKey: settings.writeKey } : {}),
       // Use settings.cloudflarePipelineUrl if provided, otherwise fallback to options.cloudflarePipelineUrl, then default
-      cloudflarePipelineUrl: settings.cloudflarePipelineUrl ?? options.cloudflarePipelineUrl ?? defaultCloudflareIntegration.cloudflarePipelineUrl,
+      cloudflarePipelineUrl:
+        settings.cloudflarePipelineUrl ??
+        options.cloudflarePipelineUrl ??
+        defaultCloudflareIntegration.cloudflarePipelineUrl,
       // defaultCloudflareIntegration defaults to 'standard'
       // allow a simple options override to turn on 'batching'
       ...(options.batching == true

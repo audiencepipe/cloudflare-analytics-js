@@ -37,7 +37,10 @@ describe('before loading', () => {
 
   beforeEach(() => {
     // Use a mock Cloudflare Pipeline URL for testing
-    options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
+    options = {
+      apiKey: 'foo',
+      cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
+    }
     analytics = new Analytics({ writeKey: options.apiKey })
 
     window.localStorage.clear()
@@ -123,7 +126,7 @@ describe('before loading', () => {
     describe('unbundling', () => {
       it('should add a list of bundled integrations', () => {
         normalize(analytics, object, options, {
-          'Cloudflare': {},
+          Cloudflare: {},
           other: {
             bundlingStatus: 'bundled',
           },
@@ -145,7 +148,7 @@ describe('before loading', () => {
             },
           },
           {
-            'Cloudflare': {},
+            Cloudflare: {},
             other: {
               bundlingStatus: 'bundled',
             },

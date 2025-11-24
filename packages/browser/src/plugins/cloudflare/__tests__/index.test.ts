@@ -21,7 +21,10 @@ describe('Cloudflare', () => {
     jest.restoreAllMocks()
 
     // Use a mock Cloudflare Pipeline URL for testing
-    options = { apiKey: 'foo', cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com' }
+    options = {
+      apiKey: 'foo',
+      cloudflarePipelineUrl: 'https://mock-pipeline.cloudflare.com',
+    }
     analytics = new Analytics({ writeKey: options.apiKey })
     cloudflarePlugin = await cloudflare(analytics, options, {})
 
@@ -93,7 +96,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.name === 'name')
       assert(event.category === 'section')
@@ -112,7 +115,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.properties.foo === 'bar')
     })
@@ -128,7 +131,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.userId === 'id')
       assert(event.traits.trait === true)
@@ -145,7 +148,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.userId === null)
       assert(event.traits.trait === true)
@@ -164,7 +167,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.event === 'event')
       assert(event.context.opt === true)
@@ -184,7 +187,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.groupId === 'id')
       assert(event.context.opt === true)
@@ -201,7 +204,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.groupId === null)
       assert(event.context.opt === true)
@@ -220,7 +223,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.previousId === 'from')
       assert(event.userId === 'to')
@@ -237,7 +240,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.previousId === 'anon-id')
       assert(event.userId === 'to')
@@ -252,7 +255,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.previousId)
       assert(event.previousId.length === 36)
@@ -267,7 +270,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.previousId === 'previous-id')
       assert(event.userId === 'user-id')
@@ -291,7 +294,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.name === 'name')
       assert(event.category === 'section')
@@ -310,7 +313,7 @@ describe('Cloudflare', () => {
       const body = JSON.parse(params.body)
       expect(Array.isArray(body)).toBe(true)
       expect(body.length).toBe(1)
-      
+
       const event = body[0]
       assert(event.properties.foo === 'bar')
     })

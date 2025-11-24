@@ -56,7 +56,10 @@ describe('Other visitor metadata', () => {
   })
 
   beforeEach(async () => {
-    options = { apiKey: 'foo' }
+    options = {
+      apiKey: 'foo',
+      cloudflarePipelineUrl: 'https://test.example.com',
+    }
     analytics = new Analytics({ writeKey: options.apiKey })
 
     await analytics.register(envEnrichment)

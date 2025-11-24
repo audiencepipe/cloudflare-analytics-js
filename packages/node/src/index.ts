@@ -19,7 +19,10 @@ export type {
   GroupParams,
   PageParams,
 } from './app/types'
-export type { HtEventsSettings, HtEventsSettings as CfEventsSettings } from './app/settings'
+export type {
+  HtEventsSettings,
+  HtEventsSettings as CfEventsSettings,
+} from './app/settings'
 
 // export Analytics as both a named export and a default export (for backwards-compat. reasons)
 import { HtEvents } from './app/analytics-node'

@@ -32,7 +32,7 @@ export interface AnyAnalytics {
   load(
     writeKeyOrSettings: CfEventsBrowserSettings | string,
     options?: InitOptions
-  ): void
+  ): AnyAnalytics
 }
 
 /**

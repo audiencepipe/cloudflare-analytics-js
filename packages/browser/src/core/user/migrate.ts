@@ -30,7 +30,7 @@ import { Utf8 } from './vendor/crypto-es/lib/core'
  * @returns bytes array
  */
 const base64ToBytes = (base64Str: string): Uint8Array => {
- const binString = (window as any)?.atob(base64Str) ?? ''
+  const binString = (window as any)?.atob(base64Str) ?? ''
   const bytes = binString.split('').map((char: string) => char.charCodeAt(0))
   return new Uint8Array(bytes)
 }
@@ -51,7 +51,7 @@ function parse(value: any) {
   // if not parsable, return as is without json parse
   try {
     return value ? JSON.parse(value) : null
- } catch (e) {
+  } catch (e) {
     return value || null
   }
 }
@@ -84,7 +84,7 @@ export function decryptRudderHtValue(value: string): string | null {
   } catch (error) {
     console.error(error)
   }
- return value
+  return value
 }
 
 const rudderEncryptKey = 'Rudder'

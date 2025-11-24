@@ -39,7 +39,7 @@ jest.mock('unfetch', () => {
           ok: true,
           status: 200,
           json: () => Promise.resolve({}),
-        } as Response);
+        } as Response)
       }
       return createMockFetchImplementation(cdnSettingsKitchenSink)(url, body)
     },
@@ -65,7 +65,7 @@ const xt: Plugin = {
   },
 
   track: async (ctx) => ctx,
- identify: async (ctx) => ctx,
+  identify: async (ctx) => ctx,
   page: async (ctx) => ctx,
   group: async (ctx) => ctx,
   alias: async (ctx) => ctx,
@@ -403,7 +403,7 @@ describe('Initialization', () => {
 
     it('does not load Cloudflare if its set to false', async () => {
       const options: { integrations?: { [key: string]: boolean } } = {
-        integrations: { 'Cloudflare': false },
+        integrations: { Cloudflare: false },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
@@ -416,7 +416,7 @@ describe('Initialization', () => {
 
     it('loads Cloudflare if integrations.All is false and Cloudflare is listed', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
-        integrations: { All: false, 'Cloudflare': true },
+        integrations: { All: false, Cloudflare: true },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
@@ -429,7 +429,7 @@ describe('Initialization', () => {
 
     it('loads Cloudflare if integrations.All is undefined', async () => {
       const options: { integrations: { [key: string]: boolean } } = {
-        integrations: { 'Cloudflare': true },
+        integrations: { Cloudflare: true },
       }
       const analyticsResponse = await CfEventsBrowser.load(settings, options)
 
@@ -457,7 +457,7 @@ describe('Initialization', () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: {
           'Test Plugin': true,
-          'Cloudflare': false,
+          Cloudflare: false,
         },
       }
       const analyticsResponse = await CfEventsBrowser.load(
@@ -482,7 +482,7 @@ describe('Initialization', () => {
         integrations: {
           All: false,
           'Test Plugin': true,
-          'Cloudflare': false,
+          Cloudflare: false,
         },
       }
       const analyticsResponse = await CfEventsBrowser.load(
@@ -968,7 +968,7 @@ describe('retries', () => {
     // @ts-ignore ignore reassining function
     loadLegacySettings = jest.fn().mockReturnValue(
       Promise.resolve({
-        integrations: { 'Cloudflare': { retryQueue: false } },
+        integrations: { Cloudflare: { retryQueue: false } },
       })
     )
   })
@@ -1066,7 +1066,7 @@ describe('Cloudflare overrides', () => {
       { writeKey },
       {
         integrations: {
-          'Cloudflare': {
+          Cloudflare: {
             cloudflarePipelineUrl: 'https://my.endpoint.com',
             anotherSettings: '👻',
           },

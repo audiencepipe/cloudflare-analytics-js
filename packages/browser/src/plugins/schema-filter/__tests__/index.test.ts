@@ -10,7 +10,7 @@ const settings: LegacySettings = {
     'Braze Web Mode (Actions)': {},
     // note that Fullstory's name here doesn't contain 'Actions'
     Fullstory: {},
-    'Cloudflare': {},
+    Cloudflare: {},
   },
   remotePlugins: [
     {
@@ -102,7 +102,10 @@ describe('schema filter', () => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
 
-    options = { apiKey: 'foo' }
+    options = {
+      apiKey: 'foo',
+      cloudflarePipelineUrl: 'https://test.example.com',
+    }
     ajs = new Analytics({ writeKey: options.apiKey })
     cloudflarePlugin = await cloudflare(ajs, options, {})
     filterXt = schemaFilter({}, settings)

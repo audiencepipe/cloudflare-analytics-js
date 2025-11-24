@@ -157,7 +157,7 @@ export interface InitOptions {
   apiHost?: string // Defaults to us-east-1.cloudflare-events.com
   protocol?: string // Defaults to https
   batching?: boolean // Defaults to false
-  
+
   /**
    * Cloudflare Pipeline URL for sending all events
    */
@@ -508,7 +508,8 @@ export class Analytics
     this.settings.timeout = timeout
   }
 
-  private async _dispatch(    event: CloudflareEvent,
+  private async _dispatch(
+    event: CloudflareEvent,
     callback?: Callback
   ): Promise<DispatchedEvent> {
     const ctx = new Context(event)
