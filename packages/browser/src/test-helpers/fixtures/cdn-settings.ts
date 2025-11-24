@@ -1,7 +1,7 @@
-import { CfEventsBrowserSettings } from '../..'
+import { HtEventsBrowserSettings } from '../..'
 import { mockIntegrationName } from './classic-destination'
 
-type CDNSettings = NonNullable<CfEventsBrowserSettings['cdnSettings']>
+type CDNSettings = NonNullable<HtEventsBrowserSettings['cdnSettings']>
 
 export const cdnSettingsKitchenSink: CDNSettings = {
   integrations: {

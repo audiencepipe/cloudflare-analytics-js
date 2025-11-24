@@ -1,5 +1,5 @@
 import unfetch from 'unfetch'
-import { CfEventsBrowser } from '..'
+import { HtEventsBrowser } from '..'
 import {
   clearAjsBrowserStorage,
   getAnonId,
@@ -19,7 +19,7 @@ const helpers = {
       )
   },
   loadAnalytics() {
-    return CfEventsBrowser.load({ writeKey: 'foo' })
+    return HtEventsBrowser.load({ writeKey: 'foo' })
   },
 }
 

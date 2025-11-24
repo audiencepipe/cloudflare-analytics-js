@@ -1,4 +1,4 @@
-import { CfEventsBrowser } from '../../../browser'
+import { HtEventsBrowser } from '../../../browser'
 import { createDestination } from '..'
 import { Destination } from '../destination'
 
@@ -32,7 +32,7 @@ describe('destination', () => {
       next(payload)
     })
 
-    const cfevents = CfEventsBrowser.load({ writeKey: 'WRITE_KEY' })
+    const cfevents = HtEventsBrowser.load({ writeKey: 'WRITE_KEY' })
 
     await cfevents.register(destination)
 
@@ -52,9 +52,9 @@ describe('destination', () => {
   })
 })
 
-describe('CfEventsBrowser', () => {
+describe('HtEventsBrowser', () => {
   it('should load plugin', async () => {
-    const analytics = await CfEventsBrowser.standalone('WRITE_KEY', {
+    const analytics = await HtEventsBrowser.standalone('WRITE_KEY', {
       destinations: {
         'Google Tag Manager': {
           measurementId: 'G-XXXXXXX',

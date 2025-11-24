@@ -1,6 +1,6 @@
 import jsdom, { JSDOM } from 'jsdom'
 import { InitOptions, getGlobalAnalytics } from '../../'
-import { CfEventsBrowser, loadLegacySettings } from '../../browser'
+import { HtEventsBrowser, loadLegacySettings } from '../../browser'
 import { snippet } from '../../tester/__fixtures__/cloudflare-snippet'
 import { install } from '../standalone-analytics'
 import unfetch from 'unfetch'
@@ -100,7 +100,7 @@ describe('standalone bundle', () => {
     }
 
     const spy = jest
-      .spyOn(CfEventsBrowser, 'standalone')
+      .spyOn(HtEventsBrowser, 'standalone')
       .mockResolvedValueOnce(fakeAjs as AnalyticsStandalone)
 
     await install()
@@ -115,7 +115,7 @@ describe('standalone bundle', () => {
       },
     }
     const spy = jest
-      .spyOn(CfEventsBrowser, 'standalone')
+      .spyOn(HtEventsBrowser, 'standalone')
       .mockResolvedValueOnce(fakeAjs as AnalyticsStandalone)
 
     await install()

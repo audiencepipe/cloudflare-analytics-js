@@ -57,7 +57,8 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
         await shouldDisableConsentRequirement?.()
       if (consentRequirementDisabled) {
         // ignore consent -- just call analytics.load as usual
-        return ogLoad.call(analytics, settings, options)
+        const result = await ogLoad.call(analytics, settings, options)
+        return result || analytics
       }
 
       // use these categories to disable/enable the appropriate device mode plugins
@@ -149,13 +150,14 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
         )
       }
 
-      return ogLoad.call(analytics, settings, {
+      const result = await ogLoad.call(analytics, settings, {
         ...options,
         updateCDNSettings: pipe(
           updateCDNSettings,
           options?.updateCDNSettings ? options.updateCDNSettings : (f) => f
         ),
       })
+      return result || analytics
     }
     analytics.load = loadWithConsent
     return analytics

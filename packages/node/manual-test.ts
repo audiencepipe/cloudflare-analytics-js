@@ -1,4 +1,4 @@
-import { CfEvents } from './src';
+import { CfEvents } from './src'
 
 // -------------------------------------------------------------------
 // 1️⃣  Create the SDK instance – use an *invalid* bearer token
@@ -10,20 +10,20 @@ const cfevents = new CfEvents({
   cloudflarePipelineBearerToken: 'this-is-a-bogus-token',
   flushInterval: 500,
   maxEventsInBatch: 1,
-});
+})
 
 // -------------------------------------------------------------------
 // 2️⃣  Listen for any emitted error events (covers async failures)
 // -------------------------------------------------------------------
 cfevents.on('error', ({ reason }) => {
-  console.error('🚨 SDK emitted error event →', reason);
-});
+  console.error('🚨 SDK emitted error event →', reason)
+})
 
 // -------------------------------------------------------------------
 // 3️⃣  Track an event *with a callback* so we can inspect the result
 // -------------------------------------------------------------------
-console.log('📤 Sending event…');
-console.log('📤 Sending track event…');
+console.log('📤 Sending event…')
+console.log('📤 Sending track event…')
 cfevents.track(
   {
     event: 'Manual Test Event',
@@ -33,14 +33,14 @@ cfevents.track(
   },
   (err, ctx) => {
     if (err) {
-      console.error('❌ Track error →', err);
+      console.error('❌ Track error →', err)
     } else {
-      console.log('✅ Track success →', ctx);
+      console.log('✅ Track success →', ctx)
     }
   }
-);
+)
 
-console.log('📤 Sending identify event…');
+console.log('📤 Sending identify event…')
 cfevents.identify(
   {
     userId: 'manual-user',
@@ -49,16 +49,16 @@ cfevents.identify(
   },
   (err, ctx) => {
     if (err) {
-      console.error('❌ Identify error →', err);
+      console.error('❌ Identify error →', err)
     } else {
-      console.log('✅ Identify success →', ctx);
+      console.log('✅ Identify success →', ctx)
     }
   }
-);
+)
 
 // -------------------------------------------------------------------
 // 4️⃣  Keep the process alive long enough for the flush to happen
 // -------------------------------------------------------------------
 setTimeout(() => {
-  console.log('🛑 Test complete.');
-}, 2000);
+  console.log('🛑 Test complete.')
+}, 2000)

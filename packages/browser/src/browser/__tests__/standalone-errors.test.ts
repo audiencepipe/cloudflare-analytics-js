@@ -1,5 +1,5 @@
 import jsdom, { JSDOM } from 'jsdom'
-import { CfEventsBrowser, LegacySettings } from '..'
+import { HtEventsBrowser, LegacySettings } from '..'
 import { snippet } from '../../tester/__fixtures__/cloudflare-snippet'
 import { pWhile } from '../../lib/p-while'
 import unfetch from 'unfetch'
@@ -100,7 +100,7 @@ describe('standalone bundle', () => {
       })
 
     jest
-      .spyOn(CfEventsBrowser, 'standalone')
+      .spyOn(HtEventsBrowser, 'standalone')
       .mockRejectedValueOnce(new Error('Ohhh nooo'))
 
     await import('../standalone')

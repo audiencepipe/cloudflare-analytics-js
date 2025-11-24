@@ -1,6 +1,6 @@
 import type { CreateWrapperSettings } from './settings'
 
-export interface CfEventsBrowserSettings {
+export interface HtEventsBrowserSettings {
   writeKey: string
   cdnURL?: string
   cdnSettings?: CDNSettings
@@ -30,9 +30,9 @@ export interface AnyAnalytics {
    * and the npm lib (`HtEventsBrowser.load`)
    */
   load(
-    writeKeyOrSettings: CfEventsBrowserSettings | string,
+    writeKeyOrSettings: HtEventsBrowserSettings | string,
     options?: InitOptions
-  ): AnyAnalytics | Promise<AnyAnalytics>
+  ): AnyAnalytics | Promise<AnyAnalytics> | void
 }
 
 /**

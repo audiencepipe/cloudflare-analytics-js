@@ -8,7 +8,7 @@ import { Analytics, InitOptions } from '../../core/analytics'
 import { LegacyDestination } from '../../plugins/ajs-destination'
 import { PersistedPriorityQueue } from '../../lib/priority-queue/persisted'
 // @ts-ignore loadLegacySettings mocked dependency is accused as unused
-import { CfEventsBrowser, loadLegacySettings } from '../index'
+import { HtEventsBrowser, loadLegacySettings } from '../index'
 // @ts-ignore isOffline mocked dependency is accused as unused
 import { isOffline } from '../../core/connection'
 import * as CloudflarePlugin from '../../plugins/cloudflare'
@@ -112,7 +112,7 @@ describe('Initialization', () => {
   })
 
   it('loads plugins', async () => {
-    await CfEventsBrowser.load({
+    await HtEventsBrowser.load({
       writeKey,
       plugins: [xt],
     })
@@ -140,7 +140,7 @@ describe('Initialization', () => {
     }
 
     jest.spyOn(lazyPlugin, 'load')
-    await CfEventsBrowser.load({ writeKey, plugins: [lazyPlugin] })
+    await HtEventsBrowser.load({ writeKey, plugins: [lazyPlugin] })
 
     expect(lazyPlugin.load).toHaveBeenCalled()
     expect(onLoad).not.toHaveBeenCalled()
@@ -185,7 +185,7 @@ describe('Initialization', () => {
 
     jest.spyOn(lazyPlugin1, 'load')
     jest.spyOn(lazyPlugin2, 'load')
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [lazyPlugin1, lazyPlugin2, xt],
     })
@@ -206,7 +206,7 @@ describe('Initialization', () => {
   describe('cdn', () => {
     it('should get the correct CDN in plugins if the CDN overridden', async () => {
       const overriddenCDNUrl = 'http://cdn.cloudflare-events.com' // http instead of https
-      await CfEventsBrowser.load({
+      await HtEventsBrowser.load({
         cdnURL: overriddenCDNUrl,
         writeKey,
         plugins: [
@@ -242,7 +242,7 @@ describe('Initialization', () => {
       const defaultObj = { original: 'default' }
       ;(window as any)['cfevents'] = defaultObj
 
-      await CfEventsBrowser.load({
+      await HtEventsBrowser.load({
         writeKey,
         plugins: [
           {
@@ -257,7 +257,7 @@ describe('Initialization', () => {
     })
 
     it('should set the global window key for the analytics buffer with the setting option', async () => {
-      await CfEventsBrowser.load(
+      await HtEventsBrowser.load(
         {
           writeKey,
           plugins: [
@@ -301,7 +301,7 @@ describe('Initialization', () => {
         toJSON: jest.fn(() => lowEntropyTestData),
       }
 
-      const [ajs] = await CfEventsBrowser.load(
+      const [ajs] = await HtEventsBrowser.load(
         { writeKey },
         { highEntropyValuesClientHints: ['architecture'] }
       )
@@ -317,7 +317,7 @@ describe('Initialization', () => {
       const mockPage = jest.fn().mockImplementation(() => Promise.resolve())
       Analytics.prototype.page = mockPage
 
-      await CfEventsBrowser.load({ writeKey }, { initialPageview: true })
+      await HtEventsBrowser.load({ writeKey }, { initialPageview: true })
 
       expect(mockPage).toHaveBeenCalled()
     })
@@ -326,12 +326,12 @@ describe('Initialization', () => {
       jest.mock('../../core/analytics')
       const mockPage = jest.fn()
       Analytics.prototype.page = mockPage
-      await CfEventsBrowser.load({ writeKey }, { initialPageview: false })
+      await HtEventsBrowser.load({ writeKey }, { initialPageview: false })
       expect(mockPage).not.toHaveBeenCalled()
     })
 
     it('does not use a persisted queue when disableClientPersistence is true', async () => {
-      const [ajs] = await CfEventsBrowser.load(
+      const [ajs] = await HtEventsBrowser.load(
         {
           writeKey,
         },
@@ -345,7 +345,7 @@ describe('Initialization', () => {
     })
 
     it('uses a persisted queue by default', async () => {
-      const [ajs] = await CfEventsBrowser.load({
+      const [ajs] = await HtEventsBrowser.load({
         writeKey,
       })
 
@@ -353,7 +353,7 @@ describe('Initialization', () => {
     })
 
     it('disables identity persistance when disableClientPersistence is true', async () => {
-      const [ajs] = await CfEventsBrowser.load(
+      const [ajs] = await HtEventsBrowser.load(
         {
           writeKey,
         },
@@ -367,7 +367,7 @@ describe('Initialization', () => {
     })
 
     it('doesnt fetch remote source settings by default', async () => {
-      await CfEventsBrowser.load({
+      await HtEventsBrowser.load({
         writeKey,
       })
 
@@ -376,7 +376,7 @@ describe('Initialization', () => {
     })
 
     it('does not fetch source settings if cdnSettings is set', async () => {
-      await CfEventsBrowser.load({
+      await HtEventsBrowser.load({
         writeKey,
         cdnSettings: { integrations: {} },
       })
@@ -392,7 +392,7 @@ describe('Initialization', () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { All: false },
       }
-      const analyticsResponse = await CfEventsBrowser.load(settings, options)
+      const analyticsResponse = await HtEventsBrowser.load(settings, options)
 
       const cloudflare = analyticsResponse[0].queue.plugins.find(
         (p) => p.name === 'Cloudflare'
@@ -405,7 +405,7 @@ describe('Initialization', () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: { Cloudflare: false },
       }
-      const analyticsResponse = await CfEventsBrowser.load(settings, options)
+      const analyticsResponse = await HtEventsBrowser.load(settings, options)
 
       const cloudflare = analyticsResponse[0].queue.plugins.find(
         (p) => p.name === 'Cloudflare'
@@ -418,7 +418,7 @@ describe('Initialization', () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { All: false, Cloudflare: true },
       }
-      const analyticsResponse = await CfEventsBrowser.load(settings, options)
+      const analyticsResponse = await HtEventsBrowser.load(settings, options)
 
       const cloudflare = analyticsResponse[0].queue.plugins.find(
         (p) => p.name === 'Cloudflare'
@@ -431,7 +431,7 @@ describe('Initialization', () => {
       const options: { integrations: { [key: string]: boolean } } = {
         integrations: { Cloudflare: true },
       }
-      const analyticsResponse = await CfEventsBrowser.load(settings, options)
+      const analyticsResponse = await HtEventsBrowser.load(settings, options)
 
       const cloudflare = analyticsResponse[0].queue.plugins.find(
         (p) => p.name === 'Cloudflare'
@@ -444,7 +444,7 @@ describe('Initialization', () => {
       const options: { integrations?: { [key: string]: boolean } } = {
         integrations: undefined,
       }
-      const analyticsResponse = await CfEventsBrowser.load(settings, options)
+      const analyticsResponse = await HtEventsBrowser.load(settings, options)
 
       const cloudflare = analyticsResponse[0].queue.plugins.find(
         (p) => p.name === 'Cloudflare'
@@ -460,7 +460,7 @@ describe('Initialization', () => {
           Cloudflare: false,
         },
       }
-      const analyticsResponse = await CfEventsBrowser.load(
+      const analyticsResponse = await HtEventsBrowser.load(
         { ...settings, plugins: [xt] },
         options
       )
@@ -485,7 +485,7 @@ describe('Initialization', () => {
           Cloudflare: false,
         },
       }
-      const analyticsResponse = await CfEventsBrowser.load(
+      const analyticsResponse = await HtEventsBrowser.load(
         { ...settings, plugins: [xt] },
         options
       )
@@ -506,7 +506,7 @@ describe('Initialization', () => {
 
 describe('Dispatch', () => {
   it('dispatches events to destinations', async () => {
-    const [ajs] = await CfEventsBrowser.load({
+    const [ajs] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude, googleAnalytics],
     })
@@ -529,7 +529,7 @@ describe('Dispatch', () => {
   })
 
   it('does not dispatch events to destinations on deny list', async () => {
-    const [ajs] = await CfEventsBrowser.load(
+    const [ajs] = await HtEventsBrowser.load(
       {
         writeKey,
         plugins: [amplitude, googleAnalytics],
@@ -561,7 +561,7 @@ describe('Dispatch', () => {
   })
 
   it('does not dispatch events to Cloudflare when All is false and Cloudflare is not explicitly enabled', async () => {
-    const [ajs] = await CfEventsBrowser.load(
+    const [ajs] = await HtEventsBrowser.load(
       {
         writeKey,
         plugins: [amplitude, googleAnalytics],
@@ -591,7 +591,7 @@ describe('Dispatch', () => {
   })
 
   it('enriches events before dispatching', async () => {
-    const [ajs] = await CfEventsBrowser.load({
+    const [ajs] = await HtEventsBrowser.load({
       writeKey,
       plugins: [enrichBilling, amplitude, googleAnalytics],
     })
@@ -609,7 +609,7 @@ describe('Dispatch', () => {
   })
 
   it('collects metrics for every event', async () => {
-    const [ajs] = await CfEventsBrowser.load({
+    const [ajs] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],
     })
@@ -637,7 +637,7 @@ describe('Dispatch', () => {
 
 describe('Group', () => {
   it('manages Group state', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
 
@@ -657,7 +657,7 @@ describe('Group', () => {
 
 describe('Alias', () => {
   it('generates alias events', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],
     })
@@ -674,7 +674,7 @@ describe('Alias', () => {
 
   it('falls back to userID in cookies if no id passed', async () => {
     jar.set('cfjs_user_id', 'dan')
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],
     })
@@ -706,7 +706,7 @@ describe('setAnonymousId', () => {
   })
 
   it('calling setAnonymousId will set a new anonymousId and returns it', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],
     })
@@ -724,7 +724,7 @@ describe('setAnonymousId', () => {
 
 describe('addSourceMiddleware', () => {
   it('supports registering source middlewares', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
 
@@ -776,7 +776,7 @@ describe.skip('addDestinationMiddleware', () => {
   })
 
   it('supports registering destination middlewares', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
 
@@ -828,7 +828,7 @@ describe.skip('addDestinationMiddleware', () => {
       isLoaded: () => true,
     }
 
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
 
@@ -851,7 +851,7 @@ describe.skip('addDestinationMiddleware', () => {
 
 describe('use', () => {
   it('registers a legacyPlugin', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
 
@@ -864,7 +864,7 @@ describe('use', () => {
 
 describe('timeout', () => {
   it('has a default timeout value', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
     //@ts-ignore
@@ -872,7 +872,7 @@ describe('timeout', () => {
   })
 
   it('can set a timeout value', async () => {
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
     })
     analytics.timeout(50)
@@ -915,7 +915,7 @@ describe.skip('deregister', () => {
     })
     xt.unload = unload
 
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [xt],
     })
@@ -935,7 +935,7 @@ describe.skip('deregister', () => {
       {}
     )
 
-    const [analytics] = await CfEventsBrowser.load({
+    const [analytics] = await HtEventsBrowser.load({
       writeKey,
       plugins: [amplitude],
     })
@@ -974,7 +974,7 @@ describe('retries', () => {
   })
 
   it('does not retry errored events if retryQueue setting is set to false', async () => {
-    const [ajs] = await CfEventsBrowser.load(
+    const [ajs] = await HtEventsBrowser.load(
       { writeKey: writeKey },
       { retryQueue: false }
     )
@@ -1009,7 +1009,7 @@ describe('retries', () => {
   })
 
   it('does not queue events / dispatch when offline if retryQueue setting is set to false', async () => {
-    const [ajs] = await CfEventsBrowser.load(
+    const [ajs] = await HtEventsBrowser.load(
       { writeKey },
       { retryQueue: false }
     )
@@ -1034,7 +1034,7 @@ describe('retries', () => {
   })
 
   it('enqueues events / dispatches if the client is currently offline and retries are *enabled* for the main event queue', async () => {
-    const [ajs] = await CfEventsBrowser.load({ writeKey }, { retryQueue: true })
+    const [ajs] = await HtEventsBrowser.load({ writeKey }, { retryQueue: true })
 
     const trackSpy = jest.fn().mockImplementation((ctx) => ctx)
     await ajs.queue.register(
@@ -1062,7 +1062,7 @@ describe('Cloudflare overrides', () => {
   it('allows for overriding Cloudflare settings', async () => {
     jest.spyOn(CloudflarePlugin, 'cloudflare')
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       { writeKey },
       {
         integrations: {
@@ -1115,7 +1115,7 @@ describe.skip('Options', () => {
 
   describe('disableAutoISOConversion', () => {
     it('converts iso strings to dates be default', async () => {
-      const [analytics] = await CfEventsBrowser.load({
+      const [analytics] = await HtEventsBrowser.load({
         writeKey,
       })
 
@@ -1149,7 +1149,7 @@ describe.skip('Options', () => {
 
     it('does not convert iso strings to dates be default if  disableAutoISOConversion is false', async () => {
       const initOptions: InitOptions = { disableAutoISOConversion: false }
-      const [analytics] = await CfEventsBrowser.load(
+      const [analytics] = await HtEventsBrowser.load(
         {
           writeKey,
         },
@@ -1186,7 +1186,7 @@ describe.skip('Options', () => {
 
     it('does not convert iso strings to dates when `true`', async () => {
       const initOptions: InitOptions = { disableAutoISOConversion: true }
-      const [analytics] = await CfEventsBrowser.load(
+      const [analytics] = await HtEventsBrowser.load(
         {
           writeKey,
         },

@@ -1,6 +1,6 @@
 import { Analytics, InitOptions } from '../core/analytics'
 
-export interface CfEventsSnippet extends AnalyticsStandalone {
+export interface HtEventsSnippet extends AnalyticsStandalone {
   load: (writeKey: string, options?: InitOptions) => void
 }
 

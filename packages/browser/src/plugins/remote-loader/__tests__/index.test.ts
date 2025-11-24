@@ -5,7 +5,7 @@ jest.mock('@segment/analytics-browser-actions-braze', () => braze)
 
 import * as loader from '../../../lib/load-script'
 import { ActionDestination, PluginFactory, remoteLoader } from '..'
-import { CfEventsBrowser, LegacySettings } from '../../../browser'
+import { HtEventsBrowser, LegacySettings } from '../../../browser'
 import { InitOptions } from '../../../core/analytics'
 import { Context } from '../../../core/context'
 import { tsubMiddleware } from '../../routing-middleware'
@@ -569,7 +569,7 @@ describe('Remote Loader', () => {
     )
   })
 
-  it('accepts settings overrides from options (CfEventsBrowser)', async () => {
+  it('accepts settings overrides from options (HtEventsBrowser)', async () => {
     const cdnSettings = {
       integrations: {
         remotePlugin: {
@@ -600,7 +600,7 @@ describe('Remote Loader', () => {
       },
     }
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       {
         writeKey: 'key',
         cdnSettings,
@@ -646,7 +646,7 @@ describe('Remote Loader', () => {
       ],
     }
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       { writeKey: '', cdnSettings },
       {
         integrations: {
@@ -687,7 +687,7 @@ describe('Remote Loader', () => {
       ],
     }
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       { writeKey: '', cdnSettings },
       {
         integrations: {
@@ -728,7 +728,7 @@ describe('Remote Loader', () => {
       ],
     }
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       { writeKey: '', cdnSettings },
       {
         integrations: {
@@ -766,7 +766,7 @@ describe('Remote Loader', () => {
       ],
     }
 
-    await CfEventsBrowser.load(
+    await HtEventsBrowser.load(
       { writeKey: '', cdnSettings },
       {
         integrations: {

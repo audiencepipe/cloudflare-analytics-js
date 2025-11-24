@@ -6,7 +6,7 @@ import type {
   CreateWrapperSettings,
   AnyAnalytics,
   CDNSettings,
-  CfEventsBrowserSettings,
+  HtEventsBrowserSettings,
   Categories,
 } from '../../types'
 import { CDNSettingsBuilder } from '@internal/test-helpers'
@@ -40,7 +40,7 @@ const getAnalyticsLoadLastCall = () => {
   const updateCDNSettings = arg2!.updateCDNSettings || ((id) => id)
   const updatedCDNSettings = updateCDNSettings(cdnSettings) as CDNSettings
   return {
-    args: [arg1 as CfEventsBrowserSettings, arg2!] as const,
+    args: [arg1 as HtEventsBrowserSettings, arg2!] as const,
     cdnSettings,
     updatedCDNSettings,
   }

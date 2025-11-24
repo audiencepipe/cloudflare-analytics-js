@@ -94,14 +94,14 @@ export interface LegacySettings {
   }
 }
 
-export interface CfEventsBrowserSettings extends AnalyticsSettings {
+export interface HtEventsBrowserSettings extends AnalyticsSettings {
   /**
    * @deprecated The writeKey is no longer needed on init.
    */
   writeKey?: string // Made optional
   /**
    * The settings for the Cloudflare Source.
-   * If provided, `CfEventsBrowser` will not fetch remote settings
+   * If provided, `HtEventsBrowser` will not fetch remote settings
    * for the source.
    */
   cdnSettings?: LegacySettings & Record<string, unknown>
@@ -346,7 +346,7 @@ const defaultSettings: LegacySettings = {
 }
 
 async function loadAnalytics(
-  settings: CfEventsBrowserSettings,
+  settings: HtEventsBrowserSettings,
   options: InitOptions = {},
   preInitBuffer: PreInitMethodCallBuffer
 ): Promise<[Analytics, Context]> {
@@ -445,20 +445,20 @@ async function loadAnalytics(
  *
  * @example
  * ```ts
- *  export const cfevents = new CfEventsBrowser()
+ *  export const cfevents = new HtEventsBrowser()
  *  cfevents.load({ writeKey: 'foo' })
  * ```
  * @link https://github.com/ht-sdks/events-sdk-js-mono/tree/master/packages/browser#readme
  */
-export class CfEventsBrowser extends AnalyticsBuffered {
+export class HtEventsBrowser extends AnalyticsBuffered {
   private _resolveLoadStart: (
-    settings: CfEventsBrowserSettings,
+    settings: HtEventsBrowserSettings,
     options: InitOptions
   ) => void
 
   constructor() {
     const { promise: loadStart, resolve: resolveLoadStart } =
-      createDeferred<Parameters<CfEventsBrowser['load']>>()
+      createDeferred<Parameters<HtEventsBrowser['load']>>()
 
     super((buffer) =>
       loadStart.then(([settings, options]) =>
@@ -482,14 +482,14 @@ export class CfEventsBrowser extends AnalyticsBuffered {
    *
    * @example
    * ```ts
-   * export const analytics = new CfEventsBrowser()
+   * export const analytics = new HtEventsBrowser()
    * analytics.load({ writeKey: 'foo' })
    * ```
    */
   load(
-    settings: CfEventsBrowserSettings,
+    settings: HtEventsBrowserSettings,
     options: InitOptions = {}
-  ): CfEventsBrowser {
+  ): HtEventsBrowser {
     this._resolveLoadStart(settings, options)
     return this
   }
@@ -499,23 +499,23 @@ export class CfEventsBrowser extends AnalyticsBuffered {
    *
    * @example
    * ```ts
-   * const ajs = CfEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
+   * const ajs = HtEventsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
    *
    * ajs.track("foo")
    * ...
    * ```
    */
   static load(
-    settings: CfEventsBrowserSettings,
+    settings: HtEventsBrowserSettings,
     options: InitOptions = {}
-  ): CfEventsBrowser {
-    return new CfEventsBrowser().load(settings, options)
+  ): HtEventsBrowser {
+    return new HtEventsBrowser().load(settings, options)
   }
 
   static standalone(
     writeKey?: string, // Made optional
     options?: InitOptions
   ): Promise<Analytics> {
-    return CfEventsBrowser.load({ writeKey }, options).then((res) => res[0])
+    return HtEventsBrowser.load({ writeKey }, options).then((res) => res[0])
   }
 }

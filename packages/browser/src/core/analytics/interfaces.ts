@@ -74,7 +74,7 @@ export interface AnalyticsClassic extends AnalyticsClassicStubs {
 }
 
 /**
- * Interface implemented by concrete Analytics class (commonly accessible if you use "await" on CfEventsBrowser.load())
+ * Interface implemented by concrete Analytics class (commonly accessible if you use "await" on HtEventsBrowser.load())
  */
 export interface AnalyticsCore extends CoreAnalytics {
   track(...args: EventParams): Promise<DispatchedEvent>
@@ -91,9 +91,9 @@ export interface AnalyticsCore extends CoreAnalytics {
 }
 
 /**
- * Interface implemented by CfEventsBrowser (buffered version of analytics) (commonly accessible through CfEventsBrowser.load())
+ * Interface implemented by HtEventsBrowser (buffered version of analytics) (commonly accessible through HtEventsBrowser.load())
  */
-export type CfEventsBrowserCore = Omit<AnalyticsCore, 'group' | 'user'> & {
+export type HtEventsBrowserCore = Omit<AnalyticsCore, 'group' | 'user'> & {
   group(): Promise<Group>
   group(...args: GroupParams): Promise<DispatchedEvent>
   user(): Promise<User>
