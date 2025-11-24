@@ -16,7 +16,9 @@ jest.mock('unfetch')
 const mockFetchCdnSettings = (cdnSettings: any = {}) => {
   return jest
     .mocked(unfetch)
-    .mockImplementation(createMockFetchImplementation(cdnSettings))
+    .mockImplementation(
+      createMockFetchImplementation(cdnSettings) as unknown as typeof unfetch
+    )
 }
 
 jest.spyOn(console, 'warn').mockImplementation((...errMsgs) => {

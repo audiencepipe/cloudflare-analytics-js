@@ -15,7 +15,12 @@ beforeEach(() => {
 
 jest
   .mocked(unfetch)
-  .mockImplementation(() => createSuccess({ integrations: {} }))
+  .mockImplementation(
+    () =>
+      createSuccess({ integrations: {} }) as unknown as Promise<
+        Awaited<ReturnType<typeof unfetch>>
+      >
+  )
 
 it('supports overriding the CDN', async () => {
   const mockCdn = 'https://cdn.foobar.com'

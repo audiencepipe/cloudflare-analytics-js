@@ -1,7 +1,7 @@
 import { cloudflare, CloudflareSettings } from '..'
 import { Analytics } from '../../../core/analytics'
 // Suppress TS error for mocked dependency
-import { isOffline } from '../../../core/connection'
+import * as connection from '../../../core/connection'
 import { Plugin } from '../../../core/plugin'
 import { envEnrichment } from '../../env-enrichment'
 import { scheduleFlush } from '../schedule-flush'
@@ -27,7 +27,7 @@ describe('Cloudflare retries', () => {
         jest.restoreAllMocks()
 
         // Override the imported 'isOffline' function with a mock implementation
-        isOffline = jest.fn().mockImplementation(() => true)
+        jest.spyOn(connection, 'isOffline').mockReturnValue(true)
 
         // Use a mock Cloudflare Pipeline URL for testing
         options = {
@@ -76,7 +76,7 @@ describe('Cloudflare retries', () => {
         expect(queue.push).toHaveBeenCalled()
         expect(queue.length).toBe(1)
         expect(ctx.attempts).toBe(1)
-        expect(isOffline).toHaveBeenCalledTimes(2)
+        expect(connection.isOffline).toHaveBeenCalledTimes(2)
         expect(queue.__type).toBe<QueueType>(
           persistenceIsDisabled ? 'priority' : 'persisted'
         )

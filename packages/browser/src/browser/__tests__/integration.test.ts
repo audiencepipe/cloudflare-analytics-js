@@ -580,7 +580,7 @@ describe('Dispatch', () => {
     const gaSpy = jest.spyOn(googleAnalytics, 'track')
     // No need to spy on cloudflare if it's not loaded
 
-    const boo = await ajs.track('Boo!', {
+    await ajs.track('Boo!', {
       total: 25,
       userId: '👻',
     })

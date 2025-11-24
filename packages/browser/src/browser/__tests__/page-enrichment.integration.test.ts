@@ -7,7 +7,11 @@ import {
 } from '../../test-helpers/fixtures'
 
 jest.mock('unfetch')
-jest.mocked(unfetch).mockImplementation(createMockFetchImplementation())
+jest
+  .mocked(unfetch)
+  .mockImplementation(
+    createMockFetchImplementation() as unknown as typeof unfetch
+  )
 
 let ajs: Analytics
 

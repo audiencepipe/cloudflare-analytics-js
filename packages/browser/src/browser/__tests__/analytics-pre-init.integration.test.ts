@@ -13,11 +13,23 @@ jest.mock('unfetch')
 const mockFetchSettingsSuccessResponse = () => {
   jest
     .mocked(unfetch)
-    .mockImplementation(() => Factory.createSuccess({ integrations: {} }))
+    .mockImplementation(
+      () =>
+        Factory.createSuccess({ integrations: {} }) as unknown as Promise<
+          Awaited<ReturnType<typeof unfetch>>
+        >
+    )
 }
 
 const mockFetchSettingsErrorResponse = (response?: Partial<Response>) => {
-  jest.mocked(unfetch).mockImplementation(() => Factory.createError(response))
+  jest
+    .mocked(unfetch)
+    .mockImplementation(
+      (): Promise<Awaited<ReturnType<typeof unfetch>>> =>
+        Factory.createError(response) as unknown as Promise<
+          Awaited<ReturnType<typeof unfetch>>
+        >
+    )
 }
 
 const writeKey = 'foo'
@@ -31,7 +43,7 @@ describe('Pre-initialization', () => {
   const identifySpy = jest.spyOn(Analytics.prototype, 'identify')
   const onSpy = jest.spyOn(Analytics.prototype, 'on')
   const getOnSpyCalls = (event: string) =>
-    onSpy.mock.calls.filter(([arg1]) => arg1 === event)
+    onSpy.mock.calls.filter(([arg1]: any) => arg1 === event)
 
   const readySpy = jest.spyOn(Analytics.prototype, 'ready')
   const browserLoadSpy = jest.spyOn(CfEventsBrowser, 'load')

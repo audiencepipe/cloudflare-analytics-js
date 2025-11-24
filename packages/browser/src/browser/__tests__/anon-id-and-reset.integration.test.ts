@@ -11,7 +11,12 @@ const helpers = {
   mockFetchSettingsSuccessResponse: () => {
     return jest
       .mocked(unfetch)
-      .mockImplementation(() => createSuccess({ integrations: {} }))
+      .mockImplementation(
+        () =>
+          createSuccess({ integrations: {} }) as unknown as Promise<
+            Awaited<ReturnType<typeof unfetch>>
+          >
+      )
   },
   loadAnalytics() {
     return CfEventsBrowser.load({ writeKey: 'foo' })

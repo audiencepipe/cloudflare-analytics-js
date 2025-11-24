@@ -34,7 +34,7 @@ describe('Cloudflare', () => {
 
     spyMock = jest.mocked(unfetch).mockResolvedValue({
       ok: true,
-    } as Response)
+    } as unknown as Awaited<ReturnType<typeof unfetch>>)
   })
 
   function resetCookies(): void {

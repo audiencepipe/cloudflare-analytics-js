@@ -149,7 +149,7 @@ describe('Remote Loader', () => {
   })
 
   it.skip('should load from given plugin sources before loading from CDN', async () => {
-    const brazeSpy = jest.spyOn({ braze }, 'braze')
+    const brazeSpy = jest.spyOn({ braze } as any, 'braze')
     ;(brazeSpy as any).pluginName = braze.pluginName
 
     await remoteLoader(

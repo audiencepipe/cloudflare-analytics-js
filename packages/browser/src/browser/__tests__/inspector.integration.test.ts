@@ -5,7 +5,12 @@ import unfetch from 'unfetch'
 jest.mock('unfetch')
 jest
   .mocked(unfetch)
-  .mockImplementation(() => createSuccess({ integrations: {} }))
+  .mockImplementation(
+    () =>
+      createSuccess({ integrations: {} }) as unknown as Promise<
+        Awaited<ReturnType<typeof unfetch>>
+      >
+  )
 
 const writeKey = 'foo'
 
