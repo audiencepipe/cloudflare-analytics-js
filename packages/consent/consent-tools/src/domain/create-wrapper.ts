@@ -47,10 +47,10 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
     const loadWithConsent: AnyAnalytics['load'] = async (
       settings,
       options
-    ): Promise<void> => {
+    ): Promise<AnyAnalytics> => {
       // do not load anything -- cloudflare included
       if (await shouldDisableCloudflare?.()) {
-        return
+        return analytics
       }
 
       const consentRequirementDisabled =
@@ -70,11 +70,11 @@ export const createWrapper = <Analytics extends AnyAnalytics>(
         // to load Cloudflare but disable consent requirement
         if (e instanceof AbortLoadError) {
           if (e.loadCloudflareNormally === true) {
-            ogLoad.call(analytics, settings, options)
+            await ogLoad.call(analytics, settings, options)
           }
           // do not load anything, but do not log anything either
           // if someone calls ctx.abort(), they are handling the error themselves
-          return
+          return analytics
         } else {
           throw e
         }

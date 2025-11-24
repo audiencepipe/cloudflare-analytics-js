@@ -32,7 +32,7 @@ const analyticsLoadSpy: jest.MockedFn<AnyAnalytics['load']> = jest.fn()
 const addSourceMiddlewareSpy = jest.fn()
 let analyticsOnSpy: jest.MockedFn<AnyAnalytics['on']>
 const analyticsTrackSpy: jest.MockedFn<AnyAnalytics['track']> = jest.fn()
-let consoleErrorSpy: jest.SpiedFunction<typeof console['error']>
+let consoleErrorSpy: jest.SpiedFunction<(typeof console)['error']>
 
 const getAnalyticsLoadLastCall = () => {
   const [arg1, arg2] = analyticsLoadSpy.mock.lastCall!
@@ -161,7 +161,7 @@ describe(createWrapper, () => {
             shouldLoad: (ctx) => ctx.abort(args),
           })
           const result = await analytics.load(DEFAULT_LOAD_SETTINGS)
-          expect(result).toBeUndefined()
+          expect(result).toBe(analytics)
           expect(consoleErrorSpy).not.toBeCalled()
         }
       )
@@ -222,6 +222,7 @@ describe(createWrapper, () => {
       const fnCalls: string[] = []
       analyticsLoadSpy.mockImplementationOnce(() => {
         fnCalls.push('analytics.load')
+        return analytics
       })
 
       const shouldLoadMock: jest.Mock<undefined> = jest
