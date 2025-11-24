@@ -82,7 +82,7 @@ export const getBrowser = mem(
     })
 
     process.on('unhandledRejection', () => {
-      browser && browser.close()
+      browser && void browser.close()
     })
 
     return browser
