@@ -33,11 +33,6 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/${{ secrets.AWS_PROD_S3_SYNC_ROLE }}
-          aws-region: us-east-1
-
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
@@ -55,6 +50,10 @@ jobs:
         working-directory: packages/browser
         env:
           PATH_VERSION: ${{ steps.parse_version.outputs.VERSION }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: npm run release:cdn
 
       - name: Publish to NPM

@@ -9,17 +9,18 @@ const mime = require('mime')
 const logUpdate = require('log-update')
 
 const bucket =
-  process.env.NODE_ENV == 'production'
+  process.env.R2_BUCKET ||
+  (process.env.NODE_ENV == 'production'
     ? process.env.PROD_BUCKET
-    : process.env.STAGE_BUCKET
-if (!bucket) throw new Error('Missing one of PROD_BUCKET or STAGE_BUCKET')
+    : process.env.STAGE_BUCKET)
+if (!bucket) throw new Error('Missing bucket configuration')
 
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID
-if (!accessKeyId) throw new Error('Missing AWS_ACCESS_KEY_ID')
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-if (!secretAccessKey) throw new Error('Missing AWS_SECRET_ACCESS_KEY')
+const accessKeyId = process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID
+if (!accessKeyId) throw new Error('Missing Access Key ID')
+const secretAccessKey =
+  process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY
+if (!secretAccessKey) throw new Error('Missing Secret Access Key')
 const sessionToken = process.env.AWS_SESSION_TOKEN
-if (!sessionToken) throw new Error('Missing AWS_SESSION_TOKEN')
 
 const pathPrefix = process.env.PATH_PREFIX ?? 'browser/candidate'
 const pathVersion = process.env.PATH_VERSION
@@ -43,12 +44,20 @@ async function getFiles(dir) {
 }
 
 async function upload() {
-  const s3 = new S3({
+  const s3Config = {
     accessKeyId,
     secretAccessKey,
     sessionToken,
     region: 'us-east-1',
-  })
+  }
+
+  if (process.env.R2_ACCOUNT_ID) {
+    s3Config.endpoint = `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
+    s3Config.region = 'auto'
+    s3Config.signatureVersion = 'v4'
+  }
+
+  const s3 = new S3(s3Config)
 
   const files = await getFiles(path.join(process.cwd(), './dist/umd'))
   const total = files.length
