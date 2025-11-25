@@ -15,7 +15,8 @@ const bucket =
     : process.env.STAGE_BUCKET)
 if (!bucket) throw new Error('Missing bucket configuration')
 
-const accessKeyId = process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID
+const accessKeyId =
+  process.env.R2_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID
 if (!accessKeyId) throw new Error('Missing Access Key ID')
 const secretAccessKey =
   process.env.R2_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY
