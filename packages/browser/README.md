@@ -3,7 +3,6 @@
 ## Note on Bearer Tokens
 The browser version of the SDK does not support Bearer tokens for authentication. This is a security measure, as there is no secure way to store sensitive keys in a browser environment. If you absolutely require this, you should use a Cloudflare worker as server side middleware to store this.
 
-
 ## Installation via CDN
 
 To integrate the JavaScript SDK with your website, place the following code snippet in the `<head>` section of your website.
@@ -171,6 +170,33 @@ declare global {
 }
 ```
 
+
+## IP Address Enrichment Plugin
+
+By default, the library does not provide an IP address in event payloads. The Cloudflare IP enrichment plugin solves this by automatically fetching and injecting the user's IP address into all event contexts.
+
+To use this optional plugin:
+
+```ts
+import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
+import { cloudflareIPEnrichment } from '@audiencepipe/cloudflare-analytics-js-browser/dist/cjs/plugins/cloudflare-ip-enrichment'
+
+const cfevents = new CfEventsBrowser()
+
+cfevents.load({
+  cloudflarePipelineUrl: "https://yourpipelineurl.com"
+})
+
+cfevents.register(cloudflareIPEnrichment)
+```
+
+The plugin works by:
+1. Fetching the user's IP address from the Cloudflare trace endpoint (`https://cloudflare.com/cdn-cgi/trace`)
+2. Extracting the IP from the response
+3. Injecting it into the `context.ip` field of all outgoing event payloads
+4. Caching the IP after the first fetch to avoid repeated network requests
+
+The plugin will not overwrite an existing IP address if one is already present in the event context.
 ---
 
 ## Development
@@ -239,3 +265,5 @@ $ npx turbo test
 Lint all with [ESLint](https://github.com/typescript-eslint/typescript-eslint/):
 ```
 $ npx turbo lint
+```
+

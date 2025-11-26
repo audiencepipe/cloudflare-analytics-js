@@ -33,3 +33,4 @@ reports/*
 playwright-report/
 playwright/.cache/
 tmp.tsconfig.json
+.env

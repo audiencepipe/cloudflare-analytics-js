@@ -1,10 +1,12 @@
 #!/usr/bin/env ./node_modules/.bin/ts-node --script-mode --transpile-only --files
 /* eslint-disable no-undef */
 
+const path = require('path')
+require('dotenv').config()
+
 const ex = require('execa')
 const S3 = require('aws-sdk/clients/s3')
 const fs = require('fs-extra')
-const path = require('path')
 const mime = require('mime')
 const logUpdate = require('log-update')
 
@@ -60,12 +62,12 @@ async function upload() {
 
   const s3 = new S3(s3Config)
 
-  const files = await getFiles(path.join(process.cwd(), './dist/umd'))
+  const files = await getFiles(path.join(process.cwd(), '../dist/umd'))
   const total = files.length
   let progress = 0
 
   const uploads = files.map(async (f) => {
-    const filePath = path.join(process.cwd(), './dist/umd', f)
+    const filePath = path.join(process.cwd(), '../dist/umd', f)
 
     const options = {
       Bucket: bucket,
