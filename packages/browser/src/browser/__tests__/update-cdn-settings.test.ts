@@ -1,4 +1,4 @@
-import { HtEventsBrowser } from '../..'
+import { CfEventsBrowser } from '../..'
 import { setGlobalCDNUrl } from '../../lib/parse-cdn'
 import { remoteLoader } from '../../plugins/remote-loader'
 import unfetch from 'unfetch'
@@ -34,7 +34,7 @@ describe('updateCDNSettings configuration option', () => {
     ;(window as any).cfevents = undefined
   })
   it('should update the configuration options if they are passed directly', async () => {
-    await HtEventsBrowser.load(
+    await CfEventsBrowser.load(
       {
         writeKey: 'foo',
         cdnSettings,
@@ -56,7 +56,7 @@ describe('updateCDNSettings configuration option', () => {
   // By default, we no longer fetch settings from the CDN
   it.skip('should update the configuration options if they are fetched', async () => {
     mockFetchSettingsSuccessResponse(cdnSettings)
-    await HtEventsBrowser.load(
+    await CfEventsBrowser.load(
       {
         writeKey: 'foo',
       },

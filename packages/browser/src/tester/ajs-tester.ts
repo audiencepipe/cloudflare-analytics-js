@@ -107,7 +107,7 @@ export async function tester(
     url || `file://${process.cwd()}/src/tester/__fixtures__/index.html`
   )
   await page.evaluate(`
-    window.AnalyticsNext.HtEventsBrowser.load({
+    window.AnalyticsNext.CfEventsBrowser.load({
       writeKey: '${_writeKey}',
     }).then(loaded => {
       window.cfevents = loaded[0]

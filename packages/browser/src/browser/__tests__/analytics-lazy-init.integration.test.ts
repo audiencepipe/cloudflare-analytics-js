@@ -1,7 +1,7 @@
 import { sleep } from '@ht-sdks/events-sdk-js-core'
 import { getBufferedPageCtxFixture } from '../../test-helpers/fixtures'
 import unfetch from 'unfetch'
-import { HtEventsBrowser } from '..'
+import { CfEventsBrowser } from '..'
 import { Analytics } from '../../core/analytics'
 import { createSuccess } from '../../test-helpers/factories'
 
@@ -27,7 +27,7 @@ describe('Lazy initialization', () => {
   })
 
   it('Should be able to delay initialization ', async () => {
-    const analytics = new HtEventsBrowser()
+    const analytics = new CfEventsBrowser()
     const track = analytics.track('foo')
     await sleep(100)
     expect(trackSpy).not.toBeCalled()
@@ -37,13 +37,13 @@ describe('Lazy initialization', () => {
   })
 
   it('.load method return an analytics instance', async () => {
-    const analytics = new HtEventsBrowser().load({ writeKey: 'foo' })
-    expect(analytics instanceof HtEventsBrowser).toBeTruthy()
+    const analytics = new CfEventsBrowser().load({ writeKey: 'foo' })
+    expect(analytics instanceof CfEventsBrowser).toBeTruthy()
   })
 
   // Load already defaults to NOT fetching external settings from CDN
   it.skip('should ignore subsequent .load calls', async () => {
-    const analytics = new HtEventsBrowser()
+    const analytics = new CfEventsBrowser()
     await analytics.load({ writeKey: 'my-write-key' })
     await analytics.load({ writeKey: 'def' })
     expect(fetched).toBeCalledTimes(1)

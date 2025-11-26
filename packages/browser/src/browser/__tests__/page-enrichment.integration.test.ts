@@ -1,5 +1,5 @@
 import unfetch from 'unfetch'
-import { Analytics, HtEventsBrowser } from '../..'
+import { Analytics, CfEventsBrowser } from '../..'
 import { PageContext } from '../../core/page'
 import {
   cdnSettingsMinimal,
@@ -16,7 +16,7 @@ jest
 let ajs: Analytics
 
 beforeEach(async () => {
-  const [analytics] = await HtEventsBrowser.load({
+  const [analytics] = await CfEventsBrowser.load({
     writeKey: 'abc_123',
     cdnSettings: { ...cdnSettingsMinimal },
   })

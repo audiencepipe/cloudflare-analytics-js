@@ -1,5 +1,9 @@
 # Events Javascript SDK
 
+## Note on Bearer Tokens
+The browser version of the SDK does not support Bearer tokens for authentication. This is a security measure, as there is no secure way to store sensitive keys in a browser environment. If you absolutely require this, you should use a Cloudflare worker as server side middleware to store this.
+
+
 ## Installation via CDN
 
 To integrate the JavaScript SDK with your website, place the following code snippet in the `<head>` section of your website.
@@ -13,6 +17,10 @@ e.page()}}();
 ```
 
 `window.cfevents.track(...)` will then be available for use.
+
+
+
+**Important Disclaimer:** The CDN version of this script is not guaranteed to be live forever as we don't provide a commercial service to host this. This script may be useful for prototyping; however, for production use, we highly recommend using the NPM script and/or running ```npm run build``` to build the script the script and host it on your own CDN if you're working in a codebase that doesn't use NPM.
 
 ### Alternative installation using NPM
 
@@ -42,6 +50,8 @@ document.body?.addEventListener('click', () => {
  cfevents.track('document body clicked!')
 })
 ```
+
+**Note on Bearer Tokens:** The browser version of the SDK does not support Bearer tokens for authentication. This is a security measure, as there is no secure way to store sensitive keys in a browser environment.
 
 ## Lazy / Delayed Loading
 You can load a buffered version of cfevents that requires `.load` to be explicitly called before initiating any network activity. This can be useful if you want to wait for a user to consent before fetching any tracking destinations or sending buffered events to cloudflare.

@@ -53,7 +53,7 @@ document.addEventListener('securitypolicyviolation', (e) => {
   }
   ajsIdentifiedCSP = true
   sendErrorMetrics(['type:csp'])
-  console.warn('Your CSP policy is missing permissions required for HtEvents')
+  console.warn('Your CSP policy is missing permissions required for CfEvents')
 })
 
 /**
