@@ -1,6 +1,6 @@
 {
   "name": "@audiencepipe/cloudflare-analytics-js-browser",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/audiencepipe/cloudflare-analytics-js-browser.git",

@@ -44,7 +44,7 @@ import { CfEventsBrowser } from '@audiencepipe/cloudflare-analytics-js-browser'
 
 const cfevents = CfEventsBrowser.load({ cloudflarePipelineUrl:"https://yourpipelineurl.com" })
 
-cfevents.identify('hello world')
+cfevents.identify('user_1234')
 
 document.body?.addEventListener('click', () => {
  cfevents.track('document body clicked!')
