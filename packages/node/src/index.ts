@@ -1,4 +1,4 @@
-export { HtEvents, HtEvents as CfEvents } from './app/analytics-node'
+export { CfEvents as CfEvents } from './app/analytics-node'
 export { Context } from './app/context'
 export {
   HTTPClient,
@@ -19,11 +19,8 @@ export type {
   GroupParams,
   PageParams,
 } from './app/types'
-export type {
-  HtEventsSettings,
-  HtEventsSettings as CfEventsSettings,
-} from './app/settings'
+export type { CfEventsSettings } from './app/settings'
 
 // export Analytics as both a named export and a default export (for backwards-compat. reasons)
-import { HtEvents } from './app/analytics-node'
-export default HtEvents
+import { CfEvents } from './app/analytics-node'
+export default CfEvents

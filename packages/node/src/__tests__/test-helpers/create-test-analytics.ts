@@ -1,16 +1,16 @@
-import { HtEvents } from '../../app/analytics-node'
-import { HtEventsSettings } from '../../app/settings'
+import { CfEvents } from '../../app/analytics-node'
+import { CfEventsSettings } from '../../app/settings'
 import { FetchHTTPClient, HTTPFetchFn } from '../../lib/http-client'
 import { createError, createSuccess } from './factories'
 
 export const createTestAnalytics = (
-  settings: Partial<HtEventsSettings> = {},
+  settings: Partial<CfEventsSettings> = {},
   {
     withError,
     useRealHTTPClient,
   }: TestFetchClientOptions & { useRealHTTPClient?: boolean } = {}
 ) => {
-  return new HtEvents({
+  return new CfEvents({
     writeKey: 'foo',
     cloudflarePipelineUrl: 'https://test-pipeline.com',
     flushInterval: 100,

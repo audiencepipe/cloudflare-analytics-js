@@ -1,5 +1,5 @@
 import { CoreAnalytics, bindAll, pTimeout } from '@ht-sdks/events-sdk-js-core'
-import { HtEventsSettings, validateSettings } from './settings'
+import { CfEventsSettings, validateSettings } from './settings'
 import { version } from '../generated/version'
 import { createConfiguredNodePlugin } from '../plugins/cloudflare'
 import { NodeEventFactory } from './event-factory'
@@ -18,7 +18,7 @@ import { Context } from './context'
 import { NodeEventQueue } from './event-queue'
 import { FetchHTTPClient } from '../lib/http-client'
 
-export class HtEvents extends NodeEmitter implements CoreAnalytics {
+export class CfEvents extends NodeEmitter implements CoreAnalytics {
   private readonly _eventFactory: NodeEventFactory
   private _isClosed = false
   private _pendingEvents = 0
@@ -31,7 +31,7 @@ export class HtEvents extends NodeEmitter implements CoreAnalytics {
 
   ready: Promise<void>
 
-  constructor(settings: HtEventsSettings) {
+  constructor(settings: CfEventsSettings) {
     super()
     validateSettings(settings)
 

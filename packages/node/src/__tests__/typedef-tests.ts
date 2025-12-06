@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import axios from 'axios'
 import {
-  HtEvents,
+  CfEvents,
   Context,
   Plugin,
   UserTraits,
@@ -18,7 +18,7 @@ import {
  */
 export default {
   'analytics.VERSION should be readonly': () => {
-    const analytics = new HtEvents({
+    const analytics = new CfEvents({
       writeKey: 'abc',
       cloudflarePipelineUrl: 'noop',
     })
@@ -34,19 +34,19 @@ export default {
       makeRequest = () => Promise.resolve({} as Response)
     }
 
-    new HtEvents({
+    new CfEvents({
       writeKey: 'foo',
       cloudflarePipelineUrl: 'noop',
       httpClient: new CustomClient(),
     })
 
-    new HtEvents({
+    new CfEvents({
       writeKey: 'foo',
       cloudflarePipelineUrl: 'noop',
       httpClient: new FetchHTTPClient(globalThis.fetch),
     })
 
-    new HtEvents({
+    new CfEvents({
       writeKey: 'foo',
       cloudflarePipelineUrl: 'noop',
       httpClient: new FetchHTTPClient(),
@@ -55,7 +55,7 @@ export default {
 
   'track/id/pg/screen/grp calls should require either userId or anonymousId':
     () => {
-      const analytics = new HtEvents({
+      const analytics = new CfEvents({
         writeKey: 'abc',
         cloudflarePipelineUrl: 'noop',
       })
@@ -70,7 +70,7 @@ export default {
     },
 
   'alias does not need a userId': () => {
-    const analytics = new HtEvents({
+    const analytics = new CfEvents({
       writeKey: 'abc',
       cloudflarePipelineUrl: 'noop',
     })
@@ -105,12 +105,12 @@ export default {
   'HTTPFetchFn should be compatible with standard fetch and node-fetch interface, as well as functions':
     () => {
       const fetch: HTTPFetchFn = require('node-fetch')
-      new HtEvents({
+      new CfEvents({
         writeKey: 'foo',
         cloudflarePipelineUrl: 'noop',
         httpClient: fetch,
       })
-      new HtEvents({
+      new CfEvents({
         writeKey: 'foo',
         cloudflarePipelineUrl: 'noop',
         httpClient: globalThis.fetch,
@@ -120,7 +120,7 @@ export default {
   'HTTPFetchFn options should be the expected type': () => {
     type BadFetch = (url: string, requestInit: { _bad_object?: string }) => any
 
-    new HtEvents({
+    new CfEvents({
       writeKey: 'foo',
       cloudflarePipelineUrl: 'noop',
       // @ts-expect-error

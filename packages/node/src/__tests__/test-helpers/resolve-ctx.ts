@@ -1,9 +1,9 @@
-import type { HtEvents } from '../../app/analytics-node'
+import type { CfEvents } from '../../app/analytics-node'
 import type { Context } from '../../app/context'
 
 /** Tester helper that resolves context from emitter event */
 export const resolveCtx = (
-  analytics: HtEvents,
+  analytics: CfEvents,
   eventName: 'track' | 'identify' | 'page' | 'screen' | 'group' | 'alias',
   { log = false } = {}
 ): Promise<Context> => {

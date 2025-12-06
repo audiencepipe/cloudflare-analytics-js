@@ -1,6 +1,6 @@
 import { TestFetchClient } from './test-helpers/create-test-analytics'
 import { performance as perf } from 'perf_hooks'
-import { HtEvents } from '../app/analytics-node'
+import { CfEvents } from '../app/analytics-node'
 import { sleep } from './test-helpers/sleep'
 import { Plugin, HightouchEvent } from '../app/types'
 import { Context } from '../app/context'
@@ -16,11 +16,11 @@ const testPlugin: Plugin = {
 let testClient: TestFetchClient
 
 describe('Ability for users to exit without losing events', () => {
-  let ajs!: HtEvents
+  let ajs!: CfEvents
   testClient = new TestFetchClient()
   const makeReqSpy = jest.spyOn(testClient, 'makeRequest')
   beforeEach(async () => {
-    ajs = new HtEvents({
+    ajs = new CfEvents({
       writeKey: 'abc123',
       cloudflarePipelineUrl: 'http://foo.com',
       maxEventsInBatch: 1,
@@ -87,7 +87,7 @@ describe('Ability for users to exit without losing events', () => {
   describe('.closeAndFlush()', () => {
     test('default timeout should be related to flush interval', () => {
       const flushInterval = 500
-      ajs = new HtEvents({
+      ajs = new CfEvents({
         writeKey: 'abc123',
         cloudflarePipelineUrl: 'http://foo.com',
         flushInterval,
@@ -189,7 +189,7 @@ describe('Ability for users to exit without losing events', () => {
     })
 
     test('should flush immediately if close is called and there are events in the hightouch.io plugin, but no more are expected', async () => {
-      const analytics = new HtEvents({
+      const analytics = new CfEvents({
         writeKey: 'foo',
         cloudflarePipelineUrl: 'http://foo.com',
         flushInterval: 10000,
@@ -221,7 +221,7 @@ describe('Ability for users to exit without losing events', () => {
           return ctx
         },
       }
-      const analytics = new HtEvents({
+      const analytics = new CfEvents({
         writeKey: 'foo',
         cloudflarePipelineUrl: 'http://foo.com',
         flushInterval: 10000,

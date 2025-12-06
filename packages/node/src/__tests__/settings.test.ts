@@ -1,5 +1,5 @@
 import { validateSettings } from '../app/settings'
-import { HtEvents } from '../app/analytics-node'
+import { CfEvents } from '../app/analytics-node'
 
 describe('validateSettings', () => {
   describe('cloudflarePipelineUrl validation', () => {
@@ -33,7 +33,7 @@ describe('validateSettings', () => {
       // Even though 'host' is provided, it should still throw because cloudflarePipelineUrl is required
       expect(
         () =>
-          new HtEvents({
+          new CfEvents({
             cloudflarePipelineUrl: undefined as any,
             host: 'https://fallback-host.com',
             writeKey: 'test-key',
@@ -44,7 +44,7 @@ describe('validateSettings', () => {
     it('should fail fast when cloudflarePipelineUrl is empty string, even with host provided', () => {
       expect(
         () =>
-          new HtEvents({
+          new CfEvents({
             cloudflarePipelineUrl: '',
             host: 'https://fallback-host.com',
             writeKey: 'test-key',
@@ -55,7 +55,7 @@ describe('validateSettings', () => {
     it('should succeed when cloudflarePipelineUrl is provided (host is ignored)', () => {
       expect(
         () =>
-          new HtEvents({
+          new CfEvents({
             cloudflarePipelineUrl: 'https://primary-pipeline.com',
             host: 'https://fallback-host.com',
             writeKey: 'test-key',

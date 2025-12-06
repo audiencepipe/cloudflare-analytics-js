@@ -18,9 +18,9 @@ interface PendingItem {
 }
 
 export interface PublisherProps {
-  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in HtEventsSettings instead. */
+  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in CfEventsSettings instead. */
   host?: string
-  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in HtEventsSettings instead. */
+  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in CfEventsSettings instead. */
   path?: string
   cloudflarePipelineBearerToken?: string
   flushInterval: number

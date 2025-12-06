@@ -28,7 +28,7 @@ import { CfEvents } from '@audiencepipe/cloudflare-analytics-node'
 // or, if you use require:
 const { CfEvents } = require('@audiencepipe/cloudflare-analytics-node')
 
-// Note: You can also use HtEvents instead of CfEvents - they are the same
+// Note: You can also use CfEvents instead of CfEvents - they are the same
 
 // instantiation
 const cfevents = new CfEvents({ cloudflarePipelineUrl: '<MY_PIPELINE_URL>' })
@@ -54,13 +54,13 @@ app.post('/cart', (req, res) => {
 
 ## Settings & Configuration
 
-You can also see the complete list of settings in the [HtEventsSettings interface](src/app/settings.ts).
+You can also see the complete list of settings in the [CfEventsSettings interface](src/app/settings.ts).
 
 ### `cloudflarePipelineUrl`
 **Required**. The URL of your Cloudflare Pipeline. This setting is mandatory and takes precedence over the `host` setting.
 
 ```ts
-const htevents = new HtEvents({
+const CfEvents = new CfEvents({
   cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>'
 })
 ```
@@ -69,7 +69,7 @@ const htevents = new HtEvents({
 If your Cloudflare Pipeline requires an Access Key (Bearer token), you can provide it via `cloudflarePipelineBearerToken`. This will override the default Basic authentication.
 
 ```ts
-const htevents = new HtEvents({
+const CfEvents = new CfEvents({
   cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>',
   cloudflarePipelineBearerToken: '<MY_ACCESS_KEY>'
 })

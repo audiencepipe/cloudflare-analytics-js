@@ -1,5 +1,5 @@
 import { version } from '../generated/version'
-import { HtEvents } from '..'
+import { CfEvents } from '..'
 import { resolveCtx } from './test-helpers/resolve-ctx'
 import { createTestAnalytics } from './test-helpers/create-test-analytics'
 import { isValidDate } from './test-helpers/is-valid-date'
@@ -33,7 +33,7 @@ beforeEach(() => {
 
 describe('Method Smoke Tests', () => {
   let scope: nock.Scope
-  let ajs: HtEvents
+  let ajs: CfEvents
   beforeEach(async () => {
     ajs = createTestAnalytics({}, { useRealHTTPClient: true })
   })

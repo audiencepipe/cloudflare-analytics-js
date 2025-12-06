@@ -1,7 +1,7 @@
 import { ValidationError } from '@ht-sdks/events-sdk-js-core'
 import { HTTPClient, HTTPFetchFn } from '../lib/http-client'
 
-export interface HtEventsSettings {
+export interface CfEventsSettings {
   /**
    * @deprecated Use cloudflarePipelineBearerToken instead. This setting is no longer used for authentication.
    * Key that corresponds to your Hightouch.io project
@@ -53,7 +53,7 @@ export interface HtEventsSettings {
   httpClient?: HTTPFetchFn | HTTPClient
 }
 
-export const validateSettings = (settings: HtEventsSettings) => {
+export const validateSettings = (settings: CfEventsSettings) => {
   if (!settings.cloudflarePipelineUrl) {
     throw new ValidationError(
       'cloudflarePipelineUrl',
