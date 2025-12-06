@@ -6,10 +6,10 @@ import { CfEvents } from './src'
 const cfevents = new CfEvents({
   // This is a real ingest endpoint; replace the token with something bogus.
   cloudflarePipelineUrl:
-    'https://d8ddfa11872f4b20a62fef626395d25c.ingest.cloudflare.com',
+    'https://webhook.site/27c55b0c-eb34-4bb4-b51a-2aa3f4d3eab9',
   cloudflarePipelineBearerToken: 'this-is-a-bogus-token',
   flushInterval: 500,
-  maxEventsInBatch: 1,
+  maxEventsInBatch: 5,
 })
 
 // -------------------------------------------------------------------

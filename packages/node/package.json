@@ -21,6 +21,7 @@
   },
   "scripts": {
     "test": "jest",
+    "manual-test": "node ../../node_modules/ts-node/dist/bin.js manual-test.ts",
     "lint": "concurrently 'eslint .' 'tsc --noEmit'",
     "build": "rm -rf dist && concurrently 'npm:build:*'",
     "build:cjs": "tsc -p tsconfig.build.json --outDir ./dist/cjs --module commonjs",
@@ -40,6 +41,7 @@
     "@internal/config": "0.0.0",
     "@types/node": "^16",
     "axios": "^1.4.0",
-    "debug": "^4.3.4"
+    "debug": "^4.3.4",
+    "ts-node": "^10.9.2"
   }
 }
