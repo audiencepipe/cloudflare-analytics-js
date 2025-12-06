@@ -68,6 +68,20 @@ it('supports multiple events in a batch', async () => {
   validateFetcherInputs(...contexts)
 })
 
+it('sets the Authorization header when a bearer token is configured', async () => {
+  const { plugin } = createTestNodePlugin({
+    cloudflarePipelineBearerToken: 'test-token',
+  })
+
+  // Trigger a track call
+  const context = new Context(eventFactory.track('event', {}, { userId: 'u1' }))
+  await plugin.track(context)
+
+  // Verify the fetcher was called with the correct header
+  const [request] = fetcher.mock.lastCall!
+  expect(request.headers).toHaveProperty('Authorization', 'Bearer test-token')
+})
+
 it('supports waiting a max amount of time before sending', async () => {
   const { plugin: hightouchPlugin } = createTestNodePlugin({
     maxRetries: 3,

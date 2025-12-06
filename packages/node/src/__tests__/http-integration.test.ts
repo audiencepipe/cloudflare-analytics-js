@@ -88,6 +88,28 @@ describe('Method Smoke Tests', () => {
       `)
       expect(scope.isDone()).toBeTruthy()
     })
+
+    test(`A request should include the Authorization header when configured`, async () => {
+      let headers: any
+      // Capture the request headers that hit the "network"
+      scope = nock('https://test-pipeline.com')
+        .post('/')
+        .reply(201, function () {
+          headers = this.req.headers
+        })
+
+      const ajsWithToken = createTestAnalytics(
+        { cloudflarePipelineBearerToken: 'my-token' },
+        { useRealHTTPClient: true }
+      )
+
+      ajsWithToken.track({ event: 'test', userId: 'user' })
+      await resolveCtx(ajsWithToken, 'track')
+
+      // Verify header presence and format (nock lowercases keys)
+      expect(headers['authorization']).toEqual(['Bearer my-token'])
+      expect(scope.isDone()).toBeTruthy()
+    })
   })
 
   describe('Request Bodies', () => {
