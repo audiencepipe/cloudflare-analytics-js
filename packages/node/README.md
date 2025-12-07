@@ -176,7 +176,7 @@ Add the binding to your `wrangler.json` (or `wrangler.toml`):
   "pipelines": [
     {
       "binding": "MY_PIPELINE",
-      "pipeline": "my-pipeline-name"
+      "pipeline": "<STREAM_ID>"
     }
   ]
 }
@@ -186,7 +186,7 @@ Add the binding to your `wrangler.json` (or `wrangler.toml`):
 ```toml
 [[pipelines]]
 binding = "MY_PIPELINE"
-pipeline = "my-pipeline-name"
+pipeline = "<STREAM_ID>"
 ```
 
 #### 2. Initialize in your Worker
@@ -212,7 +212,7 @@ export default {
     // Tip: Use ctx.waitUntil to flush events after the response is sent, 
     // ensuring low latency for the user.
     ctx.waitUntil(new Promise((resolve) => 
-      cfevents.track({ event: 'Page View', userId: '123' }, resolve)
+      cfevents.track({ event: 'Test Event', userId: '123' }, resolve)
     ));
 
     return new Response('Hello World!');
