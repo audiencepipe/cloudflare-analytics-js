@@ -34,7 +34,25 @@ type DefinedPluginFields =
 
 type HightouchNodePlugin = Plugin & Required<Pick<Plugin, DefinedPluginFields>>
 
-export type ConfigureNodePluginProps = PublisherProps
+import { HttpTransport, BindingTransport, PipelineTransport } from './transports'
+import { HTTPClient } from '../../lib/http-client'
+
+export interface ConfigureNodePluginProps {
+  // Common
+  flushInterval: number
+  maxEventsInBatch: number
+  maxRetries: number
+  writeKey: string
+  disable?: boolean
+  
+  // Transport specific
+  host?: string
+  path?: string // deprecated but kept for compat
+  cloudflarePipelineBearerToken?: string
+  httpClient?: HTTPClient
+  httpRequestTimeout?: number
+  cloudflarePipelineBinding?: { send: (events: any[]) => Promise<void> }
+}
 
 export function createNodePlugin(publisher: Publisher): HightouchNodePlugin {
   function action(ctx: Context): Promise<Context> {
@@ -61,7 +79,47 @@ export const createConfiguredNodePlugin = (
   props: ConfigureNodePluginProps,
   emitter: NodeEmitter
 ) => {
-  const publisher = new Publisher(props, emitter)
+  let transport: PipelineTransport
+
+  if (props.cloudflarePipelineBinding) {
+    if (props.host) {
+      console.warn(
+        '[Cloudflare Analytics] Warning: Both "cloudflarePipelineBinding" and "cloudflarePipelineUrl" were provided. The SDK will use the Binding and ignore the URL.'
+      )
+    }
+
+    const runtime = detectRuntime()
+    if (runtime !== 'cloudflare-worker') {
+      console.warn(
+        `[Cloudflare Analytics] Warning: "cloudflarePipelineBinding" was provided, but the current runtime detected is "${runtime}". This configuration is only supported in Cloudflare Workers.`
+      )
+    }
+    transport = new BindingTransport({
+      binding: props.cloudflarePipelineBinding,
+    })
+  } else {
+    // If no binding, we assume HTTP. Validation upstream ensures we have what we need.
+    // We expect httpClient to be provided by the caller (Analytics constructor).
+    if (!props.httpClient) {
+        throw new Error('httpClient is required for HTTP transport')
+    }
+    transport = new HttpTransport({
+      host: props.host,
+      path: props.path,
+      cloudflarePipelineBearerToken: props.cloudflarePipelineBearerToken,
+      httpRequestTimeout: props.httpRequestTimeout,
+      httpClient: props.httpClient,
+      emitter,
+    })
+  }
+
+  const publisher = new Publisher(
+    {
+      ...props,
+      transport,
+    },
+    emitter
+  )
   return {
     publisher: publisher,
     plugin: createNodePlugin(publisher),

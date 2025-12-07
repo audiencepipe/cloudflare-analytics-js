@@ -18,9 +18,13 @@ export interface CfEventsSettings {
    */
   path?: string
   /**
-   * The Cloudflare Pipeline URL. If provided, this will take precedence over the host option.
+   * The Cloudflare Pipeline URL. Method of delivery if Binding is not provided.
    */
-  cloudflarePipelineUrl: string
+  cloudflarePipelineUrl?: string
+  /**
+   * The Cloudflare Pipeline Binding. If provided, this will take precedence over the URL option.
+   */
+  cloudflarePipelineBinding?: { send: (events: any[]) => Promise<void> }
   /**
    * The Cloudflare Pipeline Access Key. If provided, this will be used as a Bearer token in the Authorization header.
    */
@@ -54,10 +58,10 @@ export interface CfEventsSettings {
 }
 
 export const validateSettings = (settings: CfEventsSettings) => {
-  if (!settings.cloudflarePipelineUrl) {
+  if (!settings.cloudflarePipelineUrl && !settings.cloudflarePipelineBinding) {
     throw new ValidationError(
       'cloudflarePipelineUrl',
-      'cloudflarePipelineUrl is missing.'
+      'cloudflarePipelineUrl or cloudflarePipelineBinding is required.'
     )
   }
 }

@@ -45,8 +45,9 @@ export class CfEvents extends NodeEmitter implements CoreAnalytics {
     const { plugin, publisher } = createConfiguredNodePlugin(
       {
         writeKey: '', // Deprecated: no longer used for authentication
-        host: settings.cloudflarePipelineUrl,
+        host: settings.cloudflarePipelineUrl, // If binding is present, this might be undefined, which is fine
         cloudflarePipelineBearerToken: settings.cloudflarePipelineBearerToken,
+        cloudflarePipelineBinding: settings.cloudflarePipelineBinding,
         path: settings.path, // Deprecated: ignored
         maxRetries: settings.maxRetries ?? 3,
         maxEventsInBatch: settings.maxEventsInBatch ?? 15,

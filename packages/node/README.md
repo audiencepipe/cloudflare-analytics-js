@@ -56,8 +56,10 @@ app.post('/cart', (req, res) => {
 
 You can also see the complete list of settings in the [CfEventsSettings interface](src/app/settings.ts).
 
+
+
 ### `cloudflarePipelineUrl`
-**Required**. The URL of your Cloudflare Pipeline. This setting is mandatory and takes precedence over the `host` setting.
+**Required** (unless `cloudflarePipelineBinding` is provided). The URL of your Cloudflare Pipeline. This setting is mandatory if you are not using a Binding.
 
 ```ts
 const CfEvents = new CfEvents({
@@ -72,6 +74,15 @@ If your Cloudflare Pipeline requires an Access Key (Bearer token), you can provi
 const CfEvents = new CfEvents({
   cloudflarePipelineUrl: 'https://<MY_PIPELINE_URL>',
   cloudflarePipelineBearerToken: '<MY_ACCESS_KEY>'
+})
+```
+
+### `cloudflarePipelineBinding`
+**Optional (Cloudflare Workers Only)**. The Cloudflare Pipeline Binding object. If provided, this takes precedence over `cloudflarePipelineUrl`.
+
+```ts
+const cfevents = new CfEvents({
+  cloudflarePipelineBinding: env.MY_PIPELINE
 })
 ```
 
@@ -153,8 +164,37 @@ export default async (req: NextRequest) => {
 ```
 
 ### Usage in Cloudflare Workers
+
+When running in Cloudflare Workers, we strongly recommend using [Cloudflare Pipeline Bindings](https://developers.cloudflare.com/pipelines/streams/writing-to-streams/) instead of HTTP. This is more secure (no need to manage secrets or URLs) and performant.
+
+#### 1. Configure the Binding
+Add the binding to your `wrangler.json` (or `wrangler.toml`):
+
+**wrangler.json**
+```json
+{
+  "pipelines": [
+    {
+      "binding": "MY_PIPELINE",
+      "pipeline": "my-pipeline-name"
+    }
+  ]
+}
+```
+
+**wrangler.toml**
+```toml
+[[pipelines]]
+binding = "MY_PIPELINE"
+pipeline = "my-pipeline-name"
+```
+
+#### 2. Initialize in your Worker
+
+Pass the binding directly to the `CfEvents` constructor via `cloudflarePipelineBinding`. You do **not** need to provide `cloudflarePipelineUrl` when using a binding.
+
 ```ts
-import { CfEvents, Context } from '@audiencepipe/cloudflare-analytics-node';
+import { CfEvents } from '@audiencepipe/cloudflare-analytics-node';
 
 export default {
   async fetch(
@@ -163,19 +203,21 @@ export default {
     ctx: ExecutionContext
   ): Promise<Response> {
     const cfevents = new CfEvents({
-      maxEventsInBatch: 1,
-      cloudflarePipelineUrl: '<MY_PIPELINE_URL>',
+      // Pass the binding directly from the environment
+      cloudflarePipelineBinding: env.MY_PIPELINE,
+      // Optional: limit batch size for serverless
+      maxEventsInBatch: 1, 
     }).on('error', console.error);
 
-    await new Promise((resolve, reject) =>
-      cfevents.track({ ... }, resolve)
-    );
+    // Tip: Use ctx.waitUntil to flush events after the response is sent, 
+    // ensuring low latency for the user.
+    ctx.waitUntil(new Promise((resolve) => 
+      cfevents.track({ event: 'Page View', userId: '123' }, resolve)
+    ));
 
-    ...
-    return new Response(...)
+    return new Response('Hello World!');
   },
 };
-
 ```
 
 

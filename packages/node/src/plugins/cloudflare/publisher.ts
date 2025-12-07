@@ -1,10 +1,9 @@
 import { backoff } from '@ht-sdks/events-sdk-js-core'
 import type { Context } from '../../app/context'
-import { tryCreateFormattedUrl } from '../../lib/create-url'
 import { extractPromiseParts } from '../../lib/extract-promise-parts'
 import { ContextBatch } from './context-batch'
 import { NodeEmitter } from '../../app/emitter'
-import { HTTPClient, HTTPClientRequest } from '../../lib/http-client'
+import { PipelineTransport } from './transports'
 
 function sleep(timeoutInMs: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, timeoutInMs))
@@ -18,10 +17,6 @@ interface PendingItem {
 }
 
 export interface PublisherProps {
-  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in CfEventsSettings instead. */
-  host?: string
-  /** @deprecated This setting is ignored. Use cloudflarePipelineUrl in CfEventsSettings instead. */
-  path?: string
   cloudflarePipelineBearerToken?: string
   flushInterval: number
   maxEventsInBatch: number
@@ -30,7 +25,7 @@ export interface PublisherProps {
   writeKey: string
   httpRequestTimeout?: number
   disable?: boolean
-  httpClient: HTTPClient
+  transport: PipelineTransport
 }
 
 /**
@@ -43,24 +38,18 @@ export class Publisher {
   private _flushInterval: number
   private _maxEventsInBatch: number
   private _maxRetries: number
-  private _auth: string
-  private _url: string
   private _closeAndFlushPendingItemsCount?: number
-  private _httpRequestTimeout: number
   private _emitter: NodeEmitter
   private _disable: boolean
-  private _httpClient: HTTPClient
+  private _transport: PipelineTransport
+
   constructor(
     {
-      host,
-      path,
       maxRetries,
       maxEventsInBatch,
       flushInterval,
-      httpRequestTimeout,
-      httpClient,
       disable,
-      cloudflarePipelineBearerToken,
+      transport,
     }: PublisherProps,
     emitter: NodeEmitter
   ) {
@@ -68,17 +57,8 @@ export class Publisher {
     this._maxRetries = maxRetries
     this._maxEventsInBatch = Math.max(maxEventsInBatch, 1)
     this._flushInterval = flushInterval
-    // Only use Bearer token authentication if provided, otherwise no auth
-    this._auth = cloudflarePipelineBearerToken
-      ? `Bearer ${cloudflarePipelineBearerToken}`
-      : ''
-    this._url = tryCreateFormattedUrl(
-      host ?? 'https://us-east-1.cloudflare-events.com',
-      path
-    )
-    this._httpRequestTimeout = httpRequestTimeout ?? 10000
     this._disable = Boolean(disable)
-    this._httpClient = httpClient
+    this._transport = transport
   }
 
   private createBatch(): ContextBatch {
@@ -199,62 +179,21 @@ export class Publisher {
       currentAttempt++
 
       let failureReason: unknown
-      try {
-        if (this._disable) {
-          return batch.resolveEvents()
-        }
 
-        const headers: Record<string, string> = {
-          'Content-Type': 'application/json',
-          'User-Agent': 'events-sdk-js-node/latest',
-        }
+      if (this._disable) {
+        return batch.resolveEvents()
+      }
 
-        // Only add Authorization header if Bearer token is provided
-        if (this._auth) {
-          headers.Authorization = this._auth
-        }
+      const result = await this._transport.send(events)
 
-        const request: HTTPClientRequest = {
-          url: this._url,
-          method: 'POST',
-          headers,
-          data: events,
-          httpRequestTimeout: this._httpRequestTimeout,
-        }
-
-        this._emitter.emit('http_request', {
-          body: request.data,
-          method: request.method,
-          url: request.url,
-          headers: request.headers,
-        })
-
-        const response = await this._httpClient.makeRequest(request)
-
-        if (response.status >= 200 && response.status < 300) {
-          // Successfully sent events, so exit!
-          batch.resolveEvents()
-          return
-        } else if (
-          response.status === 400 ||
-          response.status === 401 ||
-          response.status === 403
-        ) {
-          // Request either malformed or size exceeded - don't retry.
-          resolveFailedBatch(
-            batch,
-            new Error(`[${response.status}] ${response.statusText}`)
-          )
-          return
-        } else {
-          // Treat other errors as transient and retry.
-          failureReason = new Error(
-            `[${response.status}] ${response.statusText}`
-          )
-        }
-      } catch (err) {
-        // Network errors get thrown, retry them.
-        failureReason = err
+      if (result.status === 'success') {
+        batch.resolveEvents()
+        return
+      } else if (result.status === 'fail') {
+        resolveFailedBatch(batch, result.error)
+        return
+      } else {
+        failureReason = result.error
       }
 
       // Final attempt failed, update context and resolve events.
