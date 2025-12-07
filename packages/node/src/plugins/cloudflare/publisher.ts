@@ -2,7 +2,6 @@ import { backoff } from '@ht-sdks/events-sdk-js-core'
 import type { Context } from '../../app/context'
 import { extractPromiseParts } from '../../lib/extract-promise-parts'
 import { ContextBatch } from './context-batch'
-import { NodeEmitter } from '../../app/emitter'
 import { PipelineTransport } from './transports'
 
 function sleep(timeoutInMs: number): Promise<void> {
@@ -39,21 +38,16 @@ export class Publisher {
   private _maxEventsInBatch: number
   private _maxRetries: number
   private _closeAndFlushPendingItemsCount?: number
-  private _emitter: NodeEmitter
   private _disable: boolean
   private _transport: PipelineTransport
 
-  constructor(
-    {
-      maxRetries,
-      maxEventsInBatch,
-      flushInterval,
-      disable,
-      transport,
-    }: PublisherProps,
-    emitter: NodeEmitter
-  ) {
-    this._emitter = emitter
+  constructor({
+    maxRetries,
+    maxEventsInBatch,
+    flushInterval,
+    disable,
+    transport,
+  }: PublisherProps) {
     this._maxRetries = maxRetries
     this._maxEventsInBatch = Math.max(maxEventsInBatch, 1)
     this._flushInterval = flushInterval

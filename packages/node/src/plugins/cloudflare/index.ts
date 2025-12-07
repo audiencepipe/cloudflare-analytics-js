@@ -1,4 +1,4 @@
-import { Publisher, PublisherProps } from './publisher'
+import { Publisher } from './publisher'
 import { version } from '../../generated/version'
 import { detectRuntime } from '../../lib/env'
 import { Plugin } from '../../app/types'
@@ -34,7 +34,11 @@ type DefinedPluginFields =
 
 type HightouchNodePlugin = Plugin & Required<Pick<Plugin, DefinedPluginFields>>
 
-import { HttpTransport, BindingTransport, PipelineTransport } from './transports'
+import {
+  HttpTransport,
+  BindingTransport,
+  PipelineTransport,
+} from './transports'
 import { HTTPClient } from '../../lib/http-client'
 
 export interface ConfigureNodePluginProps {
@@ -44,7 +48,7 @@ export interface ConfigureNodePluginProps {
   maxRetries: number
   writeKey: string
   disable?: boolean
-  
+
   // Transport specific
   host?: string
   path?: string // deprecated but kept for compat
@@ -101,7 +105,7 @@ export const createConfiguredNodePlugin = (
     // If no binding, we assume HTTP. Validation upstream ensures we have what we need.
     // We expect httpClient to be provided by the caller (Analytics constructor).
     if (!props.httpClient) {
-        throw new Error('httpClient is required for HTTP transport')
+      throw new Error('httpClient is required for HTTP transport')
     }
     transport = new HttpTransport({
       host: props.host,
@@ -113,13 +117,10 @@ export const createConfiguredNodePlugin = (
     })
   }
 
-  const publisher = new Publisher(
-    {
-      ...props,
-      transport,
-    },
-    emitter
-  )
+  const publisher = new Publisher({
+    ...props,
+    transport,
+  })
   return {
     publisher: publisher,
     plugin: createNodePlugin(publisher),

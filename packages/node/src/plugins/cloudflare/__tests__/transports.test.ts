@@ -14,7 +14,7 @@ describe('BindingTransport', () => {
     expect(response).toEqual({ status: 'success' })
   })
 
-  it('should return retry on error', async () => {
+  it('should return fail on error', async () => {
     const error = new Error('Binding failed')
     const sendMock = jest.fn().mockRejectedValue(error)
     const binding = { send: sendMock }
@@ -24,6 +24,6 @@ describe('BindingTransport', () => {
     const response = await transport.send(events)
 
     expect(sendMock).toHaveBeenCalledTimes(1)
-    expect(response).toEqual({ status: 'retry', error })
+    expect(response).toEqual({ status: 'fail', error })
   })
 })

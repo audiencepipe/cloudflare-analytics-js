@@ -1,0 +1,11 @@
+{
+  "name": "test-worker",
+  "main": "worker.ts",
+  "compatibility_date": "2023-01-01",
+  "pipelines": [
+    {
+      "binding": "TESTRUNNER_BINDING",
+      "pipeline": "test_pipeline"
+    }
+  ]
+}

@@ -18,7 +18,7 @@ describe('Settings / Configuration Init', () => {
   it('throws if no cloudflarePipelineUrl', async () => {
     // @ts-ignore ignore error to test runtime validation
     expect(() => new CfEvents({ writeKey: 'foo' })).toThrow(
-      /cloudflarePipelineUrl or cloudflarePipelineBinding is required/
+      /cloudflarePipelineUrl cloudflarePipelineUrl or cloudflarePipelineBinding is required./
     )
     expect(
       () =>
@@ -26,7 +26,9 @@ describe('Settings / Configuration Init', () => {
           writeKey: 'foo',
           cloudflarePipelineUrl: undefined,
         } as any)
-    ).toThrow(/cloudflarePipelineUrl or cloudflarePipelineBinding is required/)
+    ).toThrow(
+      /cloudflarePipelineUrl cloudflarePipelineUrl or cloudflarePipelineBinding is required./
+    )
   })
 
   it('does not throw if no writeKey', async () => {

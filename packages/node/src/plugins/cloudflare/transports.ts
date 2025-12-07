@@ -1,4 +1,3 @@
-import { backoff } from '@ht-sdks/events-sdk-js-core'
 import { tryCreateFormattedUrl } from '../../lib/create-url'
 import { HTTPClient, HTTPClientRequest } from '../../lib/http-client'
 import { NodeEmitter } from '../../app/emitter'
@@ -29,12 +28,10 @@ export class BindingTransport implements PipelineTransport {
       return { status: 'success' }
     } catch (err: any) {
       // Bindings typically throw if something fundamental is wrong (like payload size)
-      // but without specific error codes, we should probably be careful.
-      // However, for now, let's assume we can't easily retry binding errors usually.
-      // But for safety, we'll treat them as retryable unless we know otherwise?
-      // Actually, standard practice for simple bindings is usually success or hard fail.
-      // Let's allow retry for safety, developer can configure retries in Publisher.
-      return { status: 'retry', error: err }
+      // or if the binding is invalid.
+      // We should treat these as fatal errors to avoid infinite retries on fundamental configuration issues.
+      // By returning 'fail', we ensure the SDK stops retrying but doesn't crash the process.
+      return { status: 'fail', error: err }
     }
   }
 }
@@ -46,10 +43,6 @@ export interface HttpTransportProps {
   httpRequestTimeout?: number
   httpClient: HTTPClient
   emitter: NodeEmitter
-}
-
-function sleep(timeoutInMs: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, timeoutInMs))
 }
 
 export class HttpTransport implements PipelineTransport {

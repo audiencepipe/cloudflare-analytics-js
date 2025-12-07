@@ -1,0 +1,11 @@
+{
+  "name": "repro-binding",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-09-23",
+  "pipelines": [
+    {
+      "binding": "WEBSITE_PROD_STREAM",
+      "pipeline": "9bc757afca1548ee94d09bcfd07c6359"
+    }
+  ]
+}
