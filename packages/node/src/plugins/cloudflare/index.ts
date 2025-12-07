@@ -40,6 +40,7 @@ import {
   PipelineTransport,
 } from './transports'
 import { HTTPClient } from '../../lib/http-client'
+import { CloudflareEvent } from '../../app/types'
 
 export interface ConfigureNodePluginProps {
   // Common
@@ -55,7 +56,9 @@ export interface ConfigureNodePluginProps {
   cloudflarePipelineBearerToken?: string
   httpClient?: HTTPClient
   httpRequestTimeout?: number
-  cloudflarePipelineBinding?: { send: (events: any[]) => Promise<void> }
+  cloudflarePipelineBinding?: {
+    send: (events: CloudflareEvent[]) => Promise<void>
+  }
 }
 
 export function createNodePlugin(publisher: Publisher): HightouchNodePlugin {

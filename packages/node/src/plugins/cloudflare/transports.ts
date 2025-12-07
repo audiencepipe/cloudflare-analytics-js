@@ -1,6 +1,7 @@
 import { tryCreateFormattedUrl } from '../../lib/create-url'
 import { HTTPClient, HTTPClientRequest } from '../../lib/http-client'
 import { NodeEmitter } from '../../app/emitter'
+import { CloudflareEvent } from '../../app/types'
 
 export interface TransportResponse {
   status: 'success' | 'retry' | 'fail'
@@ -8,21 +9,21 @@ export interface TransportResponse {
 }
 
 export interface PipelineTransport {
-  send(events: any[]): Promise<TransportResponse>
+  send(events: CloudflareEvent[]): Promise<TransportResponse>
 }
 
 export interface BindingTransportProps {
-  binding: { send: (events: any[]) => Promise<void> }
+  binding: { send: (events: CloudflareEvent[]) => Promise<void> }
 }
 
 export class BindingTransport implements PipelineTransport {
-  private _binding: { send: (events: any[]) => Promise<void> }
+  private _binding: { send: (events: CloudflareEvent[]) => Promise<void> }
 
   constructor({ binding }: BindingTransportProps) {
     this._binding = binding
   }
 
-  async send(events: any[]): Promise<TransportResponse> {
+  async send(events: CloudflareEvent[]): Promise<TransportResponse> {
     try {
       await this._binding.send(events)
       return { status: 'success' }
@@ -72,7 +73,7 @@ export class HttpTransport implements PipelineTransport {
     this._emitter = emitter
   }
 
-  async send(events: any[]): Promise<TransportResponse> {
+  async send(events: CloudflareEvent[]): Promise<TransportResponse> {
     try {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -118,6 +119,9 @@ export class HttpTransport implements PipelineTransport {
         }
       }
     } catch (err: any) {
+      if (err.code === 'ERR_INVALID_URL' || err instanceof TypeError) {
+        return { status: 'fail', error: err }
+      }
       return { status: 'retry', error: err }
     }
   }
