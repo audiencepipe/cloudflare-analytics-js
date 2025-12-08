@@ -197,6 +197,7 @@ The plugin works by:
 4. Caching the IP after the first fetch to avoid repeated network requests
 
 The plugin will not overwrite an existing IP address if one is already present in the event context.
+
 ---
 
 ## Development
@@ -204,8 +205,8 @@ The plugin will not overwrite an existing IP address if one is already present i
 First, clone the repo and then startup our local dev environment:
 
 ```sh
-$ git clone git@github.com:ht-sdks/events-sdk-js-mono.git
-$ cd events-sdk-js-mono
+$ git clone git@github.com:audiencepipe/cloudflare-analytics-js.git
+$ cd cloudflare-analytics-js
 $ nvm use  # installs correct version of node defined in .nvmrc.
 $ npm install
 $ npx turbo run build
